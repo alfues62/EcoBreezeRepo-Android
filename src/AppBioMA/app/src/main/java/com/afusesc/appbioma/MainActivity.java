@@ -11,31 +11,32 @@ import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.ParcelUuid;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageProxy;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
 
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.mlkit.vision.barcode.common.Barcode;
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.barcode.BarcodeScanning;
+import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.LifecycleOwner;
 
-import org.w3c.dom.Text;
-
-import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 // ------------------------------------------------------------------
 /**
@@ -51,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String MAC_OBJETIVO = "D1:04:CF:20:79:85"; // Dirección MAC del dispositivo objetivo
     private BackendManager backendManager;
     TextView tv;
+    private ExecutorService cameraExecutor;
+    private String qrText = ""; // Variable donde almacenaremos el texto del QR
+    private TextView qrTextView; // TextView para mostrar el texto escaneado
+
     // --------------------------------------------------------------
     /**
      * Método que se ejecuta al crear la actividad.
@@ -71,7 +76,76 @@ public class MainActivity extends AppCompatActivity {
 
         backendManager = new BackendManager();
 
+        cameraExecutor = Executors.newSingleThreadExecutor();
+        qrTextView = findViewById(R.id.qrTextView);  // Inicializamos el TextView
+
+        // Inicializamos el botón y configuramos el listener
+        Button scanQrButton = findViewById(R.id.scanQrButton);
+        scanQrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startCamera();  // Inicia el escaneo al hacer clic en el botón
+            }
+        });
+
         Log.d(ETIQUETA_LOG, " onCreate(): termina ");
+    }
+
+    private void startCamera() {
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+
+        cameraProviderFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+
+                // Vista previa
+                Preview preview = new Preview.Builder().build();
+                preview.setSurfaceProvider(((PreviewView) findViewById(R.id.previewView)).getSurfaceProvider());
+
+                // Analizador de imágenes
+                ImageAnalysis imageAnalysis = new ImageAnalysis.Builder().build();
+                imageAnalysis.setAnalyzer(cameraExecutor, imageProxy -> processImageProxy(imageProxy));
+
+                // Selección de cámara trasera
+                CameraSelector cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
+
+                // Unir el ciclo de vida de la cámara con la actividad
+                cameraProvider.unbindAll();
+                cameraProvider.bindToLifecycle(
+                        (LifecycleOwner) this, cameraSelector, preview, imageAnalysis
+                );
+
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }, ContextCompat.getMainExecutor(this));
+    }
+
+    private void processImageProxy(@NonNull ImageProxy imageProxy) {
+        // Procesar la imagen y extraer el texto del código QR
+        if (imageProxy.getImage() != null) {
+            InputImage image = InputImage.fromMediaImage(imageProxy.getImage(), imageProxy.getImageInfo().getRotationDegrees());
+
+            BarcodeScanning.getClient().process(image)
+                    .addOnSuccessListener(barcodes -> {
+                        for (Barcode barcode : barcodes) {
+                            if (barcode.getValueType() == Barcode.TYPE_TEXT) {
+                                // Almacenar el texto escaneado en la variable
+                                qrText = barcode.getDisplayValue();
+                                // Actualizar el TextView con el texto escaneado
+                                qrTextView.setText(qrText);
+                            }
+                        }
+                    })
+                    .addOnFailureListener(e -> e.printStackTrace())
+                    .addOnCompleteListener(task -> imageProxy.close());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        cameraExecutor.shutdown();
     }
 
     // --------------------------------------------------------------
