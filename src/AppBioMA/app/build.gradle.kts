@@ -39,7 +39,7 @@ dependencies {
     implementation("com.google.mlkit:barcode-scanning")
     implementation("androidx.camera:camera-lifecycle:1.3.4")
     implementation("androidx.camera:camera-view:1.3.4")
-    implementation("androidx.camera:camera-mlkit-vision:1.1.0-alpha10")
+    implementation("androidx.camera:camera-camera2:1.3.4")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")

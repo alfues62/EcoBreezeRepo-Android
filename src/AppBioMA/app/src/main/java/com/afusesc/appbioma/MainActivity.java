@@ -121,8 +121,25 @@ public class MainActivity extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(this));
     }
 
+    private boolean esDireccionMacValida(String mac) {
+        // Expresión regular para verificar el formato de una dirección MAC
+        return mac.matches("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$");
+    }
+
+    private void detenerCamara() {
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+
+        cameraProviderFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+                cameraProvider.unbindAll(); // Desvincula todos los casos de uso (vista previa, análisis, etc.)
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }, ContextCompat.getMainExecutor(this));
+    }
+
     private void processImageProxy(@NonNull ImageProxy imageProxy) {
-        // Procesar la imagen y extraer el texto del código QR
         if (imageProxy.getImage() != null) {
             InputImage image = InputImage.fromMediaImage(imageProxy.getImage(), imageProxy.getImageInfo().getRotationDegrees());
 
@@ -130,17 +147,30 @@ public class MainActivity extends AppCompatActivity {
                     .addOnSuccessListener(barcodes -> {
                         for (Barcode barcode : barcodes) {
                             if (barcode.getValueType() == Barcode.TYPE_TEXT) {
-                                // Almacenar el texto escaneado en la variable
                                 qrText = barcode.getDisplayValue();
-                                // Actualizar el TextView con el texto escaneado
-                                qrTextView.setText(qrText);
+                                qrTextView.setText(qrText); // Muestra el texto QR en el TextView
+
+                                // Verificar si el texto del QR contiene una dirección MAC
+                                if (esDireccionMacValida(qrText)) {
+                                    // Iniciar búsqueda del dispositivo Bluetooth LE con la MAC del QR
+                                    buscarEsteDispositivoBTLE(qrText);
+
+                                    // Detener la cámara porque ya detectamos el QR
+                                    detenerCamara();
+                                } else {
+                                    Log.d(ETIQUETA_LOG, "El texto escaneado no es una dirección MAC válida.");
+                                }
                             }
                         }
                     })
                     .addOnFailureListener(e -> e.printStackTrace())
                     .addOnCompleteListener(task -> imageProxy.close());
+        } else {
+            imageProxy.close();
         }
     }
+
+
 
     @Override
     protected void onDestroy() {
