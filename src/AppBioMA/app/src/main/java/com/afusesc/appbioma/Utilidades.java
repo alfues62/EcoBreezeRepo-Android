@@ -4,9 +4,17 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-// -----------------------------------------------------------------------------------
-// @author: Jordi Bataller i Mascarell
-// -----------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------
+/**
+ * @brief Clase Utilidades que proporciona métodos para convertir entre diferentes representaciones de datos.
+ *
+ * Esta clase incluye métodos para convertir cadenas de texto a arrays de bytes, convertir UUIDs
+ * a su representación de cadena y hexadecimal, y otros métodos de conversión de bytes.
+ * -----------------------------------------------------------------------------------
+ * @author: Jordi Bataller i Mascarell
+ * -----------------------------------------------------------------------------------
+ */
+//-----------------------------------------------------------------------------------
 public class Utilidades {
 
     /**

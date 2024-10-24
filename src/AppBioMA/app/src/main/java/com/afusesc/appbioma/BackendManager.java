@@ -12,22 +12,38 @@ import okhttp3.Response;
 
 import java.io.IOException;
 
+// --------------------------------------------------------------
+/**
+ * @brief Clase que gestiona la comunicación con el servidor backend.
+ */
+// --------------------------------------------------------------
 public class BackendManager {
-
     private static final String ETIQUETA_LOG = ">>>>"; // Etiqueta para los logs
     private static final String URL_BASE = "http://192.168.151.180:8080"; // URL del servidor, ajustar según sea necesario
     private OkHttpClient client;
 
-    // Constructor inicializa el cliente OkHttp
+    /**
+     * @brief Constructor de la clase BackendManager.
+     *        Se inicializa el cliente OkHttp para las solicitudes al backend.
+     */
     public BackendManager() {
         this.client = new OkHttpClient();
     }
 
+    // --------------------------------------------------------------
     /**
-     * Método para enviar un número al backend.
+     *  @brief Método encargado para enviar la información al backend.
      *
-     * @param numero El número (minor) a enviar.
+     *  |-----------------------------------------------------
+     *  | int (numero) --->
+     *  |                   enviarNumeroAlBackend()
+     *  |              <---
+     *  |-----------------------------------------------------
+     *
+     *  Parametros:
+     *    @param numero El numero a enviar a la base de datos.
      */
+    // --------------------------------------------------------------
     public void enviarNumeroAlBackend(int numero) {
         // Construye la solicitud POST con el número como parámetro
         RequestBody formBody = new FormBody.Builder()
