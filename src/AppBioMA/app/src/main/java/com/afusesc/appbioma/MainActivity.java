@@ -43,8 +43,7 @@ import java.util.concurrent.Executors;
 
 // ------------------------------------------------------------------
 /**
- * Actividad principal que maneja la interacción con dispositivos Bluetooth LE (BTLE)
- * y se comunica con el backend para enviar información.
+ * @brief Actividad principal de la app, escanea un QR para empezar el escaneo y envio de datos
  */
 // ------------------------------------------------------------------
 public class MainActivity extends AppCompatActivity {
@@ -52,12 +51,23 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int REQUEST_LOCATION_PERMISSION = 2;
     private ExecutorService cameraExecutor;
-    private String qrText = ""; // Variable donde almacenaremos el texto del QR
+    private String qrText = "";
     private TextView qrTextView;
     private BluetoothAdapter bluetoothAdapter;
     private TextView tv;
-    private Button btnBuscarTodos, btnBuscarEste, btnDetener;
+    private Button /*btnBuscarTodos, */ btnBuscarEste, btnDetener;
 
+    // --------------------------------------------------------------
+    /**
+     * @brief Método que se llama cuando la actividad se crea.
+     *
+     * Inicializa los componentes de la interfaz, verifica si el dispositivo soporta Bluetooth, solicita los permisos necesarios
+     * y configura los botones para buscar dispositivos Bluetooth LE y escanear un código QR.
+     *
+     * Parametros:
+     *      @param savedInstanceState Estado previamente guardado de la actividad, si está disponible.
+     */
+    // --------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Inicializar componentes de UI
         tv = findViewById(R.id.minor);
-        btnBuscarTodos = findViewById(R.id.botonBuscarDispositivosBTLE);
+
+            /*btnBuscarTodos = findViewById(R.id.botonBuscarDispositivosBTLE);*/
         btnBuscarEste = findViewById(R.id.botonBuscarNuestroDispositivoBTLE);
         btnDetener = findViewById(R.id.botonDetenerBusquedaDispositivosBTLE);
 
@@ -92,27 +103,27 @@ public class MainActivity extends AppCompatActivity {
                 startCamera();  // Inicia el escaneo al hacer clic en el botón
             }
         });
-
-        //Log.d(ETIQUETA_LOG, " onCreate(): termina ");
-
-        // Configurar acciones para los botones
         configurarBotones();
+
+        Log.d(ETIQUETA_LOG, " onCreate(): termina ");
     }
 
+    // --------------------------------------------------------------
+    /**
+     * @brief Se enlazan los botones a sus funciones.
+     *
+     * |-----------------------------------------------------
+     *  |     configurarBotones()
+     *  | <---
+     *  |-----------------------------------------------------
+     */
+    // --------------------------------------------------------------
     private void configurarBotones() {
-        // Botón para buscar todos los dispositivos BTLE
-        btnBuscarTodos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                iniciarBusquedaTodos();
-            }
-        });
-
         // Botón para buscar un dispositivo específico por su dirección MAC
         btnBuscarEste.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                iniciarBusquedaEste("00:11:22:33:44:55"); // Reemplaza con la MAC específica
+                iniciarBusquedaEste(""); // Reemplaza con la MAC específica
             }
         });
 
@@ -127,31 +138,15 @@ public class MainActivity extends AppCompatActivity {
 
     // --------------------------------------------------------------
     /**
-     * Método para iniciar la búsqueda de todos los dispositivos BTLE
-     */
-    // --------------------------------------------------------------
-    private void iniciarBusquedaTodos() {
-        Log.d(ETIQUETA_LOG, "Iniciando búsqueda de todos los dispositivos BTLE");
-
-        // Verificar si el Bluetooth está activado
-        if (!bluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            return;
-        }
-
-        // Iniciar el servicio para buscar todos los dispositivos BTLE
-        Intent intent = new Intent(this, ServicioBeacons.class);
-        intent.setAction("buscar_todos");
-        startService(intent);
-        tv.setText("Buscando todos los dispositivos...");
-    }
-
-    // --------------------------------------------------------------
-    /**
-     * Método para iniciar la búsqueda de un dispositivo BTLE específico
+     * @brief Método que inicia el servicio de busqueda de un dispositivo en especifico.
      *
-     * @param direccionMac La dirección MAC del dispositivo a buscar.
+     * |-----------------------------------------------------
+     *  |         String (MAC) --->
+     *  |                          iniciarBusquedaEste()
+     *  |                      <---
+     *  |-----------------------------------------------------
+     * Parametros:
+     *      @param direccionMac La dirección MAC del dispositivo a buscar.
      */
     // --------------------------------------------------------------
     private void iniciarBusquedaEste(String direccionMac) {
@@ -173,7 +168,11 @@ public class MainActivity extends AppCompatActivity {
 
     // --------------------------------------------------------------
     /**
-     * Método para detener la búsqueda de dispositivos BTLE
+     * @brief Método para detener la búsqueda de dispositivos BTLE
+     *  |-----------------------------------------------------
+     *  |                detenerBusqueda()
+     *  |           <---
+     *  |-----------------------------------------------------
      */
     // --------------------------------------------------------------
     private void detenerBusqueda() {
@@ -187,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
 
     // --------------------------------------------------------------
     /**
-     * Solicitar permisos necesarios (Bluetooth y Localización para escanear dispositivos BTLE)
+     * @brief Solicitar permisos necesarios (Bluetooth y Localización para escanear dispositivos BTLE)
      */
     // --------------------------------------------------------------
     private void solicitarPermisos() {
@@ -211,7 +210,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -227,6 +225,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // --------------------------------------------------------------
+    /**
+     * @brief Inicia la cámara para el escaneo de códigos QR.
+     *
+     * Este método configura la cámara y vincula la vista previa y el análisis de imágenes.
+     */
+    // --------------------------------------------------------------
     private void startCamera() {
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
 
@@ -257,11 +262,33 @@ public class MainActivity extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(this));
     }
 
+    // --------------------------------------------------------------
+    /**
+     * @brief Verifica si una dirección MAC es válida.
+     *
+     * |--------------------------------------
+     * |
+     * | String (MAC) --->
+     * |                esDireccionMacValida()
+     * | Bool (T/F) <---
+     * |
+     * |--------------------------------------
+     * Parametros:
+     *      @param mac La dirección MAC que se va a verificar.
+     *
+     *  @return true si el formato es válido, false en caso contrario.
+     */
+    // --------------------------------------------------------------
     private boolean esDireccionMacValida(String mac) {
         // Expresión regular para verificar el formato de una dirección MAC
         return mac.matches("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$");
     }
 
+    // --------------------------------------------------------------
+    /**
+     * @brief Detiene la cámara y desvincula todos los casos de uso.
+     */
+    // --------------------------------------------------------------
     private void detenerCamara() {
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
 
@@ -275,6 +302,17 @@ public class MainActivity extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(this));
     }
 
+    // --------------------------------------------------------------
+    /**
+     * @brief Metodo para detectar el código QR.
+     *
+     * Este método se encarga de analizar la imagen y detectar códigos QR. Si se encuentra un código
+     * QR válido que contiene una dirección MAC, inicia la búsqueda del dispositivo correspondiente.
+     *
+     * Parametros:
+     *      @param imageProxy El proxy de la imagen que se va a procesar.
+     */
+    // --------------------------------------------------------------
     private void processImageProxy(@NonNull ImageProxy imageProxy) {
         if (imageProxy.getImage() != null) {
             InputImage image = InputImage.fromMediaImage(imageProxy.getImage(), imageProxy.getImageInfo().getRotationDegrees());
@@ -306,9 +344,6 @@ public class MainActivity extends AppCompatActivity {
             imageProxy.close();
         }
     }
-
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
