@@ -1,5 +1,8 @@
 package com.afusesc.appbioma;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -72,7 +75,24 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             boolean success = response.getBoolean("success");
                             if (success) {
-                                // Guardar datos del usuario en preferencias o en una variable estática
+                                // Obtener datos del usuario
+                                JSONObject usuario = response.getJSONObject("usuario");
+                                String userId = usuario.getString("ID");
+                                String userName = usuario.getString("Nombre");
+                                String userRole = usuario.getString("Rol");
+
+                                // Crear una instancia de UsuarioActivo
+                                UsuarioActivo usuarioActivo = new UsuarioActivo(userId, userName, userRole);
+
+                                // Guardar datos del usuario en SharedPreferences
+                                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("userId", usuarioActivo.getUserId());
+                                editor.putString("userName", usuarioActivo.getUserName());
+                                editor.putString("userRole", usuarioActivo.getUserRole());
+                                editor.apply();
+
+                                // Ir a MainActivity
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish(); // Cerrar la actividad de login

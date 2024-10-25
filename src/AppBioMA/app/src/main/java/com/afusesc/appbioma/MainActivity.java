@@ -9,7 +9,9 @@ import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,12 +31,21 @@ import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LifecycleOwner;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -55,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView qrTextView;
     private BluetoothAdapter bluetoothAdapter;
     private TextView tv;
-    private Button /*btnBuscarTodos, */ btnBuscarEste, btnDetener;
+    private Button /*btnBuscarTodos, */ btnBuscarEste, btnDetener, logoutButton;
 
     // --------------------------------------------------------------
     /**
@@ -76,9 +87,16 @@ public class MainActivity extends AppCompatActivity {
         // Inicializar componentes de UI
         tv = findViewById(R.id.minor);
 
+        // LAMO A LOS DATOS DEL SHARED PREFERENCES
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        //String userId = sharedPreferences.getString("userId", "No ID");
+        //String userName = sharedPreferences.getString("userName", "Usuario");
+        //String userRole = sharedPreferences.getString("userRole", "Rol");
+
             /*btnBuscarTodos = findViewById(R.id.botonBuscarDispositivosBTLE);*/
         btnBuscarEste = findViewById(R.id.botonBuscarNuestroDispositivoBTLE);
         btnDetener = findViewById(R.id.botonDetenerBusquedaDispositivosBTLE);
+        logoutButton = findViewById(R.id.logoutButton);
 
         // Inicializar Bluetooth Adapter
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -108,6 +126,18 @@ public class MainActivity extends AppCompatActivity {
         Log.d(ETIQUETA_LOG, " onCreate(): termina ");
     }
 
+    private void logout() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear(); // Elimina todos los datos
+        editor.apply();
+
+        // Redirigir a LoginActivity
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     // --------------------------------------------------------------
     /**
      * @brief Se enlazan los botones a sus funciones.
@@ -119,6 +149,12 @@ public class MainActivity extends AppCompatActivity {
      */
     // --------------------------------------------------------------
     private void configurarBotones() {
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+            }
+        });
         // Botón para buscar un dispositivo específico por su dirección MAC
         btnBuscarEste.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -326,9 +362,12 @@ public class MainActivity extends AppCompatActivity {
 
                                 // Verificar si el texto del QR contiene una dirección MAC
                                 if (esDireccionMacValida(qrText)) {
-                                    // Iniciar búsqueda del dispositivo Bluetooth LE con la MAC del QR
-                                    iniciarBusquedaEste(qrText);
-                                    //buscarEsteDispositivoBTLE(qrText);
+                                    // Recuperar datos del usuario activo desde SharedPreferences
+                                    SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+                                    int userId = sharedPreferences.getInt("userId", -1); // Asegúrate de que userId es un int
+
+                                    // Insertar la dirección MAC en la base de datos
+                                    insertarSensorEnBaseDatos(userId, qrText);
 
                                     // Detener la cámara porque ya detectamos el QR
                                     detenerCamara();
@@ -343,6 +382,59 @@ public class MainActivity extends AppCompatActivity {
         } else {
             imageProxy.close();
         }
+    }
+
+    // Método para insertar el sensor en la base de datos
+    private void insertarSensorEnBaseDatos(int userId, String mac) {
+        String url = "http://192.168.1.59:8080/api/api_sensor.php"; // Cambia esto a tu URL real
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("action", "insertar_sensor");
+            jsonBody.put("usuario_id", userId);
+            jsonBody.put("mac", mac);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            boolean success = response.getBoolean("success");
+                            if (success) {
+                                Toast.makeText(MainActivity.this, "Sensor añadido con éxito", Toast.LENGTH_SHORT).show();
+                            } else {
+                                String errorMessage = response.optString("error", "Error desconocido.");
+                                Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("MainActivity", "Error: " + error.getMessage());
+                        Toast.makeText(MainActivity.this, "Ocurrió un error al añadir el sensor", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        detenerCamara(); // Detener la cámara al pausar la actividad
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startCamera(); // Reiniciar la cámara al reanudar la actividad
     }
     @Override
     protected void onDestroy() {
