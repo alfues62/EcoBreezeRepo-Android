@@ -1,5 +1,6 @@
 package com.afusesc.appbioma;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,8 +53,17 @@ public class RegisterActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 String resultado = crearUsuario(nombre, apellidos, email, contrasenaHash);
+
+                // Mostrar mensaje en la UI y redirigir si el registro es exitoso
                 runOnUiThread(() -> {
                     Toast.makeText(RegisterActivity.this, resultado, Toast.LENGTH_LONG).show();
+
+                    if (resultado.equals("Registro exitoso")) { // Asumiendo que el servidor devuelve esta respuesta en caso de éxito
+                        // Redirigir a LoginActivity
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish(); // Finaliza RegisterActivity para que el usuario no pueda volver con el botón "Atrás"
+                    }
                 });
             } catch (Exception e) {
                 e.printStackTrace();
@@ -72,7 +82,6 @@ public class RegisterActivity extends AppCompatActivity {
             urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setDoOutput(true);
 
-            // Aquí envolvemos el código en un bloque try-catch para manejar JSONException
             JSONObject jsonParam = new JSONObject();
             try {
                 jsonParam.put("Nombre", nombre);
@@ -101,7 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
                 while ((line = reader.readLine()) != null) {
                     sb.append(line);
                 }
-                return sb.toString();
+                return sb.toString(); // Suponiendo que la respuesta exitosa es "Registro exitoso"
             } else {
                 return "Error en el registro";
             }
@@ -118,4 +127,5 @@ public class RegisterActivity extends AppCompatActivity {
         return BCrypt.hashpw(password, BCrypt.gensalt(10));
     }
 }
+
 

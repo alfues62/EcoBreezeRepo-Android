@@ -113,9 +113,9 @@ public class MainActivity extends AppCompatActivity {
      * @brief Se enlazan los botones a sus funciones.
      *
      * |-----------------------------------------------------
-     *  |     configurarBotones()
-     *  | <---
-     *  |-----------------------------------------------------
+     * |     configurarBotones()
+     * | <---
+     * |-----------------------------------------------------
      */
     // --------------------------------------------------------------
     private void configurarBotones() {
@@ -349,5 +349,4 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         cameraExecutor.shutdown();
     }
-
 } // class
