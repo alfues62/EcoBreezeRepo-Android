@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView qrTextView;
     private BluetoothAdapter bluetoothAdapter;
     private TextView tv;
+    private TextView textViewUserId;
+    private TextView textViewMac;
     private Button /*btnBuscarTodos, */ btnBuscarEste, btnDetener, logoutButton;
 
     // --------------------------------------------------------------
@@ -113,6 +115,13 @@ public class MainActivity extends AppCompatActivity {
         cameraExecutor = Executors.newSingleThreadExecutor();
         qrTextView = findViewById(R.id.qrTextView);  // Inicializamos el TextView
 
+        // Inicializa los TextView
+        textViewUserId = findViewById(R.id.textViewUserId);
+        textViewMac = findViewById(R.id.textViewMac);
+
+        // Llama al método para cargar datos de SharedPreferences
+        cargarDatos();
+
         // Inicializamos el botón y configuramos el listener
         Button scanQrButton = findViewById(R.id.scanQrButton);
         scanQrButton.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +135,20 @@ public class MainActivity extends AppCompatActivity {
         Log.d(ETIQUETA_LOG, " onCreate(): termina ");
     }
 
+    private void cargarDatos() {
+        // Recupera los SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("userId", -1);
+        String mac = sharedPreferences.getString("mac", "No disponible");
+
+        // Muestra los datos en los TextView
+        textViewUserId.setText("User ID: " + (userId != -1 ? userId : "No encontrado"));
+        textViewMac.setText("MAC Address: " + mac);
+
+        // Para depuración, imprime en logcat
+        Log.d("MainActivity", "User ID: " + userId);
+        Log.d("MainActivity", "MAC: " + mac);
+    }
     private void logout() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -362,12 +385,11 @@ public class MainActivity extends AppCompatActivity {
 
                                 // Verificar si el texto del QR contiene una dirección MAC
                                 if (esDireccionMacValida(qrText)) {
-                                    // Recuperar datos del usuario activo desde SharedPreferences
-                                    SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-                                    int userId = sharedPreferences.getInt("userId", -1); // Asegúrate de que userId es un int
+                                    // Iniciar búsqueda del dispositivo Bluetooth LE con la MAC del QR
+                                    //iniciarBusquedaEste(qrText);
 
-                                    // Insertar la dirección MAC en la base de datos
-                                    insertarSensorEnBaseDatos(userId, qrText);
+                                    // Guardar la MAC en la base de datos
+                                    guardarMacEnBD(qrText);
 
                                     // Detener la cámara porque ya detectamos el QR
                                     detenerCamara();
@@ -384,45 +406,52 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Método para insertar el sensor en la base de datos
-    private void insertarSensorEnBaseDatos(int userId, String mac) {
-        String url = "http://192.168.1.59:8080/api/api_sensor.php"; // Cambia esto a tu URL real
-        JSONObject jsonBody = new JSONObject();
-        try {
-            jsonBody.put("action", "insertar_sensor");
-            jsonBody.put("usuario_id", userId);
-            jsonBody.put("mac", mac);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    // Método para guardar la MAC en la base de datos
+    private void guardarMacEnBD(String mac) {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("userId", -1);
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            boolean success = response.getBoolean("success");
-                            if (success) {
-                                Toast.makeText(MainActivity.this, "Sensor añadido con éxito", Toast.LENGTH_SHORT).show();
-                            } else {
-                                String errorMessage = response.optString("error", "Error desconocido.");
-                                Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+        if (userId != -1) {
+            JSONObject jsonBody = new JSONObject();
+
+            try {
+                jsonBody.put("action", "insertar_sensor"); // Asegúrate de que esto coincida con tu backend
+                jsonBody.put("MAC", mac);
+                jsonBody.put("USUARIO_ID", userId);
+
+                Log.d("JSON Enviado", jsonBody.toString()); // Log del JSON enviado
+
+                RequestQueue requestQueue = Volley.newRequestQueue(this);
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                        "http://192.168.1.59:8080/api/api_usuario.php?action=insertar_sensor", jsonBody,
+                        response -> {
+                            Log.d("API Response", response.toString());
+                            try {
+                                boolean success = response.getBoolean("success"); // Asegúrate de que "success" es parte de la respuesta
+                                if (success) {
+                                    Toast.makeText(MainActivity.this, "Sensor añadido exitosamente.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    String errorMessage = response.optString("error", "Error desconocido.");
+                                    Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                Log.e("JSON Exception", "Error parsing response: " + e.getMessage());
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("MainActivity", "Error: " + error.getMessage());
-                        Toast.makeText(MainActivity.this, "Ocurrió un error al añadir el sensor", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        },
+                        error -> {
+                            Log.e("MainActivity", "Error: " + error.getMessage());
+                            Toast.makeText(MainActivity.this, "Ocurrió un error en el servidor", Toast.LENGTH_SHORT).show();
+                        });
 
-        requestQueue.add(jsonObjectRequest);
+                requestQueue.add(jsonObjectRequest);
+            } catch (JSONException e) {
+                Log.e("JSON Exception", "Error creando JSON: " + e.getMessage());
+                e.printStackTrace();
+                Toast.makeText(this, "Error creando JSON", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "Usuario no encontrado.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

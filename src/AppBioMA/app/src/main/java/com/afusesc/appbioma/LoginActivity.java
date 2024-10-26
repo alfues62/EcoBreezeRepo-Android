@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                             if (success) {
                                 // Obtener datos del usuario
                                 JSONObject usuario = response.getJSONObject("usuario");
-                                String userId = usuario.getString("ID");
+                                int userId = usuario.getInt("ID");
                                 String userName = usuario.getString("Nombre");
                                 String userRole = usuario.getString("Rol");
 
@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                                 // Guardar datos del usuario en SharedPreferences
                                 SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("userId", usuarioActivo.getUserId());
+                                editor.putInt("userId", usuarioActivo.getUserId());
                                 editor.putString("userName", usuarioActivo.getUserName());
                                 editor.putString("userRole", usuarioActivo.getUserRole());
                                 editor.apply();

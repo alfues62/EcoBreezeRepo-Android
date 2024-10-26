@@ -64,4 +64,22 @@
         android:text="Cerrar Sesión"
         android:layout_marginTop="16dp"/>
 
+    <TextView
+        android:id="@+id/textViewUserId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User ID: "
+        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/textViewMac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MAC Address: "
+        android:textSize="18sp"
+        android:layout_marginTop="40dp"
+        android:layout_centerHorizontal="true" />
+
 </android.widget.LinearLayout>
