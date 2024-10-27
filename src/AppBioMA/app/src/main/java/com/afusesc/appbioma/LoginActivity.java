@@ -22,6 +22,11 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+// --------------------------------------------------------------
+/**
+ * @brief Actividad que gestiona el inicio de sesión en la app.
+ */
+// --------------------------------------------------------------
 public class LoginActivity extends AppCompatActivity {
 
     private EditText emailEditText;
@@ -30,6 +35,17 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String LOGIN_URL = "http://192.168.1.59:8080/api/api_usuario.php?action=iniciar_sesion";
 
+    // --------------------------------------------------------------
+    /**
+     * @brief Método que se llama al crear la actividad de inicio de sesión.
+     *
+     * Configura la interfaz de usuario, obteniendo las referencias a los elementos de edición de texto
+     * y el botón de inicio de sesión. Agrega un listener al botón para ejecutar el método de login.
+     *
+     * Parámetros:
+     *      @param savedInstanceState Estado previamente guardado de la actividad, si está disponible.
+     */
+    // --------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +63,15 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    // --------------------------------------------------------------
+    /**
+     * @brief Inicia el proceso de inicio de sesión del usuario.
+     *
+     * Este método valida que los campos de texto no estén vacíos, y luego envía una solicitud
+     * de inicio de sesión al servidor. Si el inicio de sesión es exitoso, guarda los datos del usuario
+     * en `SharedPreferences` y redirige a `MainActivity`.
+     */
+    // --------------------------------------------------------------
     private void login() {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();

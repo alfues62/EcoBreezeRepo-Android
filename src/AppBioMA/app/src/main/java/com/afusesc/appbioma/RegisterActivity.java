@@ -23,10 +23,26 @@ import java.net.URL;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+// --------------------------------------------------------------
+/**
+ * @brief Actividad que gestiona el regisrro de usuarios en la app.
+ */
+// --------------------------------------------------------------
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText editTextNombre, editTextApellidos, editTextEmail, editTextContrasena;
 
+    // --------------------------------------------------------------
+    /**
+     * @brief Método que se llama al crear la actividad de registro.
+     *
+     * Configura los elementos de la interfaz de usuario y el botón de registro, y establece
+     * un listener para iniciar el proceso de registro del usuario cuando el botón se presiona.
+     *
+     * Parámetros:
+     *      @param savedInstanceState Estado previamente guardado de la actividad, si está disponible.
+     */
+    // --------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +57,15 @@ public class RegisterActivity extends AppCompatActivity {
         buttonRegistrar.setOnClickListener(v -> registrarUsuario());
     }
 
+    // --------------------------------------------------------------
+    /**
+     * @brief Inicia el proceso de registro de usuario.
+     *
+     * Obtiene los datos ingresados en los campos de texto, aplica un hash a la contraseña
+     * y ejecuta una petición de registro en un hilo separado. Si el registro es exitoso, muestra un mensaje
+     * y redirige al usuario a la pantalla de inicio de sesión.
+     */
+    // --------------------------------------------------------------
     private void registrarUsuario() {
         String nombre = editTextNombre.getText().toString();
         String apellidos = editTextApellidos.getText().toString();
@@ -71,6 +96,24 @@ public class RegisterActivity extends AppCompatActivity {
         }).start();
     }
 
+    // --------------------------------------------------------------
+    /**
+     * @brief Crea el registro del usuario en la base de datos.
+     *
+     * Este método realiza una solicitud POST al servidor con los datos del usuario para registrar
+     * su cuenta en la base de datos.
+     *
+     * Parámetros:
+     *      @param nombre Nombre del usuario.
+     *      @param apellidos Apellidos del usuario.
+     *      @param email Correo electrónico del usuario.
+     *      @param contrasenaHash Contraseña del usuario, previamente encriptada.
+     *
+     * @return Un mensaje indicando si el registro fue exitoso o si hubo un error.
+     *
+     * @throws IOException En caso de problemas de red o de conexión con el servidor.
+     */
+    // --------------------------------------------------------------
     private String crearUsuario(String nombre, String apellidos, String email, String contrasenaHash) throws IOException {
         String urlString = "http://192.168.1.59:8080/api/api_usuario.php"; // Cambia esto por tu URL real
         HttpURLConnection urlConnection = null;
@@ -121,11 +164,21 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    // Método para hashear la contraseña
+    // --------------------------------------------------------------
+    /**
+     * @brief Aplica un hash a la contraseña del usuario.
+     *
+     * Usa el algoritmo BCrypt para encriptar la contraseña del usuario antes de enviarla al servidor.
+     * Un valor de "10" se usa como número de rondas de encriptación, ofreciendo un buen balance entre seguridad y rendimiento.
+     *
+     * Parámetros:
+     *      @param password La contraseña del usuario en texto plano.
+     *
+     * @return La contraseña hasheada usando BCrypt.
+     */
+    // --------------------------------------------------------------
     private String hashPassword(String password) {
         // Elige un número de rondas de encriptación. Por lo general, 10 es una buena opción.
         return BCrypt.hashpw(password, BCrypt.gensalt(10));
     }
 }
-
-

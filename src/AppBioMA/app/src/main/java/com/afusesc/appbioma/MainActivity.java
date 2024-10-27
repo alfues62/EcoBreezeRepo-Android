@@ -36,6 +36,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.barcode.common.Barcode;
@@ -47,7 +48,9 @@ import androidx.lifecycle.LifecycleOwner;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -115,13 +118,6 @@ public class MainActivity extends AppCompatActivity {
         cameraExecutor = Executors.newSingleThreadExecutor();
         qrTextView = findViewById(R.id.qrTextView);  // Inicializamos el TextView
 
-        // Inicializa los TextView
-        textViewUserId = findViewById(R.id.textViewUserId);
-        textViewMac = findViewById(R.id.textViewMac);
-
-        // Llama al método para cargar datos de SharedPreferences
-        cargarDatos();
-
         // Inicializamos el botón y configuramos el listener
         Button scanQrButton = findViewById(R.id.scanQrButton);
         scanQrButton.setOnClickListener(new View.OnClickListener() {
@@ -135,20 +131,14 @@ public class MainActivity extends AppCompatActivity {
         Log.d(ETIQUETA_LOG, " onCreate(): termina ");
     }
 
-    private void cargarDatos() {
-        // Recupera los SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-        int userId = sharedPreferences.getInt("userId", -1);
-        String mac = sharedPreferences.getString("mac", "No disponible");
-
-        // Muestra los datos en los TextView
-        textViewUserId.setText("User ID: " + (userId != -1 ? userId : "No encontrado"));
-        textViewMac.setText("MAC Address: " + mac);
-
-        // Para depuración, imprime en logcat
-        Log.d("MainActivity", "User ID: " + userId);
-        Log.d("MainActivity", "MAC: " + mac);
-    }
+    // --------------------------------------------------------------
+    /**
+     * @brief Realiza el cierre de sesión al borrar los datos de usuario almacenados y redirige a la pantalla de login.
+     *
+     * Este método borra toda la información del usuario en `SharedPreferences` y redirige
+     * al usuario a la actividad `LoginActivity`.
+     */
+    // --------------------------------------------------------------
     private void logout() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -406,7 +396,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Método para guardar la MAC en la base de datos
+    // --------------------------------------------------------------
+    /**
+     * @brief Guarda la dirección MAC detectada en la base de datos remota.
+     *
+     * Este método envía una solicitud POST al servidor para registrar un nuevo sensor.
+     * Envía como datos la dirección MAC y el identificador de usuario.
+     *
+     * @param mac La dirección MAC que será registrada en la base de datos.
+     */
+    // --------------------------------------------------------------
     private void guardarMacEnBD(String mac) {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         int userId = sharedPreferences.getInt("userId", -1);
@@ -416,8 +415,8 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 jsonBody.put("action", "insertar_sensor"); // Asegúrate de que esto coincida con tu backend
-                jsonBody.put("MAC", mac);
-                jsonBody.put("USUARIO_ID", userId);
+                jsonBody.put("mac", mac);
+                jsonBody.put("usuario_id", userId);
 
                 Log.d("JSON Enviado", jsonBody.toString()); // Log del JSON enviado
 
@@ -440,6 +439,10 @@ public class MainActivity extends AppCompatActivity {
                         },
                         error -> {
                             Log.e("MainActivity", "Error: " + error.getMessage());
+                            if (error.networkResponse != null) {
+                                Log.e("MainActivity", "Error code: " + error.networkResponse.statusCode);
+                                Log.e("MainActivity", "Error response: " + new String(error.networkResponse.data));
+                            }
                             Toast.makeText(MainActivity.this, "Ocurrió un error en el servidor", Toast.LENGTH_SHORT).show();
                         });
 
@@ -453,18 +456,39 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Usuario no encontrado.", Toast.LENGTH_SHORT).show();
         }
     }
-
+    // --------------------------------------------------------------
+    /**
+     * @brief Método llamado cuando la actividad entra en pausa.
+     *
+     * Este método detiene la cámara para liberar recursos mientras
+     * la actividad está en segundo plano.
+     */
+    // --------------------------------------------------------------
     @Override
     protected void onPause() {
         super.onPause();
         detenerCamara(); // Detener la cámara al pausar la actividad
     }
-
+    // --------------------------------------------------------------
+    /**
+     * @brief Método llamado cuando la actividad se reanuda.
+     *
+     * Este método reinicia la cámara para que el escaneo de códigos QR continúe
+     * cuando la actividad vuelve a estar activa.
+     */
+    // --------------------------------------------------------------
     @Override
     protected void onResume() {
         super.onResume();
         startCamera(); // Reiniciar la cámara al reanudar la actividad
     }
+    // --------------------------------------------------------------
+    /**
+     * @brief Método llamado cuando la actividad se destruye.
+     *
+     * Este método cierra el ejecutor de cámara para liberar recursos al cerrar la actividad.
+     */
+    // --------------------------------------------------------------
     @Override
     protected void onDestroy() {
         super.onDestroy();
