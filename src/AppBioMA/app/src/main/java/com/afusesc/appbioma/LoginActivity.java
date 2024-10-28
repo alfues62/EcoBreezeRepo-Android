@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private Button loginButton;
 
-    private static final String LOGIN_URL = "http://192.168.1.59:8080/api/api_usuario.php?action=iniciar_sesion";
+    private static final String LOGIN_URL = "http://192.168.30.180:8080/api/api_usuario.php?action=iniciar_sesion";
 
     // --------------------------------------------------------------
     /**

@@ -422,7 +422,7 @@ public class MainActivity extends AppCompatActivity {
 
                 RequestQueue requestQueue = Volley.newRequestQueue(this);
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                        "http://192.168.1.59:8080/api/api_usuario.php?action=insertar_sensor", jsonBody,
+                        "http://192.168.30.180:8080/api/api_usuario.php?action=insertar_sensor", jsonBody,
                         response -> {
                             Log.d("API Response", response.toString());
                             try {

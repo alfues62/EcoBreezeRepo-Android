@@ -115,7 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
      */
     // --------------------------------------------------------------
     private String crearUsuario(String nombre, String apellidos, String email, String contrasenaHash) throws IOException {
-        String urlString = "http://192.168.1.59:8080/api/api_usuario.php"; // Cambia esto por tu URL real
+        String urlString = "http://192.168.30.180:8080/api/api_usuario.php"; // Cambia esto por tu URL real
         HttpURLConnection urlConnection = null;
 
         try {
