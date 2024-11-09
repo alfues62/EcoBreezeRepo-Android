@@ -2,6 +2,7 @@ package com.m4gti.ecobreeze.ui.activities;
 
 import com.m4gti.ecobreeze.R;
 import com.m4gti.ecobreeze.logic.LogicaLogin;
+import com.m4gti.ecobreeze.utils.Globales;
 
 import android.os.Bundle;
 import android.view.View;
@@ -12,11 +13,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
-
     private EditText emailEditText;
     private EditText passwordEditText;
     private Button loginButton;
-    private static final String LOGIN_URL = "http://192.168.1.58:8080/api/api_usuario.php?action=iniciar_sesion";
+    private static final String LOGIN_URL = "http://" + Globales.IP + ":8080/api/api_usuario.php?action=iniciar_sesion";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

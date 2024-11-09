@@ -26,7 +26,6 @@ public class LogicaLogin {
         // Crear el JSON para la solicitud
         JSONObject jsonBody = new JSONObject();
         try {
-            jsonBody.put("action", "iniciar_sesion");
             jsonBody.put("email", email);
             jsonBody.put("contrasena", password);
         } catch (JSONException e) {
@@ -60,7 +59,7 @@ public class LogicaLogin {
                                 editor.apply();
 
                                 // Ir a La actividad de destino
-                                Intent intent = new Intent(context, ScannerActivity.class);
+                                Intent intent = new Intent(context, MainActivity.class);
                                 context.startActivity(intent);
                                 if (context instanceof LoginActivity) {
                                     ((LoginActivity) context).finish(); // Cerrar la actividad de login

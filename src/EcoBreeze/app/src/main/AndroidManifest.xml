@@ -40,6 +40,11 @@
         </activity>
 
         <activity
+            android:name=".ui.activities.HuellaActivity"
+            android:exported="true">
+        </activity>
+
+        <activity
             android:name=".ui.activities.ScannerActivity"
             android:exported="true">
         </activity>
