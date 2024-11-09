@@ -84,6 +84,67 @@ public class LogicaLogin {
         requestQueue.add(jsonObjectRequest);
     }
 
+    public static void loginConHuella(Context context, String tokenHuella, String LOGIN_HUELLA_URL) {
+        // Crear el JSON para la solicitud
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("token_huella", tokenHuella);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // Crear la solicitud con Volley
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, LOGIN_HUELLA_URL, jsonBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            boolean success = response.getBoolean("success");
+                            if (success) {
+                                // Obtener datos del usuario
+                                JSONObject usuario = response.getJSONObject("usuario");
+                                int userId = usuario.getInt("ID");
+                                String userName = usuario.getString("Nombre");
+                                String userRole = usuario.getString("Rol");
+
+                                // Crear una instancia de UsuarioActivo
+                                UsuarioActivo usuarioActivo = new UsuarioActivo(userId, userName, userRole);
+
+                                // Guardar datos del usuario en SharedPreferences
+                                SharedPreferences sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt("userId", usuarioActivo.getUserId());
+                                editor.putString("userName", usuarioActivo.getUserName());
+                                editor.putString("userRole", usuarioActivo.getUserRole());
+                                editor.apply();
+
+                                // Ir a la actividad principal
+                                Intent intent = new Intent(context, MainActivity.class);
+                                context.startActivity(intent);
+                                if (context instanceof LoginActivity) {
+                                    ((LoginActivity) context).finish(); // Cerrar la actividad de login
+                                }
+                            } else {
+                                String errorMessage = response.optString("error", "Error desconocido.");
+                                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("LoginActivity", "Error: " + error.getMessage());
+                        Toast.makeText(context, "Ocurrió un error en el servidor", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        requestQueue.add(jsonObjectRequest);
+    }
+
     public static void logout(Context context) {
         // Borrar los datos de usuario almacenados
         SharedPreferences sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
