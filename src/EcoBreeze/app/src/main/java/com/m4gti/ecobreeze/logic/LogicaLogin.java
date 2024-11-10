@@ -84,11 +84,12 @@ public class LogicaLogin {
         requestQueue.add(jsonObjectRequest);
     }
 
-    public static void loginConHuella(Context context, String tokenHuella, String LOGIN_HUELLA_URL) {
+    public static void loginConHuella(Context context, String email, String tokenHuella, String LOGIN_HUELLA_URL) {
         // Crear el JSON para la solicitud
         JSONObject jsonBody = new JSONObject();
         try {
-            jsonBody.put("token_huella", tokenHuella);
+            jsonBody.put("email", email);
+            jsonBody.put("token_huella", tokenHuella); // Enviar el token de huella en lugar de la contraseña
         } catch (JSONException e) {
             e.printStackTrace();
         }

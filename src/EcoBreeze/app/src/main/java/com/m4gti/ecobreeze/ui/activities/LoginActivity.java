@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Llamar a la función de inicio de sesión
+                // Llamar a la función de inicio de sesión con correo y contraseña
                 LogicaLogin.login(LoginActivity.this, email, password, LOGIN_URL);
             }
         });
@@ -57,19 +57,19 @@ public class LoginActivity extends AppCompatActivity {
         loginWithFingerprintButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Iniciar autenticación biométrica
                 iniciarAutenticacionConHuella();
             }
         });
     }
 
-    // Configuración de autenticación biométrica
+    // Función para iniciar la autenticación con huella digital
     private void iniciarAutenticacionConHuella() {
-        BiometricManager biometricManager;
-        biometricManager = BiometricManager.from(this);
+        // Verificar si el dispositivo soporta la autenticación biométrica (huella digital)
+        BiometricManager biometricManager = BiometricManager.from(this);
         if (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)
                 == BiometricManager.BIOMETRIC_SUCCESS) {
 
+            // Configurar el executor y el BiometricPrompt para autenticar al usuario con huella
             Executor executor = ContextCompat.getMainExecutor(this);
             BiometricPrompt biometricPrompt = new BiometricPrompt(LoginActivity.this, executor,
                     new BiometricPrompt.AuthenticationCallback() {
@@ -77,15 +77,18 @@ public class LoginActivity extends AppCompatActivity {
                         public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
                             super.onAuthenticationSucceeded(result);
 
-                            // Obtener el token_huella
-                            String tokenHuella = obtenerTokenHuella();
+                            // Si la autenticación con huella fue exitosa, obtener el correo y el token de huella
+                            String email = emailEditText.getText().toString().trim();
+                            String tokenHuella = result.getCryptoObject() != null ? result.getCryptoObject().getSignature().toString() : null;
 
-                            // Iniciar sesión con huella
-                            if (tokenHuella != null) {
-                                LogicaLogin.loginConHuella(LoginActivity.this, tokenHuella, LOGIN_HUELLA_URL);
-                            } else {
-                                Toast.makeText(LoginActivity.this, "Error al obtener token de huella", Toast.LENGTH_SHORT).show();
+                            // Verificar que el correo y el token de huella no sean nulos
+                            if (email.isEmpty() || tokenHuella == null) {
+                                Toast.makeText(LoginActivity.this, "Correo y huella son necesarios", Toast.LENGTH_SHORT).show();
+                                return;
                             }
+
+                            // Llamar al login con correo y huella (usando el correo y el token de huella)
+                            LogicaLogin.loginConHuella(LoginActivity.this, email, tokenHuella, LOGIN_HUELLA_URL);
                         }
 
                         @Override
@@ -101,20 +104,18 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
 
+            // Crear la información del prompt para la autenticación
             BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
                     .setTitle("Iniciar sesión con huella digital")
                     .setSubtitle("Usa tu huella digital para iniciar sesión")
                     .setNegativeButtonText("Cancelar")
                     .build();
 
+            // Iniciar la autenticación biométrica
             biometricPrompt.authenticate(promptInfo);
         } else {
+            // Si el dispositivo no soporta huella, mostrar mensaje
             Toast.makeText(this, "La autenticación biométrica no está disponible", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private String obtenerTokenHuella() {
-        // Método para obtener el token de huella, ajusta la lógica según tus necesidades
-        return "TOKEN_HUELLA_DE_EJEMPLO";
     }
 }
