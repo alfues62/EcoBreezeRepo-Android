@@ -111,7 +111,7 @@ public class LogicaEnvioDatos {
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                         HUELLA_URL, jsonBody,
                         response -> {
-                            Log.d("API Response", response.toString()); // Ver todo el contenido de la respuesta
+                            Log.d("API Response", response.toString());
                             try {
                                 boolean success = response.getBoolean("success");
                                 if (success) {
