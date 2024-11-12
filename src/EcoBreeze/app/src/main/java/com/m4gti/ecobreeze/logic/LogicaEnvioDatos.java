@@ -1,5 +1,7 @@
 package com.m4gti.ecobreeze.logic;
 
+import com.m4gti.ecobreeze.utils.Globales;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -15,9 +17,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LogicaEnvioDatos {
-    private static final String SCAN_URL = "http://192.168.1.58:8080/api/api_usuario.php?action=insertar_sensor";
-    private Context context;
+    private static final String SCAN_URL = "http://" + Globales.IP + ":8080/api/api_usuario.php?action=insertar_sensor"; // URL PARA INSERTAR LA MAC
+    private static final String HUELLA_URL = "http://" + Globales.IP + ":8080/api/api_usuario.php?action=insertar_huella"; // URL PARA SUBIR LA HUELLA
 
+    private Context context;
     public LogicaEnvioDatos(Context context) {
         this.context = context;
     }
@@ -49,7 +52,6 @@ public class LogicaEnvioDatos {
             JSONObject jsonBody = new JSONObject();
 
             try {
-                jsonBody.put("action", "insertar_sensor"); // Asegúrate de que esto coincida con tu backend
                 jsonBody.put("mac", mac);
                 jsonBody.put("usuario_id", userId);
 
@@ -66,6 +68,57 @@ public class LogicaEnvioDatos {
                                     Toast.makeText(context, "Sensor añadido exitosamente.", Toast.LENGTH_SHORT).show();
                                 } else {
                                     String errorMessage = response.optString("error", "Error desconocido.");
+                                    Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                Log.e("JSON Exception", "Error parsing response: " + e.getMessage());
+                            }
+                        },
+                        error -> {
+                            Log.e("LogicaEnvioDatos", "Error: " + error.getMessage());
+                            if (error.networkResponse != null) {
+                                Log.e("LogicaEnvioDatos", "Error code: " + error.networkResponse.statusCode);
+                                Log.e("LogicaEnvioDatos", "Error response: " + new String(error.networkResponse.data));
+                            }
+                            Toast.makeText(context, "Ocurrió un error en el servidor", Toast.LENGTH_SHORT).show();
+                        });
+
+                requestQueue.add(jsonObjectRequest);
+            } catch (JSONException e) {
+                Log.e("JSON Exception", "Error creando JSON: " + e.getMessage());
+                e.printStackTrace();
+                Toast.makeText(context, "Error creando JSON", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(context, "Usuario no encontrado.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void guardarTokenHuellaEnBD(String tokenHuella) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("userId", -1);
+
+        if (userId != -1) {
+            JSONObject jsonBody = new JSONObject();
+
+            try {
+                jsonBody.put("token_huella", tokenHuella);  // Enviar el token de huella
+                jsonBody.put("id", userId);  // Usamos el id del usuario en lugar de "usuario_id"
+
+                Log.d("JSON Enviado", jsonBody.toString()); // Log del JSON enviado
+
+                RequestQueue requestQueue = Volley.newRequestQueue(context);
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                        HUELLA_URL, jsonBody,
+                        response -> {
+                            Log.d("API Response", response.toString());
+                            try {
+                                boolean success = response.getBoolean("success");
+                                if (success) {
+                                    Toast.makeText(context, "Token de huella añadido exitosamente.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    String errorMessage = response.optString("error", "Error desconocido.");
+                                    Log.e("API Error", errorMessage); // Ver el mensaje de error
                                     Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
