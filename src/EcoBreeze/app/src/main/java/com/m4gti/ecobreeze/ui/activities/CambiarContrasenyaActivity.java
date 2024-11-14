@@ -1,18 +1,17 @@
 package com.m4gti.ecobreeze.ui.activities;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
-import com.android.volley.Request;
+
 import com.android.volley.Response;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
+import com.android.volley.VolleyError;
 import com.m4gti.ecobreeze.R;
-import com.m4gti.ecobreeze.utils.Globales;
+import com.m4gti.ecobreeze.logic.LogicaUser;
 
 import org.json.JSONObject;
 
@@ -58,59 +57,30 @@ public class CambiarContrasenyaActivity extends AppCompatActivity {
     }
 
     private void cambiarContrasena(String contrasenaActual, String nuevaContrasena) {
-        // Obtener el ID del usuario desde SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        int idUsuario = sharedPreferences.getInt("userId", -1);  // Recupera el ID del usuario
-
-        // Verificar si se obtuvo el ID del usuario
-        if (idUsuario == -1) {
-            Toast.makeText(CambiarContrasenyaActivity.this, "Usuario no encontrado", Toast.LENGTH_SHORT).show();
-            return;  // Si no se encuentra el usuario, no hacer la solicitud
-        }
-
-        // Crear el objeto JSON con los datos
-        JSONObject requestData = new JSONObject();
-        try {
-            requestData.put("id", idUsuario);
-            requestData.put("contrasena_actual", contrasenaActual);
-            requestData.put("nueva_contrasena", nuevaContrasena);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // URL del endpoint
-        String url = "http://" + Globales.IP + ":8080/api/api_usuario.php?action=cambiar_contrasena";
-
-        // Crear una solicitud POST con Volley
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestData,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            boolean success = response.getBoolean("success");
-                            if (success) {
-                                String message = response.getString("message");
-                                Toast.makeText(CambiarContrasenyaActivity.this, message, Toast.LENGTH_SHORT).show();
-                            } else {
-                                String error = response.getString("error");
-                                Toast.makeText(CambiarContrasenyaActivity.this, error, Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Toast.makeText(CambiarContrasenyaActivity.this, "Error al procesar la respuesta", Toast.LENGTH_SHORT).show();
-                        }
+        // Llamar a la lógica de negocio a través de LogicaUser
+        LogicaUser.cambiarContrasena(this, contrasenaActual, nuevaContrasena, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    boolean success = response.getBoolean("success");
+                    if (success) {
+                        String message = response.getString("message");
+                        Toast.makeText(CambiarContrasenyaActivity.this, message, Toast.LENGTH_SHORT).show();
+                    } else {
+                        String error = response.getString("error");
+                        Toast.makeText(CambiarContrasenyaActivity.this, error, Toast.LENGTH_SHORT).show();
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(com.android.volley.VolleyError error) {
-                        // Manejo de error
-                        Toast.makeText(CambiarContrasenyaActivity.this, "Error al realizar la solicitud", Toast.LENGTH_SHORT).show();
-                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(CambiarContrasenyaActivity.this, "Error al procesar la respuesta", Toast.LENGTH_SHORT).show();
                 }
-        );
-
-        // Añadir la solicitud a la cola de Volley
-        Volley.newRequestQueue(this).add(request);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Manejo de error
+                Toast.makeText(CambiarContrasenyaActivity.this, "Error al realizar la solicitud", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
