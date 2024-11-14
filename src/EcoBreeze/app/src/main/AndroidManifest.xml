@@ -50,6 +50,21 @@
             android:exported="true">
         </activity>
 
+        <activity
+            android:name=".ui.activities.UserActivity"
+            android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".ui.activities.CambiarContrasenyaActivity"
+            android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".ui.activities.CambiarCorreoActivity"
+            android:exported="true">
+        </activity>
+
         <service
             android:name=".services.BeaconService"
             android:exported="false">

@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
     private Button logoutButton;
     private Button scannerButton;
     private Button huellaButton;
+    private Button userButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         logoutButton = findViewById(R.id.logoutButton);
         scannerButton = findViewById(R.id.scannerButton);
         huellaButton = findViewById(R.id.huellaButton);
+        userButton = findViewById(R.id.userButton);
 
         configurarBotones();
     }
@@ -50,6 +52,14 @@ public class MainActivity extends AppCompatActivity {
                public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, HuellaActivity.class);
                 startActivity(intent); // Inicia la actividad HuellaActivity
+            }
+        });
+        // Botón para ir a UserActivity
+        userButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, UserActivity.class);
+                startActivity(intent); // Inicia la actividad UserActivity
             }
         });
     }
