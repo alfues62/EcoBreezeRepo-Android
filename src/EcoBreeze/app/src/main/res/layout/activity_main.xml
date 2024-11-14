@@ -7,35 +7,45 @@
     tools:context=".ui.activities.MainActivity">
 
     <!-- Botón para ir a ScannerActivity -->
+
+    <!-- Botón para ir a HuellaActivity -->
+
+    <!-- Botón para ir a HuellaActivity -->
+
     <Button
         android:id="@+id/scannerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Scan"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Botón para ir a HuellaActivity -->
     <Button
         android:id="@+id/huellaButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Huella"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logoutButton" />
+        app:layout_constraintTop_toBottomOf="@+id/userButton" />
+
+    <Button
+        android:id="@+id/userButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pagina Usuario"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scannerButton" />
 
     <Button
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cerrar Sesión"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scannerButton" />
+        app:layout_constraintTop_toBottomOf="@+id/huellaButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
