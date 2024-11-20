@@ -4,62 +4,47 @@ import java.sql.Time;
 import java.util.Date;
 
 public class Medicion {
-    int id;
-    float valorO3;
-    String Lon;
-    String Lat;
-    Date fecha;
-    Time hora;
-    int tipoGas;
+    private int idMedicion;
+    private double valor;
+    private double lon;
+    private double lat;
+    private String fecha;
+    private String hora;
+    private String categoria;
+    private int tipoGasId;
+    private String tipoGas;
 
-    public Medicion(int id, float valorO3, String lon, String lat, Date fecha, Time hora, int tipoGas) {
-        this.id = id;
-        this.valorO3 = valorO3;
-        Lon = lon;
-        Lat = lat;
+    // Constructor
+    public Medicion(int idMedicion, double valor, double lon, double lat, String fecha, String hora, String categoria, int tipoGasId, String tipoGas) {
+        this.idMedicion = idMedicion;
+        this.valor = valor;
+        this.lon = lon;
+        this.lat = lat;
         this.fecha = fecha;
         this.hora = hora;
+        this.categoria = categoria;
+        this.tipoGasId = tipoGasId;
         this.tipoGas = tipoGas;
     }
 
-    public int getId() {return id;}
-
-    public void setId(int id) {this.id = id;}
-
-    public float getValorO3() {return valorO3;}
-
-    public void setValorO3(float valorO3) {this.valorO3 = valorO3;}
-
-    public String getLon() {return Lon;}
-
-    public void setLon(String lon) {Lon = lon;}
-
-    public String getLat() {return Lat;}
-
-    public void setLat(String lat) {Lat = lat;}
-
-    public Date getFecha() {return fecha;}
-
-    public void setFecha(Date fecha) {this.fecha = fecha;}
-
-    public Time getHora() {return hora;}
-
-    public void setHora(Time hora) {this.hora = hora;}
-
-    public int getTipoGas() {return tipoGas;}
-
-    public void setTipoGas(int tipoGas) {this.tipoGas = tipoGas;}
-
-    @Override
-    public String toString() {
-        return "Medicion{" +
-                "id=" + id +
-                ", valorO3=" + valorO3 +
-                ", Lon='" + Lon + '\'' +
-                ", Lat='" + Lat + '\'' +
-                ", fecha=" + fecha +
-                ", hora=" + hora +
-                ", tipoGas=" + tipoGas +
-                '}';
+    public int getIdMedicion() {
+        return idMedicion;
     }
+
+    public double getValor() {
+        return valor;
+    }
+
+    public String getCategoria() {
+        return categoria;  // Getter para categoría
+    }
+    public String getFecha() {
+        return fecha;
+    }
+
+    public String getHora() {
+        return hora;
+    }
+
 }
+
