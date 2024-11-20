@@ -51,6 +51,10 @@ dependencies {
     implementation("com.android.volley:volley:1.2.1")
     implementation("de.svenkubiak:jBCrypt:0.4")
 
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")

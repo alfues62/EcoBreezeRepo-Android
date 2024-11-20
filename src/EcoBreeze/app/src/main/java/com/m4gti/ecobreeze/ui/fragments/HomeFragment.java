@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.m4gti.ecobreeze.R;
+import com.m4gti.ecobreeze.ui.activities.VerMas;
 
 public class HomeFragment extends Fragment {
 

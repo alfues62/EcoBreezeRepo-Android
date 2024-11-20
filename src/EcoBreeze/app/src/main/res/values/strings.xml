@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">EcoBreeze</string>
+    <string-array name="gas_types">
+        <item>CO2</item>
+        <item>CH4</item>
+        <item>O3</item>
+        <item>SO2</item>
+        <item>SO4</item>
+    </string-array>
 </resources>

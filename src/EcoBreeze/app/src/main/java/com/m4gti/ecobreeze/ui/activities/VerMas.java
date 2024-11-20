@@ -1,5 +1,6 @@
 package com.m4gti.ecobreeze.ui.activities;
 
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -10,12 +11,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.m4gti.ecobreeze.R;
+import com.m4gti.ecobreeze.models.TipoGas;
+import com.m4gti.ecobreeze.ui.fragments.HomeFragment;
 
 public class VerMas extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.vermas); // Asegúrate de que este sea el layout correcto
+        setContentView(R.layout.activity_vermas); // Asegúrate de que este sea el layout correcto
 
         Spinner tipo = findViewById(R.id.filtro_gas);
 
@@ -36,15 +39,11 @@ public class VerMas extends AppCompatActivity {
         // Configura el TextView y su OnClickListener
         TextView textLink = findViewById(R.id.atras_link);
         textLink.setOnClickListener(v -> {
-            // Reemplazar el contenido actual con el HomeFragment
-            Fragment homeFragment = new HomeFragment(); // Instancia del Fragment
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, homeFragment); // Cambia "fragment_container" al id del contenedor de tu Fragment
-            transaction.addToBackStack(null); // Opcional: agrega la transacción a la pila
-            transaction.commit();
+            Intent intent = new Intent(VerMas.this, MainActivity.class);
+            startActivity(intent);
         });
         TextView atrasLink = findViewById(R.id.atras_link);
-        atrasLink.setPaintFlags(atrasLink.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        textLink.setPaintFlags(atrasLink.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
     }
 }
