@@ -1,95 +1,77 @@
 package com.m4gti.ecobreeze.ui.activities;
 
-import com.m4gti.ecobreeze.logic.LogicaRecepcionDatos;
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
+import androidx.appcompat.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.m4gti.ecobreeze.R;
-import com.m4gti.ecobreeze.logic.LogicaLogin;
-import com.m4gti.ecobreeze.models.Medicion;
+import com.m4gti.ecobreeze.ui.fragments.HomeFragment;
+import com.m4gti.ecobreeze.ui.fragments.MapaGlobalFragment;
+import com.m4gti.ecobreeze.ui.fragments.PerfilFragment;
+import com.m4gti.ecobreeze.ui.fragments.QueRespirasFragment;
 
-public class MainActivity extends AppCompatActivity implements LogicaRecepcionDatos.OnMedicionRecibidaListener {
+import androidx.fragment.app.Fragment;
 
-    private Button logoutButton;
-    private Button scannerButton;
-    private Button huellaButton;
-    private Button userButton;
-
-    private TextView textViewUltimaMedicion;
-    private LogicaRecepcionDatos logicaRecepcionDatos;
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        logoutButton = findViewById(R.id.logoutButton);
-        scannerButton = findViewById(R.id.scannerButton);
-        huellaButton = findViewById(R.id.huellaButton);
-        userButton = findViewById(R.id.userButton);
+        // Configura BottomNavigationView
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment selectedFragment = null;
+                if (item.getItemId() == R.id.navigation_home) {
+                    selectedFragment = new HomeFragment();
+                } else if (item.getItemId() == R.id.navigation_mapaGlobal) {
+                    selectedFragment = new MapaGlobalFragment();
+                } else if (item.getItemId() == R.id.navigation_queRespiras) {
+                    selectedFragment = new QueRespirasFragment();
+                } else if (item.getItemId() == R.id.navigation_perfil) {
+                    selectedFragment = new PerfilFragment();
+                }
 
-        textViewUltimaMedicion = findViewById(R.id.textViewUltimaMedicion);
+                if (selectedFragment != null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, selectedFragment)
+                            .commit();
+                }
+                return true;
+            }
 
-        // Inicializamos LogicaRecepcionDatos con el listener
-        logicaRecepcionDatos = new LogicaRecepcionDatos(this, this);  // Le pasamos el listener a la clase
+        });
 
-        // Obtener las mediciones
-        logicaRecepcionDatos.obtenerMedicionesDeServidor();
+        // Configura el fragmento del mapa
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
 
-        configurarBotones();
+        // Selección predeterminada en la navegación
+        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
     }
 
-    // Implementamos el método de la interfaz
     @Override
-    public void onMedicionRecibida(Medicion medicion) {
-        // Mostrar la última medición incluyendo la categoría
-        String medicionText = "ID: " + medicion.getIdMedicion() + "\n" +
-                "Valor: " + medicion.getValor() + "\n" +
-                "Fecha: " + medicion.getFecha() + "\n" +
-                "Hora: " + medicion.getHora() + "\n" +
-                "Categoría: " + medicion.getCategoria();  // Añadir categoría al texto
-
-        textViewUltimaMedicion.setText(medicionText);
-    }
-
-    private void configurarBotones() {
-        // Botón de logout
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogicaLogin.logout(MainActivity.this); // Llama al método de logout en LogicaLogin
-            }
-        });
-
-        // Botón para ir a ScannerActivity
-        scannerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ScannerActivity.class);
-                startActivity(intent); // Inicia la actividad ScannerActivity
-            }
-        });
-
-        // Botón para ir a HuellaActivity
-        huellaButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, HuellaActivity.class);
-                startActivity(intent); // Inicia la actividad HuellaActivity
-            }
-        });
-        // Botón para ir a UserActivity
-        userButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, UserActivity.class);
-                startActivity(intent); // Inicia la actividad UserActivity
-            }
-        });
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        // Configura el mapa aquí
+        LatLng UPV = new LatLng(39.481106, -0.340987); // Coordenadas de la UPV
+        googleMap.addMarker(new MarkerOptions().position(UPV).title("Marker UPV"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(UPV));
     }
 }

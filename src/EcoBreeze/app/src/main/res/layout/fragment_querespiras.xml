@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Título -->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¿Qué estás respirando?"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:paddingBottom="8dp" />
+
+        <!-- Subtítulo -->
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descubre las causas, efectos y soluciones para mejorar la calidad del aire."
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:paddingBottom="16dp" />
+
+        <!-- Sección Principal: Contaminantes -->
+
+        <!-- Contaminante CO₂ -->
+        <TextView
+            android:id="@+id/section_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:text="Contaminantes:"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/co2_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="CO₂ (Dióxido de Carbono)"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/co2_image"
+            android:layout_width="match_parent"
+            android:layout_height="244dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/c02_image" />
+
+        <TextView
+            android:id="@+id/co2_origins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Origen y causas:\nProducido por actividades humanas como la respiración, combustión de combustibles fósiles y ciertas actividades industriales."
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <TextView
+            android:id="@+id/co2_health_effects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Efectos en la salud:\nFatiga, menor concentración, dolores de cabeza, riesgo a largo plazo de problemas respiratorios."
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <TextView
+            android:id="@+id/co2_environment_effects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Efectos en el medio ambiente:\nContribuye al cambio climático como un gas de efecto invernadero."
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <TextView
+            android:id="@+id/co2_limits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Límites recomendados:\nMantener los niveles interiores por debajo de 1000 ppm."
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <TextView
+            android:id="@+id/co2_recommendations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recomendaciones:\nMejorar la ventilación en espacios cerrados.\nReducir el uso de fuentes de energía que emiten dióxido de carbono."
+            android:textSize="16sp"
+            android:paddingTop="4dp"
+            android:paddingBottom="16dp" />
+
+        <!-- Contaminante CH₄ -->
+        <TextView
+            android:id="@+id/ch4_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="CH₄ (Metano)"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ch4_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ch4_image" />
+
+        <TextView
+            android:id="@+id/ch4_origins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Origen y causas:\nProducido por actividades agrícolas, gestión de residuos y la extracción de gas natural."
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <TextView
+            android:id="@+id/ch4_health_effects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Efectos en la salud:\nRiesgo de asfixia en altas concentraciones, aunque generalmente no es peligroso a niveles ambientales."
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <TextView
+            android:id="@+id/ch4_environment_effects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Efectos en el medio ambiente:\nPotente gas de efecto invernadero que contribuye significativamente al calentamiento global."
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <TextView
+            android:id="@+id/ch4_limits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Límites recomendados:\nMantener los niveles laborales por debajo de 1000 ppm."
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <TextView
+            android:id="@+id/ch4_recommendations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recomendaciones:\nMejorar la gestión de residuos y reducir las emisiones de las industrias de gas y petróleo."
+            android:textSize="16sp"
+            android:paddingTop="4dp"
+            android:paddingBottom="16dp" />
+
+        <!-- Contaminante O₃ -->
+        <TextView
+            android:id="@+id/o3_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="O₃ (Ozono)"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/o3_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/o3_image" />
+
+        <TextView
+            android:id="@+id/o3_origins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Origen y causas:\nFormado por reacciones fotoquímicas entre contaminantes como óxidos de nitrógeno y compuestos orgánicos volátiles bajo la luz solar."
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <TextView
+            android:id="@+id/o3_health_effects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Efectos en la salud:\nIrritación de los ojos, nariz y garganta, problemas respiratorios y empeoramiento del asma."
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <TextView
+            android:id="@+id/o3_environment_effects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Efectos en el medio ambiente:\nPuede dañar cultivos, vegetación y materiales de construcción."
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <TextView
+            android:id="@+id/o3_limits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Límites recomendados:\nConcentración en exteriores no superior a 70 ppb (promedio de 8 horas)."
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <TextView
+            android:id="@+id/o3_recommendations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recomendaciones:\nEvitar actividades al aire libre durante picos de ozono.
+Fomentar el uso de transporte público y reducir emisiones de compuestos volátiles."
+            android:textSize="16sp"
+            android:paddingTop="4dp"
+            android:paddingBottom="16dp" />
+        <!-- Contaminante SO₂ -->
+        <TextView
+            android:id="@+id/so2_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="SO₂ (Dióxido de Azufre)"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/so2_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/so2_image" />
+
+        <TextView
+            android:id="@+id/so2_origins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Origen y causas:\nProducido principalmente por la quema de combustibles fósiles, como carbón y petróleo, y procesos industriales."
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <TextView
+            android:id="@+id/so2_health_effects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Efectos en la salud:\nIrritación del sistema respiratorio, empeoramiento de enfermedades pulmonares y asma."
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <TextView
+            android:id="@+id/so2_environment_effects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Efectos en el medio ambiente:\nContribuye a la lluvia ácida, dañando ecosistemas acuáticos y vegetación."
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <TextView
+            android:id="@+id/so2_limits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Límites recomendados:\nConcentraciones exteriores inferiores a 20 ppb (promedio diario)."
+            android:textSize="16sp"
+            android:paddingTop="4dp" />
+
+        <TextView
+            android:id="@+id/so2_recommendations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recomendaciones:\nPromover tecnologías limpias y reducir la quema de combustibles fósiles."
+            android:textSize="16sp"
+            android:paddingTop="4dp"
+            android:paddingBottom="16dp" />
+
+
+
+    </LinearLayout>
+</ScrollView>
