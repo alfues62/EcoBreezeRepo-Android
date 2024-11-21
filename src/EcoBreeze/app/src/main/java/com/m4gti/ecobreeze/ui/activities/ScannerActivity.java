@@ -63,7 +63,7 @@ public class ScannerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
 
-        tv= findViewById(R.id.minor);
+        tv = findViewById(R.id.minor);
         logicaEnvioDatos = new LogicaEnvioDatos(this);
 
         // Inicializar Bluetooth Adapter
@@ -89,9 +89,28 @@ public class ScannerActivity extends AppCompatActivity {
                 startCamera();  // Inicia el escaneo al hacer clic en el botón
             }
         });
+
+        // Botón para iniciar búsqueda de un dispositivo específico
+        Button botonBuscarDispositivo = findViewById(R.id.botonBuscarNuestroDispositivoBTLE);
+        botonBuscarDispositivo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                iniciarBusquedaEste("00:11:22:33:44:55"); // Cambiar por la MAC real que quieras buscar
+            }
+        });
+
+        // Botón para detener la búsqueda
+        Button botonDetenerBusqueda = findViewById(R.id.botonDetenerBusquedaDispositivosBTLE);
+        botonDetenerBusqueda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detenerBusqueda(); // Detiene la búsqueda de dispositivos
+            }
+        });
     }
 
     // --------------------------------------------------------------
+
     /**
      * @brief Método que inicia el servicio de busqueda de un dispositivo en especifico.
      *
@@ -109,6 +128,16 @@ public class ScannerActivity extends AppCompatActivity {
 
         if (!bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             return;
         }
