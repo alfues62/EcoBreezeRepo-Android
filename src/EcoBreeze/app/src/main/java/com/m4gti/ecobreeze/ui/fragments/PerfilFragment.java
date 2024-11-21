@@ -2,6 +2,7 @@ package com.m4gti.ecobreeze.ui.fragments;
 import com.m4gti.ecobreeze.R;
 import com.m4gti.ecobreeze.logic.LogicaLogin;
 import com.m4gti.ecobreeze.logic.LogicaRecepcionDatos;
+import com.m4gti.ecobreeze.logic.NotificationHelper;
 import com.m4gti.ecobreeze.models.Medicion;
 import com.m4gti.ecobreeze.ui.activities.HuellaActivity;
 import com.m4gti.ecobreeze.ui.activities.MainActivity;
@@ -15,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.fragment.app.Fragment;
 
@@ -24,6 +27,8 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
     private Button scannerButton;
     private Button huellaButton;
     private Button userButton;
+    private Handler handler;
+    private Runnable notificacionRunnable;
     private TextView textViewUltimaMedicion;
     private LogicaRecepcionDatos logicaRecepcionDatos;
 
@@ -49,8 +54,40 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
 
         configurarBotones();
 
+        // Inicializar el temporizador para notificaciones
+        iniciarNotificaciones();
+
         return view;
     }
+
+    private void iniciarNotificaciones() {
+        handler = new Handler(Looper.getMainLooper());
+        notificacionRunnable = new Runnable() {
+            @Override
+            public void run() {
+                enviarNotificacionConCategoriaActual();
+                handler.postDelayed(this, 30000); // 30 segundos
+            }
+        };
+        handler.post(notificacionRunnable);
+    }
+
+    private void enviarNotificacionConCategoriaActual() {
+        // Extraer el texto de la medición actual desde el TextView
+        String medicionText = textViewUltimaMedicion.getText().toString();
+
+        if (medicionText.contains("Categoría:")) {
+            String categoria = medicionText.substring(medicionText.indexOf("Categoría:") + 10).trim();
+
+            // Enviar notificación con la categoría
+            NotificationHelper.sendSensorAlertNotification(
+                    requireContext(),
+                    "Categoría actual: " + categoria
+            );
+        }
+    }
+
+
 
     // Implementamos el método de la interfaz
     @Override
@@ -63,6 +100,14 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
                 "Categoría: " + medicion.getCategoria();  // Añadir categoría al texto
 
         textViewUltimaMedicion.setText(medicionText);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (handler != null) {
+            handler.removeCallbacks(notificacionRunnable);
+        }
     }
 
     private void configurarBotones() {
