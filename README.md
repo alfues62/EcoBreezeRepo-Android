@@ -9,4 +9,4 @@ Esta App es responsable de recibir los datos del beacon de Arduino y enviarlos a
     
 Con esto la app debería empezar a recibir beacons de Arduino y enviarlos a la BBDD, desde la cual se mostrará en la página Web
 
-### Version Inicio Sprint 2
+### Version Inicio Sprint 3
