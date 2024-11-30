@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                comprobarEstadoSensor();
+                //comprobarEstadoSensor();
                 handler.postDelayed(this, 60000); // Verifica cada 5 segundos
             }
         };
@@ -163,10 +163,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         boolean sensorDesconectado = true; // Cambiar por la lógica real
 
         if (sensorDesconectado) {
-            mostrarNotificacion("El sensor está apagado o desconectado");
+            //mostrarNotificacion("El sensor está apagado o desconectado");
         }
     }
-
-    // Aquí puedes invocar comprobarEstadoSensor cuando sea necesario, por ejemplo, al perder conexión Bluetooth.
-
 }

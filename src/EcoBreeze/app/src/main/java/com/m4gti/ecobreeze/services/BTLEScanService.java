@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -41,6 +42,24 @@ public class BTLEScanService extends Service {
     private ScanCallback callbackDelEscaneo;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
+    private long ultimoTiempoBeacon = 0;
+    private static final long TIEMPO_SIN_BEACONS = 10000; // 10 segundos
+    private Handler handler = new Handler();
+
+    // Runnable para verificar el tiempo sin detectar beacons
+    private Runnable verificadorDeBeacons = new Runnable() {
+        @Override
+        public void run() {
+            long tiempoActual = System.currentTimeMillis();
+            if (tiempoActual - ultimoTiempoBeacon > TIEMPO_SIN_BEACONS) {
+                // Si han pasado más de 10 segundos sin un beacon, mostrar la notificación
+                mostrarNotificacion("No se ha detectado ningún beacon en los últimos 10 segundos.");
+            } else {
+                // Verificar nuevamente después de 1 segundo
+                handler.postDelayed(this, 1000);
+            }
+        }
+    };
 
     @Override
     public void onCreate() {
@@ -50,18 +69,29 @@ public class BTLEScanService extends Service {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         inicializarBlueTooth();
-        inicializarLocalizacion();
-
-        crearCanalDeNotificacion();
-        Notification notification = new Notification.Builder(this, CHANNEL_ID)
-                .setContentTitle("BTLE & Location Service")
-                .setContentText("Corriendo en segundo plano")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .build();
-        startForeground(1, notification);
+        //inicializarLocalizacion();
 
 
     }
+
+    private void crearCanalDeNotificacion() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Solo se necesita crear un canal en dispositivos con Android 8.0 o superior
+            NotificationChannel canal = new NotificationChannel(
+                    CHANNEL_ID,
+                    "Beacon Notifications",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            canal.setDescription("Notificaciones cuando no se detecten beacons.");
+
+            // Obtener el servicio de notificaciones y registrar el canal
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(canal);
+            }
+        }
+    }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -79,6 +109,9 @@ public class BTLEScanService extends Service {
             stopSelf();
         }
 
+        // Comenzamos a verificar el tiempo sin beacons
+        handler.postDelayed(verificadorDeBeacons, 1000);
+
         return START_STICKY;
     }
 
@@ -87,7 +120,8 @@ public class BTLEScanService extends Service {
         super.onDestroy();
         Log.d(ETIQUETA_LOG, "Servicio detenido: deteniendo escaneo BTLE.");
         detenerBusquedaDispositivosBTLE();
-        detenerActualizacionesDeLocalizacion();
+        //detenerActualizacionesDeLocalizacion();
+        handler.removeCallbacks(verificadorDeBeacons);
     }
 
     @Nullable
@@ -112,50 +146,6 @@ public class BTLEScanService extends Service {
         }
     }
 
-    private void obtenerUbicacionActual() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Log.e(ETIQUETA_LOG, "Permiso de ubicación no concedido.");
-            return;
-        }
-
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(location -> {
-                    if (location != null) {
-                        Log.d(ETIQUETA_LOG, "Ubicación actual: Latitud = " + location.getLatitude() + ", Longitud = " + location.getLongitude());
-                    } else {
-                        Log.e(ETIQUETA_LOG, "No se pudo obtener la ubicación.");
-                    }
-                })
-                .addOnFailureListener(e -> Log.e(ETIQUETA_LOG, "Error al obtener la ubicación: " + e.getMessage()));
-    }
-
-    private void buscarTodosLosDispositivosBTLE() {
-        Log.d(ETIQUETA_LOG, "Comenzando escaneo BTLE.");
-
-        callbackDelEscaneo = new ScanCallback() {
-            @Override
-            public void onScanResult(int callbackType, ScanResult resultado) {
-                super.onScanResult(callbackType, resultado);
-                mostrarInformacionDispositivoBTLE(resultado);
-            }
-
-            @Override
-            public void onBatchScanResults(List<ScanResult> results) {
-                super.onBatchScanResults(results);
-                for (ScanResult resultado : results) {
-                    mostrarInformacionDispositivoBTLE(resultado);
-                }
-            }
-
-            @Override
-            public void onScanFailed(int errorCode) {
-                super.onScanFailed(errorCode);
-                Log.e(ETIQUETA_LOG, "Error en el escaneo: código " + errorCode);
-            }
-        };
-        elEscanner.startScan(callbackDelEscaneo);
-    }
-
     private void detenerBusquedaDispositivosBTLE() {
         if (callbackDelEscaneo != null) {
             elEscanner.stopScan(callbackDelEscaneo);
@@ -165,18 +155,20 @@ public class BTLEScanService extends Service {
     }
 
     private void buscarEsteDispositivoBTLE(final String direccionMac) {
-        Log.d(ETIQUETA_LOG, " buscarEsteDispositivoBTLE(): empieza ");
-
-        Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): instalamos scan callback ");
+        Log.d(ETIQUETA_LOG, "buscarEsteDispositivoBTLE(): empieza");
 
         this.callbackDelEscaneo = new ScanCallback() {
             @Override
             public void onScanResult(int callbackType, ScanResult resultado) {
                 super.onScanResult(callbackType, resultado);
-                Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): onScanResult() ");
+                Log.d(ETIQUETA_LOG, "buscarEsteDispositivoBTLE(): onScanResult()");
 
                 // Comparar la dirección MAC del dispositivo encontrado
                 if (resultado.getDevice().getAddress().equals(direccionMac)) {
+                    // Actualizar el tiempo de último beacon recibido
+                    ultimoTiempoBeacon = System.currentTimeMillis();
+
+                    // Mostrar la información del dispositivo como lo haces ahora
                     mostrarInformacionDispositivoBTLE(resultado);
                 }
             }
@@ -184,19 +176,19 @@ public class BTLEScanService extends Service {
             @Override
             public void onBatchScanResults(List<ScanResult> results) {
                 super.onBatchScanResults(results);
-                Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): onBatchScanResults() ");
+                Log.d(ETIQUETA_LOG, "buscarEsteDispositivoBTLE(): onBatchScanResults()");
             }
 
             @Override
             public void onScanFailed(int errorCode) {
                 super.onScanFailed(errorCode);
-                Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): onScanFailed() ");
+                Log.d(ETIQUETA_LOG, "buscarEsteDispositivoBTLE(): onScanFailed()");
             }
         };
 
-        Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): empezamos a escanear buscando: " + direccionMac);
+        Log.d(ETIQUETA_LOG, "buscarEsteDispositivoBTLE(): comenzamos a escanear buscando: " + direccionMac);
         this.elEscanner.startScan(this.callbackDelEscaneo);
-    }// ()
+    }
 
     private void mostrarInformacionDispositivoBTLE(ScanResult resultado) {
         BluetoothDevice bluetoothDevice = resultado.getDevice();
@@ -237,11 +229,31 @@ public class BTLEScanService extends Service {
         } catch (Exception e) {
             Log.e(ETIQUETA_LOG, "Error al procesar los datos del iBeacon: " + e.getMessage());
         }
-        obtenerUbicacionActual(); // Obtener la ubicación actual
+        //obtenerUbicacionActual(); // Obtener la ubicación actual
 
         Log.d(ETIQUETA_LOG, "****************************************************\n");
     }
 
+    private void mostrarNotificacion(String mensaje) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "Beacon Notification Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        Notification notification = new Notification.Builder(this, CHANNEL_ID)
+                .setContentTitle("Alerta de Beacon")
+                .setContentText(mensaje)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .build();
+
+        notificationManager.notify(1, notification);
+    }
     private void inicializarLocalizacion() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -282,20 +294,6 @@ public class BTLEScanService extends Service {
     private void detenerActualizacionesDeLocalizacion() {
         if (fusedLocationClient != null && locationCallback != null) {
             fusedLocationClient.removeLocationUpdates(locationCallback);
-        }
-    }
-
-    private void crearCanalDeNotificacion() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel serviceChannel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "BTLE & Location Service Channel",
-                    NotificationManager.IMPORTANCE_DEFAULT
-            );
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            if (manager != null) {
-                manager.createNotificationChannel(serviceChannel);
-            }
         }
     }
 }
