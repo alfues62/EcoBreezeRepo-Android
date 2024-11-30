@@ -66,7 +66,7 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
             @Override
             public void run() {
                 enviarNotificacionConCategoriaActual();
-                handler.postDelayed(this, 30000); // 30 segundos
+                handler.postDelayed(this, 1000); // 30 segundos
             }
         };
         handler.post(notificacionRunnable);

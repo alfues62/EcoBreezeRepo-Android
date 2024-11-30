@@ -75,9 +75,9 @@
         </activity>
 
         <service
-            android:name=".services.BeaconService"
-            android:exported="false">
-        </service>
+            android:name=".services.BTLEScanService"
+            android:enabled="true"
+            android:exported="false" />
 
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
