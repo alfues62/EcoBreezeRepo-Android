@@ -1,2 +1,301 @@
-package com.m4gti.ecobreeze.services;public class BTLEScanService {
+package com.m4gti.ecobreeze.services;
+
+import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Build;
+import android.os.IBinder;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.m4gti.ecobreeze.R;
+import com.m4gti.ecobreeze.models.TramaIBeacon;
+import com.m4gti.ecobreeze.utils.Utilidades;
+
+import java.util.List;
+
+public class BTLEScanService extends Service {
+
+    private static final String ETIQUETA_LOG = "BTLE_SERVICE";
+    private static final String CHANNEL_ID = "BTLELocationServiceChannel";
+    private BluetoothLeScanner elEscanner;
+    private ScanCallback callbackDelEscaneo;
+    private FusedLocationProviderClient fusedLocationClient;
+    private LocationCallback locationCallback;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.d(ETIQUETA_LOG, "Servicio creado: inicializando Bluetooth.");
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        inicializarBlueTooth();
+        inicializarLocalizacion();
+
+        crearCanalDeNotificacion();
+        Notification notification = new Notification.Builder(this, CHANNEL_ID)
+                .setContentTitle("BTLE & Location Service")
+                .setContentText("Corriendo en segundo plano")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .build();
+        startForeground(1, notification);
+
+
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null && intent.hasExtra("MAC_ADDRESS")) {
+            String direccionMac = intent.getStringExtra("MAC_ADDRESS");
+            if (direccionMac != null && !direccionMac.isEmpty()) {
+                Log.d(ETIQUETA_LOG, "Servicio iniciado: buscando dispositivo con dirección MAC: " + direccionMac);
+                buscarEsteDispositivoBTLE(direccionMac);
+            } else {
+                Log.e(ETIQUETA_LOG, "No se proporcionó una dirección MAC válida en el Intent.");
+                stopSelf(); // Detenemos el servicio si no hay una dirección MAC válida.
+            }
+        } else {
+            Log.e(ETIQUETA_LOG, "El Intent no contiene la dirección MAC. Deteniendo el servicio.");
+            stopSelf();
+        }
+
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(ETIQUETA_LOG, "Servicio detenido: deteniendo escaneo BTLE.");
+        detenerBusquedaDispositivosBTLE();
+        detenerActualizacionesDeLocalizacion();
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        // No usaremos comunicación tipo "bind" para este servicio.
+        return null;
+    }
+
+    private void inicializarBlueTooth() {
+        BluetoothAdapter bta = BluetoothAdapter.getDefaultAdapter();
+        if (bta == null || !bta.isEnabled()) {
+            Log.e(ETIQUETA_LOG, "Bluetooth no está habilitado o no es compatible.");
+            stopSelf(); // Finalizamos el servicio si no se puede usar Bluetooth.
+            return;
+        }
+
+        elEscanner = bta.getBluetoothLeScanner();
+        if (elEscanner == null) {
+            Log.e(ETIQUETA_LOG, "No se pudo obtener el escáner BTLE.");
+            stopSelf();
+        }
+    }
+
+    private void obtenerUbicacionActual() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e(ETIQUETA_LOG, "Permiso de ubicación no concedido.");
+            return;
+        }
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(location -> {
+                    if (location != null) {
+                        Log.d(ETIQUETA_LOG, "Ubicación actual: Latitud = " + location.getLatitude() + ", Longitud = " + location.getLongitude());
+                    } else {
+                        Log.e(ETIQUETA_LOG, "No se pudo obtener la ubicación.");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e(ETIQUETA_LOG, "Error al obtener la ubicación: " + e.getMessage()));
+    }
+
+    private void buscarTodosLosDispositivosBTLE() {
+        Log.d(ETIQUETA_LOG, "Comenzando escaneo BTLE.");
+
+        callbackDelEscaneo = new ScanCallback() {
+            @Override
+            public void onScanResult(int callbackType, ScanResult resultado) {
+                super.onScanResult(callbackType, resultado);
+                mostrarInformacionDispositivoBTLE(resultado);
+            }
+
+            @Override
+            public void onBatchScanResults(List<ScanResult> results) {
+                super.onBatchScanResults(results);
+                for (ScanResult resultado : results) {
+                    mostrarInformacionDispositivoBTLE(resultado);
+                }
+            }
+
+            @Override
+            public void onScanFailed(int errorCode) {
+                super.onScanFailed(errorCode);
+                Log.e(ETIQUETA_LOG, "Error en el escaneo: código " + errorCode);
+            }
+        };
+        elEscanner.startScan(callbackDelEscaneo);
+    }
+
+    private void detenerBusquedaDispositivosBTLE() {
+        if (callbackDelEscaneo != null) {
+            elEscanner.stopScan(callbackDelEscaneo);
+            callbackDelEscaneo = null;
+            Log.d(ETIQUETA_LOG, "Escaneo BTLE detenido.");
+        }
+    }
+
+    private void buscarEsteDispositivoBTLE(final String direccionMac) {
+        Log.d(ETIQUETA_LOG, " buscarEsteDispositivoBTLE(): empieza ");
+
+        Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): instalamos scan callback ");
+
+        this.callbackDelEscaneo = new ScanCallback() {
+            @Override
+            public void onScanResult(int callbackType, ScanResult resultado) {
+                super.onScanResult(callbackType, resultado);
+                Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): onScanResult() ");
+
+                // Comparar la dirección MAC del dispositivo encontrado
+                if (resultado.getDevice().getAddress().equals(direccionMac)) {
+                    mostrarInformacionDispositivoBTLE(resultado);
+                }
+            }
+
+            @Override
+            public void onBatchScanResults(List<ScanResult> results) {
+                super.onBatchScanResults(results);
+                Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): onBatchScanResults() ");
+            }
+
+            @Override
+            public void onScanFailed(int errorCode) {
+                super.onScanFailed(errorCode);
+                Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): onScanFailed() ");
+            }
+        };
+
+        Log.d(ETIQUETA_LOG, "  buscarEsteDispositivoBTLE(): empezamos a escanear buscando: " + direccionMac);
+        this.elEscanner.startScan(this.callbackDelEscaneo);
+    }// ()
+
+    private void mostrarInformacionDispositivoBTLE(ScanResult resultado) {
+        BluetoothDevice bluetoothDevice = resultado.getDevice();
+        byte[] bytes = resultado.getScanRecord().getBytes();
+        int rssi = resultado.getRssi();
+
+        String nombreDispositivo = bluetoothDevice.getName() != null ? bluetoothDevice.getName() : "Nombre no disponible";
+        String direccionMac = bluetoothDevice.getAddress();
+
+        Log.d(ETIQUETA_LOG, "\n****************************************************");
+        Log.d(ETIQUETA_LOG, "****** INFORMACIÓN DEL DISPOSITIVO BTLE DETECTADO ******");
+        Log.d(ETIQUETA_LOG, "****************************************************");
+        Log.d(ETIQUETA_LOG, "Nombre: " + nombreDispositivo);
+        Log.d(ETIQUETA_LOG, "Dirección MAC: " + direccionMac);
+        Log.d(ETIQUETA_LOG, "RSSI (Potencia de la señal): " + rssi);
+
+        if (bytes != null && bytes.length > 0) {
+            Log.d(ETIQUETA_LOG, "Datos crudos del anuncio: " + Utilidades.bytesToHexString(bytes));
+        } else {
+            Log.d(ETIQUETA_LOG, "Datos crudos del anuncio: No disponibles");
+        }
+
+        try {
+            TramaIBeacon tib = new TramaIBeacon(bytes);
+
+            Log.d(ETIQUETA_LOG, "---------------- DETALLES DEL IBEACON ----------------");
+            Log.d(ETIQUETA_LOG, "Prefijo: " + Utilidades.bytesToHexString(tib.getPrefijo()));
+            Log.d(ETIQUETA_LOG, "AdvFlags: " + Utilidades.bytesToHexString(tib.getAdvFlags()));
+            Log.d(ETIQUETA_LOG, "AdvHeader: " + Utilidades.bytesToHexString(tib.getAdvHeader()));
+            Log.d(ETIQUETA_LOG, "Company ID: " + Utilidades.bytesToHexString(tib.getCompanyID()));
+            Log.d(ETIQUETA_LOG, "iBeacon Type: " + Integer.toHexString(tib.getiBeaconType()));
+            Log.d(ETIQUETA_LOG, "iBeacon Length: 0x" + Integer.toHexString(tib.getiBeaconLength()) + " (" + tib.getiBeaconLength() + ")");
+            Log.d(ETIQUETA_LOG, "UUID: " + Utilidades.bytesToString(tib.getUUID()));
+            Log.d(ETIQUETA_LOG, "Major: " + Utilidades.bytesToInt(tib.getMajor()) + " (Hex: " + Utilidades.bytesToHexString(tib.getMajor()) + ")");
+            Log.d(ETIQUETA_LOG, "Minor: " + Utilidades.bytesToInt(tib.getMinor()) + " (Hex: " + Utilidades.bytesToHexString(tib.getMinor()) + ")");
+            Log.d(ETIQUETA_LOG, "TxPower: " + tib.getTxPower() + " (Hex: " + Integer.toHexString(tib.getTxPower()) + ")");
+            Log.d(ETIQUETA_LOG, "-----------------------------------------------------");
+        } catch (Exception e) {
+            Log.e(ETIQUETA_LOG, "Error al procesar los datos del iBeacon: " + e.getMessage());
+        }
+        obtenerUbicacionActual(); // Obtener la ubicación actual
+
+        Log.d(ETIQUETA_LOG, "****************************************************\n");
+    }
+
+    private void inicializarLocalizacion() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        locationCallback = new LocationCallback() {
+            private LocationResult locationResult;
+
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                this.locationResult = locationResult;
+                if (locationResult == null) {
+                    Log.d(ETIQUETA_LOG, "No location result");
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    Log.d(ETIQUETA_LOG, "Ubicación: " + location.getLatitude() + ", " + location.getLongitude());
+                }
+            }
+        };
+
+        iniciarActualizacionesDeLocalizacion();
+    }
+
+    private void iniciarActualizacionesDeLocalizacion() {
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(5000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e(ETIQUETA_LOG, "Permisos de localización no concedidos.");
+            return;
+        }
+
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+    }
+
+    private void detenerActualizacionesDeLocalizacion() {
+        if (fusedLocationClient != null && locationCallback != null) {
+            fusedLocationClient.removeLocationUpdates(locationCallback);
+        }
+    }
+
+    private void crearCanalDeNotificacion() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel serviceChannel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "BTLE & Location Service Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager != null) {
+                manager.createNotificationChannel(serviceChannel);
+            }
+        }
+    }
 }

@@ -59,7 +59,7 @@ public class LogicaLogin {
                                 editor.apply();
 
                                 // Ir a La actividad de destino
-                                Intent intent = new Intent(context, MainActivity.class);
+                                Intent intent = new Intent(context, ScannerActivity .class);
                                 context.startActivity(intent);
                                 if (context instanceof LoginActivity) {
                                     ((LoginActivity) context).finish(); // Cerrar la actividad de login
