@@ -42,24 +42,36 @@ public class BTLEScanService extends Service {
     private ScanCallback callbackDelEscaneo;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
-    private long ultimoTiempoBeacon = 0;
-    private static final long TIEMPO_SIN_BEACONS = 10000; // 10 segundos
-    private Handler handler = new Handler();
 
-    // Runnable para verificar el tiempo sin detectar beacons
-    private Runnable verificadorDeBeacons = new Runnable() {
-        @Override
-        public void run() {
-            long tiempoActual = System.currentTimeMillis();
-            if (tiempoActual - ultimoTiempoBeacon > TIEMPO_SIN_BEACONS) {
-                // Si han pasado más de 10 segundos sin un beacon, mostrar la notificación
-                mostrarNotificacion("No se ha detectado ningún beacon en los últimos 10 segundos.");
-            } else {
-                // Verificar nuevamente después de 1 segundo
-                handler.postDelayed(this, 1000);
-            }
-        }
+    private Handler handler = new Handler();
+    private Runnable verificarBeacons = () -> {
+        enviarNotificacion();
+        stopSelf(); // Opcional: detener el servicio.
     };
+
+    private void iniciarTemporizador() {
+        handler.postDelayed(verificarBeacons, 60000); // 60 segundos.
+    }
+
+    private void detenerTemporizador() {
+        handler.removeCallbacks(verificarBeacons);
+    }
+
+    private void enviarNotificacion() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Notification.Builder builder = new Notification.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("Sin detección de beacons")
+                .setContentText("No se detectaron beacons en 60 segundos.")
+                .setPriority(Notification.PRIORITY_HIGH);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            crearCanalDeNotificacion();
+        }
+
+        notificationManager.notify(1, builder.build());
+    }
+
 
     @Override
     public void onCreate() {
@@ -100,6 +112,7 @@ public class BTLEScanService extends Service {
             if (direccionMac != null && !direccionMac.isEmpty()) {
                 Log.d(ETIQUETA_LOG, "Servicio iniciado: buscando dispositivo con dirección MAC: " + direccionMac);
                 buscarEsteDispositivoBTLE(direccionMac);
+                iniciarTemporizador(); // Inicia el temporizador aquí
             } else {
                 Log.e(ETIQUETA_LOG, "No se proporcionó una dirección MAC válida en el Intent.");
                 stopSelf(); // Detenemos el servicio si no hay una dirección MAC válida.
@@ -108,9 +121,6 @@ public class BTLEScanService extends Service {
             Log.e(ETIQUETA_LOG, "El Intent no contiene la dirección MAC. Deteniendo el servicio.");
             stopSelf();
         }
-
-        // Comenzamos a verificar el tiempo sin beacons
-        handler.postDelayed(verificadorDeBeacons, 1000);
 
         return START_STICKY;
     }
@@ -121,7 +131,6 @@ public class BTLEScanService extends Service {
         Log.d(ETIQUETA_LOG, "Servicio detenido: deteniendo escaneo BTLE.");
         detenerBusquedaDispositivosBTLE();
         //detenerActualizacionesDeLocalizacion();
-        handler.removeCallbacks(verificadorDeBeacons);
     }
 
     @Nullable
@@ -165,9 +174,6 @@ public class BTLEScanService extends Service {
 
                 // Comparar la dirección MAC del dispositivo encontrado
                 if (resultado.getDevice().getAddress().equals(direccionMac)) {
-                    // Actualizar el tiempo de último beacon recibido
-                    ultimoTiempoBeacon = System.currentTimeMillis();
-
                     // Mostrar la información del dispositivo como lo haces ahora
                     mostrarInformacionDispositivoBTLE(resultado);
                 }
@@ -190,7 +196,16 @@ public class BTLEScanService extends Service {
         this.elEscanner.startScan(this.callbackDelEscaneo);
     }
 
+    private void enviarDatosBroadcast(String mensaje) {
+        Intent intent = new Intent("BTLEScanServiceUpdates");
+        intent.putExtra("datos", mensaje);
+        sendBroadcast(intent);
+    }
+
     private void mostrarInformacionDispositivoBTLE(ScanResult resultado) {
+
+        detenerTemporizador();
+
         BluetoothDevice bluetoothDevice = resultado.getDevice();
         byte[] bytes = resultado.getScanRecord().getBytes();
         int rssi = resultado.getRssi();
@@ -204,6 +219,7 @@ public class BTLEScanService extends Service {
         Log.d(ETIQUETA_LOG, "Nombre: " + nombreDispositivo);
         Log.d(ETIQUETA_LOG, "Dirección MAC: " + direccionMac);
         Log.d(ETIQUETA_LOG, "RSSI (Potencia de la señal): " + rssi);
+        enviarDatosBroadcast("Dispositivo detectado: " + nombreDispositivo);
 
         if (bytes != null && bytes.length > 0) {
             Log.d(ETIQUETA_LOG, "Datos crudos del anuncio: " + Utilidades.bytesToHexString(bytes));
@@ -234,26 +250,6 @@ public class BTLEScanService extends Service {
         Log.d(ETIQUETA_LOG, "****************************************************\n");
     }
 
-    private void mostrarNotificacion(String mensaje) {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "Beacon Notification Channel",
-                    NotificationManager.IMPORTANCE_DEFAULT
-            );
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        Notification notification = new Notification.Builder(this, CHANNEL_ID)
-                .setContentTitle("Alerta de Beacon")
-                .setContentText(mensaje)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .build();
-
-        notificationManager.notify(1, notification);
-    }
     private void inicializarLocalizacion() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
