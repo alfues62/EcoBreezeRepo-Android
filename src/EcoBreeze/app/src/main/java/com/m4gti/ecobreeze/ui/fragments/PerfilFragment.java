@@ -79,11 +79,13 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
         if (medicionText.contains("Categoría:")) {
             String categoria = medicionText.substring(medicionText.indexOf("Categoría:") + 10).trim();
 
-            // Enviar notificación con la categoría
-            NotificationHelper.sendSensorAlertNotification(
-                    requireContext(),
-                    "Categoría actual: " + categoria
-            );
+            // Verificar si la categoría es "Alta" antes de enviar la notificación
+            if ("Alto".equalsIgnoreCase(categoria)) { // Comparación ignorando mayúsculas y minúsculas
+                NotificationHelper.sendSensorAlertNotification(
+                        requireContext(),
+                        "¡Alerta! el nivel actual es muy " + categoria
+                );
+            }
         }
     }
 
