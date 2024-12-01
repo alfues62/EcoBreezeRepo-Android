@@ -6,6 +6,7 @@ import com.m4gti.ecobreeze.logic.NotificationHelper;
 import com.m4gti.ecobreeze.models.Medicion;
 import com.m4gti.ecobreeze.ui.activities.HuellaActivity;
 import com.m4gti.ecobreeze.ui.activities.MainActivity;
+import com.m4gti.ecobreeze.ui.activities.NotificacionesActivity;
 import com.m4gti.ecobreeze.ui.activities.ScannerActivity;
 import com.m4gti.ecobreeze.ui.activities.UserActivity;
 
@@ -27,6 +28,7 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
     private Button scannerButton;
     private Button huellaButton;
     private Button userButton;
+    private Button notifButton;
     private Handler handler;
     private Runnable notificacionRunnable;
     private TextView textViewUltimaMedicion;
@@ -41,6 +43,7 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
         scannerButton = view.findViewById(R.id.scannerButton);
         huellaButton = view.findViewById(R.id.huellaButton);
         userButton = view.findViewById(R.id.userButton);
+        notifButton = view.findViewById(R.id.notifButton);
 
         textViewUltimaMedicion = view.findViewById(R.id.textViewUltimaMedicion);
 
@@ -137,6 +140,15 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), HuellaActivity.class);
+                startActivity(intent); // Inicia la actividad HuellaActivity
+            }
+        });
+
+        // Botón para ir a NotificacionesActivity
+        notifButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), NotificacionesActivity.class);
                 startActivity(intent); // Inicia la actividad HuellaActivity
             }
         });
