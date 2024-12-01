@@ -50,7 +50,7 @@ public class BTLEScanService extends Service {
     };
 
     private void iniciarTemporizador() {
-        handler.postDelayed(verificarBeacons, 60000); // 60 segundos.
+        handler.postDelayed(verificarBeacons, 30000); // 60 segundos.
     }
 
     private void detenerTemporizador() {
@@ -205,6 +205,7 @@ public class BTLEScanService extends Service {
     private void mostrarInformacionDispositivoBTLE(ScanResult resultado) {
 
         detenerTemporizador();
+        iniciarTemporizador();
 
         BluetoothDevice bluetoothDevice = resultado.getDevice();
         byte[] bytes = resultado.getScanRecord().getBytes();
