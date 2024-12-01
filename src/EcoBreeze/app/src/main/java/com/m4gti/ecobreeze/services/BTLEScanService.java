@@ -29,6 +29,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.m4gti.ecobreeze.R;
+import com.m4gti.ecobreeze.logic.LogicaEnvioDatos;
 import com.m4gti.ecobreeze.models.TramaIBeacon;
 import com.m4gti.ecobreeze.utils.Utilidades;
 
@@ -50,7 +51,7 @@ public class BTLEScanService extends Service {
     };
 
     private void iniciarTemporizador() {
-        handler.postDelayed(verificarBeacons, 30000); // 60 segundos.
+        handler.postDelayed(verificarBeacons, 10000); // 60 segundos.
     }
 
     private void detenerTemporizador() {
@@ -62,7 +63,7 @@ public class BTLEScanService extends Service {
         Notification.Builder builder = new Notification.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Sin detección de beacons")
-                .setContentText("No se detectaron beacons en 60 segundos.")
+                .setContentText("No se detectaron beacons en 10 segundos.")
                 .setPriority(Notification.PRIORITY_HIGH);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -70,6 +71,15 @@ public class BTLEScanService extends Service {
         }
 
         notificationManager.notify(1, builder.build());
+
+        // Obtener la fecha actual (para usarla en la notificación)
+        String fecha = Utilidades.obtenerFechaActual();  // Asegúrate de tener un método que obtenga la fecha actual en el formato deseado.
+
+        // Instanciar LogicaEnvioDatos
+        LogicaEnvioDatos logicaEnvioDatos = new LogicaEnvioDatos(this);
+
+        // Llamar al método para guardar la notificación en la base de datos
+        logicaEnvioDatos.guardarNotificacionEnBD("Sin detección de beacons", "No se detectaron beacons en 60 segundos.", fecha);
     }
 
 
