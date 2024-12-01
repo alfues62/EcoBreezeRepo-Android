@@ -2,6 +2,9 @@ package com.m4gti.ecobreeze.utils;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 //-----------------------------------------------------------------------------------
@@ -17,6 +20,11 @@ import java.util.UUID;
 //-----------------------------------------------------------------------------------
 public class Utilidades {
 
+
+    public static String obtenerFechaActual() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return sdf.format(new Date());
+    }
     /**
      * Convierte una cadena de texto en un array de bytes.
      *

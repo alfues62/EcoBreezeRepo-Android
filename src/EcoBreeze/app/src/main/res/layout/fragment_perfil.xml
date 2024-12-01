@@ -22,16 +22,25 @@
         android:text="Huella"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userButton" />
+        app:layout_constraintTop_toBottomOf="@+id/notifButton" />
 
     <Button
         android:id="@+id/userButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pagina Usuario"
+        android:text="Pagina Edit Usuario"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scannerButton" />
+
+    <Button
+        android:id="@+id/notifButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pagina Notificaciones"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userButton" />
 
     <Button
         android:id="@+id/logoutButton"

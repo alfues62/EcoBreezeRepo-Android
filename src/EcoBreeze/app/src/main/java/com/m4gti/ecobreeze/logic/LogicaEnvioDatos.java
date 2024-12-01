@@ -19,6 +19,7 @@ import org.json.JSONObject;
 public class LogicaEnvioDatos {
     private static final String SCAN_URL = "http://" + Globales.IP + ":8080/api/api_usuario.php?action=insertar_sensor"; // URL PARA INSERTAR LA MAC
     private static final String HUELLA_URL = "http://" + Globales.IP + ":8080/api/api_usuario.php?action=insertar_huella"; // URL PARA SUBIR LA HUELLA
+    private static final String NOTIFICACION_URL = "http://" + Globales.IP + ":8080/api/api_datos.php?action=insertar_notificacion"; // URL PARA INSERTAR LA NOTIFICACIÓN
 
     private Context context;
     public LogicaEnvioDatos(Context context) {
@@ -144,4 +145,78 @@ public class LogicaEnvioDatos {
             Toast.makeText(context, "Usuario no encontrado.", Toast.LENGTH_SHORT).show();
         }
     }
+
+    /**
+     * Guarda la notificación en la base de datos remota. [USADO PARA SUBIR NOTIFICACIONES]
+     *
+     * Este método envía una solicitud POST al servidor para registrar una nueva notificación.
+     * Envía como datos el título, el cuerpo, la fecha y el ID de usuario.
+     *
+     * @param titulo El título de la notificación.
+     * @param cuerpo El cuerpo de la notificación.
+     * @param fecha  La fecha de la notificación.
+     */
+    public void guardarNotificacionEnBD(String titulo, String cuerpo, String fecha) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("userId", -1);
+
+        if (userId != -1) {
+            // Crear el objeto JSON con los datos
+            JSONObject jsonBody = new JSONObject();
+
+            try {
+                jsonBody.put("titulo", titulo);
+                jsonBody.put("cuerpo", cuerpo);
+                jsonBody.put("fecha", fecha);
+                jsonBody.put("usuario_id", userId);
+
+                Log.d("JSON Enviado", jsonBody.toString()); // Log del JSON enviado
+
+                // Crear la solicitud Volley
+                RequestQueue requestQueue = Volley.newRequestQueue(context);
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                        NOTIFICACION_URL, jsonBody, // Cambia esta URL
+                        response -> {
+                            Log.d("API Response", response.toString()); // Ver el contenido de la respuesta
+                            try {
+                                // Verifica si la respuesta contiene el campo "success" como booleano
+                                boolean success = response.getBoolean("success");
+                                if (success) {
+                                    Log.d("Notificación", "Notificación guardada exitosamente.");
+                                    Toast.makeText(context, "Notificación guardada exitosamente.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    // Extraer el mensaje de error y mostrarlo
+                                    String errorMessage = response.optString("error", "Error desconocido.");
+                                    Log.e("Error", "Error al guardar la notificación: " + errorMessage);
+                                    Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                Log.e("JSON Exception", "Error parsing response: " + e.getMessage());
+                                Toast.makeText(context, "Error al procesar la respuesta", Toast.LENGTH_SHORT).show();
+                            }
+                        },
+                        error -> {
+                            Log.e("LogicaEnvioDatos", "Error: " + error.getMessage());
+                            if (error.networkResponse != null) {
+                                // Si hay respuesta del servidor, verifica el código de estado HTTP
+                                Log.e("LogicaEnvioDatos", "Error code: " + error.networkResponse.statusCode);
+                                Log.e("LogicaEnvioDatos", "Error response: " + new String(error.networkResponse.data));
+                            }
+                            // Toast en caso de error de red o de servidor
+                            Toast.makeText(context, "Ocurrió un error en el servidor", Toast.LENGTH_SHORT).show();
+                        });
+
+
+                // Añadir la solicitud a la cola de solicitudes
+                requestQueue.add(jsonObjectRequest);
+            } catch (JSONException e) {
+                Log.e("JSON Exception", "Error creando JSON: " + e.getMessage());
+                e.printStackTrace();
+                Toast.makeText(context, "Error creando JSON", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(context, "Usuario no encontrado.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
