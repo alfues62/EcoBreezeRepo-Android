@@ -1,8 +1,25 @@
 package com.m4gti.ecobreeze.models;
 
-import java.sql.Time;
-import java.util.Date;
-
+/**
+ * @class Medicion
+ * @brief Clase que representa una medición ambiental.
+ *
+ * Esta clase almacena los datos de una medición realizada por los sensores, incluyendo el ID de la medición, el valor,
+ * la ubicación geográfica (longitud y latitud), la fecha y hora de la medición, la categoría y el tipo de gas medido.
+ *
+ * Atributos:
+ *   - `idMedicion`: ID único de la medición.
+ *   - `valor`: Valor numérico de la medición.
+ *   - `lon`: Longitud geográfica de la medición.
+ *   - `lat`: Latitud geográfica de la medición.
+ *   - `fecha`: Fecha de la medición.
+ *   - `hora`: Hora de la medición.
+ *   - `categoria`: Categoría de la medición.
+ *   - `tipoGasId`: ID del tipo de gas medido.
+ *   - `tipoGas`: Nombre del tipo de gas medido.
+ *
+ * @note Utiliza atributos para almacenar y acceder a los datos de la medición.
+ */
 public class Medicion {
     private int idMedicion;
     private double valor;
