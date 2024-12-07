@@ -1,0 +1,77 @@
+\doxysection{com.\+m4gti.\+ecobreeze.\+services.\+BTLEScan\+Service Class Reference}
+\hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1services_1_1_b_t_l_e_scan_service}{}\label{classcom_1_1m4gti_1_1ecobreeze_1_1services_1_1_b_t_l_e_scan_service}\index{com.m4gti.ecobreeze.services.BTLEScanService@{com.m4gti.ecobreeze.services.BTLEScanService}}
+
+
+Servicio encargado de escanear dispositivos Bluetooth Low Energy (BTLE) y obtener la ubicación del usuario.  
+
+
+Inheritance diagram for com.\+m4gti.\+ecobreeze.\+services.\+BTLEScan\+Service\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcom_1_1m4gti_1_1ecobreeze_1_1services_1_1_b_t_l_e_scan_service}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1services_1_1_b_t_l_e_scan_service_a844442579ffdcc3a136e2ade3453b301}{on\+Create}} ()
+\item 
+int \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1services_1_1_b_t_l_e_scan_service_a187798cc36dcfbc43cf352ef7b117de4}{on\+Start\+Command}} (Intent intent, int flags, int start\+Id)
+\item 
+void \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1services_1_1_b_t_l_e_scan_service_ab3fc7e3dfdf48a4ac89394c63ec6d035}{on\+Destroy}} ()
+\item 
+IBinder \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1services_1_1_b_t_l_e_scan_service_ad801744d496230a3fdfd080112e3ed97}{on\+Bind}} (Intent intent)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Servicio encargado de escanear dispositivos Bluetooth Low Energy (BTLE) y obtener la ubicación del usuario. 
+
+Este servicio utiliza la tecnología Bluetooth para escanear dispositivos i\+Beacon cercanos y realizar un seguimiento de la ubicación del usuario mediante el servicio de localización de Google. Cuando un dispositivo BTLE es detectado, el servicio notifica al usuario a través de una notificación y guarda los datos obtenidos.
+
+Métodos principales\+:
+\begin{DoxyEnumerate}
+\item Inicializar Bluetooth y crear el escáner BTLE.
+\item Iniciar el escaneo para buscar dispositivos BTLE específicos.
+\item Procesar los resultados del escaneo para extraer la información de dispositivos i\+Beacon.
+\item Obtener la ubicación actual del usuario.
+\item Enviar notificaciones y guardar los datos procesados en una base de datos.
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+Utiliza {\ttfamily Bluetooth\+Le\+Scanner} para realizar el escaneo de dispositivos BTLE. 
+
+Requiere permisos de ubicación y Bluetooth habilitados. 
+\end{DoxyNote}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1services_1_1_b_t_l_e_scan_service_ad801744d496230a3fdfd080112e3ed97}\index{com.m4gti.ecobreeze.services.BTLEScanService@{com.m4gti.ecobreeze.services.BTLEScanService}!onBind@{onBind}}
+\index{onBind@{onBind}!com.m4gti.ecobreeze.services.BTLEScanService@{com.m4gti.ecobreeze.services.BTLEScanService}}
+\doxysubsubsection{\texorpdfstring{onBind()}{onBind()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1services_1_1_b_t_l_e_scan_service_ad801744d496230a3fdfd080112e3ed97} 
+IBinder com.\+m4gti.\+ecobreeze.\+services.\+BTLEScan\+Service.\+on\+Bind (\begin{DoxyParamCaption}\item[{Intent}]{intent}{}\end{DoxyParamCaption})}
+
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1services_1_1_b_t_l_e_scan_service_a844442579ffdcc3a136e2ade3453b301}\index{com.m4gti.ecobreeze.services.BTLEScanService@{com.m4gti.ecobreeze.services.BTLEScanService}!onCreate@{onCreate}}
+\index{onCreate@{onCreate}!com.m4gti.ecobreeze.services.BTLEScanService@{com.m4gti.ecobreeze.services.BTLEScanService}}
+\doxysubsubsection{\texorpdfstring{onCreate()}{onCreate()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1services_1_1_b_t_l_e_scan_service_a844442579ffdcc3a136e2ade3453b301} 
+void com.\+m4gti.\+ecobreeze.\+services.\+BTLEScan\+Service.\+on\+Create (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1services_1_1_b_t_l_e_scan_service_ab3fc7e3dfdf48a4ac89394c63ec6d035}\index{com.m4gti.ecobreeze.services.BTLEScanService@{com.m4gti.ecobreeze.services.BTLEScanService}!onDestroy@{onDestroy}}
+\index{onDestroy@{onDestroy}!com.m4gti.ecobreeze.services.BTLEScanService@{com.m4gti.ecobreeze.services.BTLEScanService}}
+\doxysubsubsection{\texorpdfstring{onDestroy()}{onDestroy()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1services_1_1_b_t_l_e_scan_service_ab3fc7e3dfdf48a4ac89394c63ec6d035} 
+void com.\+m4gti.\+ecobreeze.\+services.\+BTLEScan\+Service.\+on\+Destroy (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1services_1_1_b_t_l_e_scan_service_a187798cc36dcfbc43cf352ef7b117de4}\index{com.m4gti.ecobreeze.services.BTLEScanService@{com.m4gti.ecobreeze.services.BTLEScanService}!onStartCommand@{onStartCommand}}
+\index{onStartCommand@{onStartCommand}!com.m4gti.ecobreeze.services.BTLEScanService@{com.m4gti.ecobreeze.services.BTLEScanService}}
+\doxysubsubsection{\texorpdfstring{onStartCommand()}{onStartCommand()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1services_1_1_b_t_l_e_scan_service_a187798cc36dcfbc43cf352ef7b117de4} 
+int com.\+m4gti.\+ecobreeze.\+services.\+BTLEScan\+Service.\+on\+Start\+Command (\begin{DoxyParamCaption}\item[{Intent}]{intent}{, }\item[{int}]{flags}{, }\item[{int}]{start\+Id}{}\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+GTI\+\_\+\+Carpeta/\+Biometria\+Repos/\+Eco\+Breeze\+Repo-\/\+Android/src/\+Eco\+Breeze/app/src/main/java/com/m4gti/ecobreeze/services/\mbox{\hyperlink{_b_t_l_e_scan_service_8java}{BTLEScan\+Service.\+java}}\end{DoxyCompactItemize}

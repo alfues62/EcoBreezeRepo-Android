@@ -1,0 +1,228 @@
+\doxysection{com.\+m4gti.\+ecobreeze.\+utils.\+Utilidades Class Reference}
+\hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades}{}\label{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades}\index{com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}}
+
+
+Clase \doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades}{Utilidades} que proporciona métodos para convertir entre diferentes representaciones de datos.  
+
+
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static String \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_aa635d276960adb43030343c61a2f53be}{obtener\+Fecha\+Actual}} ()
+\item 
+static byte\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a1abbe2d5517f3918f76bf08870487773}{string\+To\+Bytes}} (String texto)
+\item 
+static UUID \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_ab3b77149ebf09c01f22a491160ac7fb2}{string\+To\+UUID}} (String uuid)
+\item 
+static String \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_ab7557ca5d5599fc3f01aab6d03eb71df}{uuid\+To\+String}} (UUID uuid)
+\item 
+static String \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a94868456160c4af18f1a2de400b098c2}{uuid\+To\+Hex\+String}} (UUID uuid)
+\item 
+static String \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a6f64e239912af2175ec2171eed6d8687}{bytes\+To\+String}} (byte\mbox{[}$\,$\mbox{]} bytes)
+\item 
+static byte\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a73b65eb9bc3444afc4279281b3479463}{dos\+Long\+To\+Bytes}} (long mas\+Significativos, long menos\+Significativos)
+\item 
+static int \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a91a495c767ce015d0d99ce30398e4433}{bytes\+To\+Int}} (byte\mbox{[}$\,$\mbox{]} bytes)
+\item 
+static long \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a64d6f308cfb9e094ae8b7de7a502643b}{bytes\+To\+Long}} (byte\mbox{[}$\,$\mbox{]} bytes)
+\item 
+static int \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a3c97371ea7b73dd201261ad78f02f2a0}{bytes\+To\+Int\+OK}} (byte\mbox{[}$\,$\mbox{]} bytes)
+\item 
+static String \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a41837ff9e1285cbe0ab5e7e249dcfa59}{bytes\+To\+Hex\+String}} (byte\mbox{[}$\,$\mbox{]} bytes)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Clase \doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades}{Utilidades} que proporciona métodos para convertir entre diferentes representaciones de datos. 
+
+Esta clase incluye métodos generales que se pueden usar en varias clases de la app. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a41837ff9e1285cbe0ab5e7e249dcfa59}\index{com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}!bytesToHexString@{bytesToHexString}}
+\index{bytesToHexString@{bytesToHexString}!com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}}
+\doxysubsubsection{\texorpdfstring{bytesToHexString()}{bytesToHexString()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a41837ff9e1285cbe0ab5e7e249dcfa59} 
+static String com.\+m4gti.\+ecobreeze.\+utils.\+Utilidades.\+bytes\+To\+Hex\+String (\begin{DoxyParamCaption}\item[{byte\mbox{[}$\,$\mbox{]}}]{bytes}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Convierte un array de bytes en su representación hexadecimal.
+
+
+\begin{DoxyParams}{Parameters}
+{\em bytes} & El array de bytes a convertir. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Una cadena que representa los bytes en formato hexadecimal separados por dos puntos (\+:). 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a91a495c767ce015d0d99ce30398e4433}\index{com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}!bytesToInt@{bytesToInt}}
+\index{bytesToInt@{bytesToInt}!com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}}
+\doxysubsubsection{\texorpdfstring{bytesToInt()}{bytesToInt()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a91a495c767ce015d0d99ce30398e4433} 
+static int com.\+m4gti.\+ecobreeze.\+utils.\+Utilidades.\+bytes\+To\+Int (\begin{DoxyParamCaption}\item[{byte\mbox{[}$\,$\mbox{]}}]{bytes}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Convierte un array de bytes en un valor entero ({\ttfamily int}).
+
+
+\begin{DoxyParams}{Parameters}
+{\em bytes} & El array de bytes a convertir. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+El valor entero resultante. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a3c97371ea7b73dd201261ad78f02f2a0}\index{com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}!bytesToIntOK@{bytesToIntOK}}
+\index{bytesToIntOK@{bytesToIntOK}!com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}}
+\doxysubsubsection{\texorpdfstring{bytesToIntOK()}{bytesToIntOK()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a3c97371ea7b73dd201261ad78f02f2a0} 
+static int com.\+m4gti.\+ecobreeze.\+utils.\+Utilidades.\+bytes\+To\+Int\+OK (\begin{DoxyParamCaption}\item[{byte\mbox{[}$\,$\mbox{]}}]{bytes}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Convierte un array de bytes en un valor entero ({\ttfamily int}). Este método se asegura de que el array de bytes tenga menos de 4 bytes y maneja correctamente valores con signo.
+
+
+\begin{DoxyParams}{Parameters}
+{\em bytes} & El array de bytes a convertir. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+El valor entero resultante. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Error} & Si el array tiene más de 4 bytes. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a64d6f308cfb9e094ae8b7de7a502643b}\index{com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}!bytesToLong@{bytesToLong}}
+\index{bytesToLong@{bytesToLong}!com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}}
+\doxysubsubsection{\texorpdfstring{bytesToLong()}{bytesToLong()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a64d6f308cfb9e094ae8b7de7a502643b} 
+static long com.\+m4gti.\+ecobreeze.\+utils.\+Utilidades.\+bytes\+To\+Long (\begin{DoxyParamCaption}\item[{byte\mbox{[}$\,$\mbox{]}}]{bytes}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Convierte un array de bytes en un valor largo ({\ttfamily long}).
+
+
+\begin{DoxyParams}{Parameters}
+{\em bytes} & El array de bytes a convertir. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+El valor {\ttfamily long} resultante. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a6f64e239912af2175ec2171eed6d8687}\index{com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}!bytesToString@{bytesToString}}
+\index{bytesToString@{bytesToString}!com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}}
+\doxysubsubsection{\texorpdfstring{bytesToString()}{bytesToString()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a6f64e239912af2175ec2171eed6d8687} 
+static String com.\+m4gti.\+ecobreeze.\+utils.\+Utilidades.\+bytes\+To\+String (\begin{DoxyParamCaption}\item[{byte\mbox{[}$\,$\mbox{]}}]{bytes}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Convierte un array de bytes en una cadena de texto (String). Cada byte se interpreta como un carácter ASCII.
+
+
+\begin{DoxyParams}{Parameters}
+{\em bytes} & El array de bytes a convertir. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+La cadena de texto resultante, o una cadena vacía si el array es nulo. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a73b65eb9bc3444afc4279281b3479463}\index{com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}!dosLongToBytes@{dosLongToBytes}}
+\index{dosLongToBytes@{dosLongToBytes}!com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}}
+\doxysubsubsection{\texorpdfstring{dosLongToBytes()}{dosLongToBytes()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a73b65eb9bc3444afc4279281b3479463} 
+static byte\mbox{[}$\,$\mbox{]} com.\+m4gti.\+ecobreeze.\+utils.\+Utilidades.\+dos\+Long\+To\+Bytes (\begin{DoxyParamCaption}\item[{long}]{mas\+Significativos}{, }\item[{long}]{menos\+Significativos}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Convierte dos valores {\ttfamily long} (bits más y menos significativos de un UUID) en un array de bytes.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mas\+Significativos} & La parte de bits más significativa. \\
+\hline
+{\em menos\+Significativos} & La parte de bits menos significativa. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Un array de bytes que representa los dos valores {\ttfamily long}. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_aa635d276960adb43030343c61a2f53be}\index{com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}!obtenerFechaActual@{obtenerFechaActual}}
+\index{obtenerFechaActual@{obtenerFechaActual}!com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}}
+\doxysubsubsection{\texorpdfstring{obtenerFechaActual()}{obtenerFechaActual()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_aa635d276960adb43030343c61a2f53be} 
+static String com.\+m4gti.\+ecobreeze.\+utils.\+Utilidades.\+obtener\+Fecha\+Actual (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Obtiene la fecha actual del sistema.
+
+\begin{DoxyReturn}{Returns}
+la fecha y hora actuales del sistema. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a1abbe2d5517f3918f76bf08870487773}\index{com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}!stringToBytes@{stringToBytes}}
+\index{stringToBytes@{stringToBytes}!com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}}
+\doxysubsubsection{\texorpdfstring{stringToBytes()}{stringToBytes()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a1abbe2d5517f3918f76bf08870487773} 
+static byte\mbox{[}$\,$\mbox{]} com.\+m4gti.\+ecobreeze.\+utils.\+Utilidades.\+string\+To\+Bytes (\begin{DoxyParamCaption}\item[{String}]{texto}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Convierte una cadena de texto en un array de bytes.
+
+
+\begin{DoxyParams}{Parameters}
+{\em texto} & La cadena de texto que se desea convertir. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Un array de bytes que representa el texto en formato binario. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_ab3b77149ebf09c01f22a491160ac7fb2}\index{com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}!stringToUUID@{stringToUUID}}
+\index{stringToUUID@{stringToUUID}!com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}}
+\doxysubsubsection{\texorpdfstring{stringToUUID()}{stringToUUID()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_ab3b77149ebf09c01f22a491160ac7fb2} 
+static UUID com.\+m4gti.\+ecobreeze.\+utils.\+Utilidades.\+string\+To\+UUID (\begin{DoxyParamCaption}\item[{String}]{uuid}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Convierte una cadena de texto de 16 caracteres en un UUID. La cadena debe tener exactamente 16 caracteres.
+
+
+\begin{DoxyParams}{Parameters}
+{\em uuid} & La cadena que se desea convertir en UUID. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+El UUID correspondiente a la cadena proporcionada. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Error} & Si la cadena no tiene exactamente 16 caracteres. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a94868456160c4af18f1a2de400b098c2}\index{com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}!uuidToHexString@{uuidToHexString}}
+\index{uuidToHexString@{uuidToHexString}!com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}}
+\doxysubsubsection{\texorpdfstring{uuidToHexString()}{uuidToHexString()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_a94868456160c4af18f1a2de400b098c2} 
+static String com.\+m4gti.\+ecobreeze.\+utils.\+Utilidades.\+uuid\+To\+Hex\+String (\begin{DoxyParamCaption}\item[{UUID}]{uuid}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Convierte un UUID en su representación hexadecimal.
+
+
+\begin{DoxyParams}{Parameters}
+{\em uuid} & El UUID que se desea convertir. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Una cadena de texto que representa el UUID en formato hexadecimal. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_ab7557ca5d5599fc3f01aab6d03eb71df}\index{com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}!uuidToString@{uuidToString}}
+\index{uuidToString@{uuidToString}!com.m4gti.ecobreeze.utils.Utilidades@{com.m4gti.ecobreeze.utils.Utilidades}}
+\doxysubsubsection{\texorpdfstring{uuidToString()}{uuidToString()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1utils_1_1_utilidades_ab7557ca5d5599fc3f01aab6d03eb71df} 
+static String com.\+m4gti.\+ecobreeze.\+utils.\+Utilidades.\+uuid\+To\+String (\begin{DoxyParamCaption}\item[{UUID}]{uuid}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Convierte un UUID en su representación como cadena de texto (String).
+
+
+\begin{DoxyParams}{Parameters}
+{\em uuid} & El UUID que se desea convertir. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+La cadena de texto que representa el UUID. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+GTI\+\_\+\+Carpeta/\+Biometria\+Repos/\+Eco\+Breeze\+Repo-\/\+Android/src/\+Eco\+Breeze/app/src/main/java/com/m4gti/ecobreeze/utils/\mbox{\hyperlink{_utilidades_8java}{Utilidades.\+java}}\end{DoxyCompactItemize}
