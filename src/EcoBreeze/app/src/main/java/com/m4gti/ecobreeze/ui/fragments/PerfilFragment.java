@@ -1,15 +1,14 @@
 package com.m4gti.ecobreeze.ui.fragments;
+
 import com.m4gti.ecobreeze.R;
 import com.m4gti.ecobreeze.logic.LogicaLogin;
 import com.m4gti.ecobreeze.logic.LogicaRecepcionDatos;
 import com.m4gti.ecobreeze.logic.NotificationHelper;
 import com.m4gti.ecobreeze.models.Medicion;
 import com.m4gti.ecobreeze.ui.activities.HuellaActivity;
-import com.m4gti.ecobreeze.ui.activities.MainActivity;
 import com.m4gti.ecobreeze.ui.activities.NotificacionesActivity;
 import com.m4gti.ecobreeze.ui.activities.ScannerActivity;
 import com.m4gti.ecobreeze.ui.activities.UserActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,7 +18,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.os.Handler;
 import android.os.Looper;
-
 import androidx.fragment.app.Fragment;
 
 public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnMedicionRecibidaListener{
@@ -91,7 +89,6 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
             }
         }
     }
-
 
 
     // Implementamos el método de la interfaz

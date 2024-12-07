@@ -56,6 +56,15 @@ public class CambiarContrasenyaActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * @brief Método para realizar el cambio de contraseña en el servidor.
+     *
+     * Este método llama a la lógica de negocio definida en `LogicaUser` para enviar una solicitud POST al servidor con la contraseña actual y la nueva contraseña proporcionada.
+     * Si la respuesta del servidor es exitosa, muestra un mensaje de éxito; en caso contrario, muestra un mensaje de error.
+     *
+     * @param contrasenaActual La contraseña actual ingresada por el usuario. Debe ser una cadena de texto no vacía.
+     * @param nuevaContrasena La nueva contraseña ingresada por el usuario. Debe ser una cadena de texto no vacía y cumplir con las políticas de seguridad.
+     */
     private void cambiarContrasena(String contrasenaActual, String nuevaContrasena) {
         // Llamar a la lógica de negocio a través de LogicaUser
         LogicaUser.cambiarContrasena(this, contrasenaActual, nuevaContrasena, new Response.Listener<JSONObject>() {

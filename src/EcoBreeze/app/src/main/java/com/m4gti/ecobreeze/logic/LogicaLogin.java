@@ -47,8 +47,6 @@ public class LogicaLogin {
      *   password (String)
      *   LOGIN_URL (String)
      *        ---> [login()] ---> Solicitud POST al servidor
-     *                             ---> Guardar datos en `SharedPreferences`
-     *                             ---> Redirigir a ScannerActivity.
      *
      * @param context El contexto de la aplicación que ejecuta el método.
      * @param email El correo electrónico del usuario. Debe ser una cadena de texto no vacía.
@@ -129,8 +127,6 @@ public class LogicaLogin {
      *   tokenHuella (String)
      *   LOGIN_HUELLA_URL (String)
      *        ---> [loginConHuella()] ---> Solicitud POST al servidor
-     *                                      ---> Guardar datos en `SharedPreferences`
-     *                                      ---> Redirigir a MainActivity.
      *
      * @param context El contexto de la aplicación que ejecuta el método.
      * @param email El correo electrónico del usuario. Debe ser una cadena de texto no vacía.

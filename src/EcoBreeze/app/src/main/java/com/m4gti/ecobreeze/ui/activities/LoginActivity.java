@@ -77,6 +77,14 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * @brief Inicia el proceso de autenticación biométrica utilizando la huella digital.
+     *
+     * Este método verifica la disponibilidad de la autenticación biométrica en el dispositivo y, si es posible,
+     * inicia una sesión utilizando la huella digital del usuario. Utiliza el framework `BiometricPrompt` para manejar la autenticación biométrica.
+     *
+     * @param email El correo electrónico del usuario que será utilizado para obtener el token de huella.
+     */
     private void iniciarAutenticacionConHuella(String email) {
         BiometricManager biometricManager = BiometricManager.from(this);
         if (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS) {
@@ -114,6 +122,14 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * @brief Obtiene el token de huella digital desde el servidor para el usuario.
+     *
+     * Este método realiza una solicitud GET al servidor para obtener el token de huella digital correspondiente al correo electrónico proporcionado.
+     * La respuesta es procesada en el hilo principal para actualizar la interfaz de usuario.
+     *
+     * @param email El correo electrónico del usuario.
+     */
     private void obtenerTokenHuellaDesdeBaseDeDatos(String email) {
         new Thread(() -> {
             try {
@@ -150,6 +166,15 @@ public class LoginActivity extends AppCompatActivity {
         }).start();
     }
 
+    /**
+     * @brief Procesa la respuesta del servidor después de obtener el token de huella digital.
+     *
+     * Este método interpreta la respuesta JSON del servidor para extraer el token de huella y realizar el login utilizando la huella digital.
+     * Si la respuesta indica éxito, llama a la lógica de negocio para iniciar sesión con el token de huella.
+     *
+     * @param result La respuesta JSON como cadena.
+     * @param email El correo electrónico del usuario.
+     */
     private void procesarRespuestaToken(String result, String email) {
         if (result != null && !result.isEmpty()) {
             try {
