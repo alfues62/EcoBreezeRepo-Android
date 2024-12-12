@@ -1,19 +1,5 @@
 package com.m4gti.ecobreeze.models;
 
-/**
- * @class Notificacion
- * @brief Clase que representa una notificación.
- *
- * Esta clase almacena los datos de una notificación, incluyendo el ID, el título, el cuerpo y la fecha de la notificación.
- *
- * Atributos:
- *   - `idNotificacion`: Identificador único de la notificación.
- *   - `titulo`: Título de la notificación.
- *   - `cuerpo`: Cuerpo o mensaje de la notificación.
- *   - `fecha`: Fecha en la que se recibió la notificación.
- *
- * @note Utiliza atributos para almacenar y acceder a los datos de la notificación.
- */
 public class Notificacion {
     private int idNotificacion;
     private String titulo;

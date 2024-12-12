@@ -14,7 +14,12 @@
         android:icon="@drawable/aire"
         android:title="¿Que respiras?" />
     <item
+        android:id="@+id/navigation_logros"
+        android:icon="@drawable/logros"
+        android:title="Logros" />
+    <item
         android:id="@+id/navigation_perfil"
         android:icon="@drawable/perfil"
         android:title="Perfil" />
+
 </menu>

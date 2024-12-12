@@ -54,7 +54,6 @@ public class ScannerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
 
-        tv = findViewById(R.id.minor);
         logicaEnvioDatos = new LogicaEnvioDatos(this);
 
         // Inicializar Bluetooth Adapter

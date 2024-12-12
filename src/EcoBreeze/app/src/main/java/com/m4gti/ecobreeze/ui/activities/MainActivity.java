@@ -34,6 +34,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.m4gti.ecobreeze.R;
 import com.m4gti.ecobreeze.logic.NotificationHelper;
 import com.m4gti.ecobreeze.ui.fragments.HomeFragment;
+import com.m4gti.ecobreeze.ui.fragments.LogrosFragment;
 import com.m4gti.ecobreeze.ui.fragments.MapaGlobalFragment;
 import com.m4gti.ecobreeze.ui.fragments.PerfilFragment;
 import com.m4gti.ecobreeze.ui.fragments.QueRespirasFragment;
@@ -63,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     selectedFragment = new QueRespirasFragment();
                 } else if (item.getItemId() == R.id.navigation_perfil) {
                     selectedFragment = new PerfilFragment();
+                }else if (item.getItemId()== R.id.navigation_logros){
+                    selectedFragment = new LogrosFragment();
                 }
 
                 if (selectedFragment != null) {
@@ -104,14 +107,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 // Actualiza la interfaz o procesa los datos según necesites.
             }
         }
-    };
-
-    @Override
+    };@Override
     protected void onResume() {
         super.onResume();
         IntentFilter filter = new IntentFilter("BTLEScanServiceUpdates");
-        registerReceiver(receiver, filter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(receiver, filter);
+        }
     }
+
+
 
     @Override
     protected void onPause() {

@@ -1,34 +1,21 @@
 package com.m4gti.ecobreeze.logic;
 
 import com.m4gti.ecobreeze.utils.Globales;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.m4gti.ecobreeze.ui.activities.ScannerActivity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * @class LogicaEnvioDatos
- * @brief Clase encargada de gestionar la lógica relacionada con el envío de datos al servidor remoto.
- *
- * Esta clase proporciona métodos para interactuar con un servidor remoto utilizando la biblioteca Volley.
- * Permite registrar direcciones MAC, tokens de huella y notificaciones en la base de datos remota.
- * La configuración del usuario actual se obtiene a través de `SharedPreferences`.
- *
- *   Métodos principales:
- *       1. Verificación de formato de direcciones MAC.
- *       2. Envío de direcciones MAC detectadas al servidor.
- *       3. Envío de tokens de huella al servidor.
- *       4. Envío de notificaciones al servidor.
- *
- * @note Se requiere acceso a un contexto Android para inicializar esta clase.
- *
- */
 public class LogicaEnvioDatos {
     private static final String SCAN_URL = "http://" + Globales.IP + ":8080/api/api_usuario.php?action=insertar_sensor"; // URL PARA INSERTAR LA MAC
     private static final String HUELLA_URL = "http://" + Globales.IP + ":8080/api/api_usuario.php?action=insertar_huella"; // URL PARA SUBIR LA HUELLA
@@ -40,17 +27,10 @@ public class LogicaEnvioDatos {
     }
 
     /**
-     * @brief Verifica si una dirección MAC tiene un formato válido.
+     * Verifica si una dirección MAC es válida. [USADO EN SCANNERACTIVITY]
      *
-     * Esta función utiliza una expresión regular para validar el formato de la dirección MAC.
-     * Una dirección MAC válida debe cumplir con el formato estándar: seis pares de caracteres
-     * hexadecimales separados por ':' o '-'.
-     *
-     * Diseño:
-     *   mac (String) ---> [esDireccionMacValida()] ---> true/false (boolean)
-     *
-     * @param mac La dirección MAC que se va a verificar. Debe ser una cadena de texto.
-     * @return true si el formato es válido; false en caso contrario.
+     * @param mac La dirección MAC que se va a verificar.
+     * @return true si el formato es válido, false en caso contrario.
      */
     public boolean esDireccionMacValida(String mac) {
         // Expresión regular para verificar el formato de una dirección MAC
@@ -58,18 +38,12 @@ public class LogicaEnvioDatos {
     }
 
     /**
-     * @brief Guarda la dirección MAC detectada en la base de datos remota.
+     * Guarda la dirección MAC detectada en la base de datos remota. [USADO EN SCANNERACTIVITY]
      *
-     * Este método envía una solicitud POST al servidor para registrar un sensor asociado a un usuario.
-     * Los datos enviados incluyen la dirección MAC del sensor y el ID del usuario actual.
-     * Si ocurre un error durante el proceso, se muestra un mensaje al usuario.
+     * Este método envía una solicitud POST al servidor para registrar un nuevo sensor.
+     * Envía como datos la dirección MAC y el identificador de usuario.
      *
-     * Diseño:
-     *   mac (String)
-     *        ---> [guardarMacEnBD()] ---> Solicitud POST al servidor
-     *                                         ---> Respuesta de éxito o error.
-     *
-     * @param mac La dirección MAC que será registrada en la base de datos. Debe ser una cadena en formato válido.
+     * @param mac La dirección MAC que será registrada en la base de datos.
      */
     public void guardarMacEnBD(String mac) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
@@ -121,19 +95,6 @@ public class LogicaEnvioDatos {
         }
     }
 
-    /**
-     * @brief Registra un token de huella en la base de datos remota.
-     *
-     * Este método envía una solicitud POST al servidor para guardar un token de huella asociado
-     * al usuario actual. El token de huella permite autenticar o identificar al usuario.
-     *
-     * Diseño:
-     *   tokenHuella (String)
-     *        ---> [guardarTokenHuellaEnBD()] ---> Solicitud POST al servidor
-     *                                             ---> Respuesta de éxito o error.
-     *
-     * @param tokenHuella El token de huella que se registrará en la base de datos. Debe ser una cadena no vacía.
-     */
     public void guardarTokenHuellaEnBD(String tokenHuella) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         int userId = sharedPreferences.getInt("userId", -1);
@@ -186,22 +147,14 @@ public class LogicaEnvioDatos {
     }
 
     /**
-     * @brief Registra una notificación en la base de datos remota.
+     * Guarda la notificación en la base de datos remota. [USADO PARA SUBIR NOTIFICACIONES]
      *
-     * Este método envía una solicitud POST al servidor para guardar los detalles de una notificación.
-     * Los datos enviados incluyen el título, el cuerpo, la fecha y el ID del usuario que creó la notificación.
-     * Muestra mensajes de éxito o error al usuario según el resultado de la operación.
+     * Este método envía una solicitud POST al servidor para registrar una nueva notificación.
+     * Envía como datos el título, el cuerpo, la fecha y el ID de usuario.
      *
-     * Diseño:
-     *   titulo (String)
-     *   cuerpo (String)
-     *   fecha (String)
-     *        ---> [guardarNotificacionEnBD()] ---> Solicitud POST al servidor
-     *                                             ---> Respuesta de éxito o error.
-     *
-     * @param titulo El título de la notificación. Debe ser una cadena no vacía.
-     * @param cuerpo El cuerpo del mensaje de la notificación. Debe ser una cadena no vacía.
-     * @param fecha La fecha de la notificación en formato `YYYY-MM-DD`. Debe ser válida.
+     * @param titulo El título de la notificación.
+     * @param cuerpo El cuerpo de la notificación.
+     * @param fecha  La fecha de la notificación.
      */
     public void guardarNotificacionEnBD(String titulo, String cuerpo, String fecha) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);

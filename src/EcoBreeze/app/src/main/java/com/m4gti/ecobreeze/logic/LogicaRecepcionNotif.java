@@ -4,33 +4,21 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.m4gti.ecobreeze.models.Notificacion;
 import com.m4gti.ecobreeze.utils.Globales;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @class LogicaRecepcionNotif
- * @brief Clase encargada de gestionar la lógica de recepción y procesamiento de notificaciones desde el servidor.
- *
- * Esta clase se encarga de obtener las notificaciones asociadas a un usuario desde un servidor remoto,
- * procesar las respuestas recibidas, y notificar al componente correspondiente mediante un listener.
- *
- *   Métodos principales:
- *       1. Solicitar notificaciones desde el servidor para el usuario activo.
- *       2. Procesar las notificaciones obtenidas y almacenarlas en una lista.
- *       3. Comunicar la lista de notificaciones procesadas a través de una interfaz de callback.
- *
- * @note Utiliza `Volley` para realizar solicitudes HTTP y `SharedPreferences` para recuperar el ID del usuario.
- * @note Requiere un contexto válido de la aplicación y un listener para recibir las notificaciones procesadas.
- */
 public class LogicaRecepcionNotif {
     private static final String NOTIFICACIONES_URL = "http://" + Globales.IP + ":8080/api/api_datos.php?action=obtener_notificaciones_usuario";
     private Context context;
@@ -42,17 +30,6 @@ public class LogicaRecepcionNotif {
         this.listener = listener;
     }
 
-    /**
-     * @brief Obtiene las notificaciones desde el servidor para el usuario activo.
-     *
-     * Este método construye un JSON con el ID del usuario y realiza una solicitud POST al servidor
-     * para obtener las notificaciones asociadas al usuario. Luego, procesa la respuesta para extraer
-     * las notificaciones y las pasa al listener correspondiente.
-     *
-     * Diseño:
-     *                  [obtenerNotificacionesDeServidor()] ---> Solicitud al servidor
-     *
-     */
     public void obtenerNotificacionesDeServidor() {
         // Obtener el ID del usuario desde SharedPreferences
         SharedPreferences sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
@@ -112,18 +89,6 @@ public class LogicaRecepcionNotif {
         }
     }
 
-    /**
-     * @brief Procesa las notificaciones obtenidas desde el servidor.
-     *
-     * Este método recorre el arreglo de notificaciones, parsea cada notificación y la convierte en
-     * un objeto `Notificacion`. Luego, agrega todas las notificaciones procesadas a una lista y
-     * las pasa al listener asociado.
-     *
-     * Diseño:
-     *   notificaciones (JSONArray) ---> [procesarNotificaciones()]
-     *
-     * @param notificaciones Un arreglo JSON que contiene todas las notificaciones obtenidas desde el servidor.
-     */
     private void procesarNotificaciones(JSONArray notificaciones) {
         // Verificamos si hay notificaciones y las procesamos
         if (notificaciones.length() > 0) {

@@ -11,16 +11,16 @@ import java.util.UUID;
 /**
  * @brief Clase Utilidades que proporciona métodos para convertir entre diferentes representaciones de datos.
  *
- * Esta clase incluye métodos generales que se pueden usar en varias clases de la app.
+ * Esta clase incluye métodos para convertir cadenas de texto a arrays de bytes, convertir UUIDs
+ * a su representación de cadena y hexadecimal, y otros métodos de conversión de bytes.
+ * -----------------------------------------------------------------------------------
+ * @author: Jordi Bataller i Mascarell
+ * -----------------------------------------------------------------------------------
  */
 //-----------------------------------------------------------------------------------
 public class Utilidades {
 
-    /**
-     * Obtiene la fecha actual del sistema.
-     *
-     * @return la fecha y hora actuales del sistema.
-     */
+
     public static String obtenerFechaActual() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         return sdf.format(new Date());
