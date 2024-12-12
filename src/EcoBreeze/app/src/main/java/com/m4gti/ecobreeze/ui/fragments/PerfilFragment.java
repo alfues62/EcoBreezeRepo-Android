@@ -1,14 +1,15 @@
 package com.m4gti.ecobreeze.ui.fragments;
-
 import com.m4gti.ecobreeze.R;
 import com.m4gti.ecobreeze.logic.LogicaLogin;
 import com.m4gti.ecobreeze.logic.LogicaRecepcionDatos;
 import com.m4gti.ecobreeze.logic.NotificationHelper;
 import com.m4gti.ecobreeze.models.Medicion;
 import com.m4gti.ecobreeze.ui.activities.HuellaActivity;
+import com.m4gti.ecobreeze.ui.activities.MainActivity;
 import com.m4gti.ecobreeze.ui.activities.NotificacionesActivity;
 import com.m4gti.ecobreeze.ui.activities.ScannerActivity;
 import com.m4gti.ecobreeze.ui.activities.UserActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.fragment.app.Fragment;
 
 public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnMedicionRecibidaListener{
@@ -38,12 +40,10 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
 
         logoutButton = view.findViewById(R.id.logoutButton);
-        scannerButton = view.findViewById(R.id.scannerButton);
         huellaButton = view.findViewById(R.id.huellaButton);
         userButton = view.findViewById(R.id.userButton);
         notifButton = view.findViewById(R.id.notifButton);
 
-        textViewUltimaMedicion = view.findViewById(R.id.textViewUltimaMedicion);
 
         // Inicializamos LogicaRecepcionDatos con el listener
         if (getActivity() != null) {
@@ -66,13 +66,13 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
         notificacionRunnable = new Runnable() {
             @Override
             public void run() {
-                enviarNotificacionConCategoriaActual();
+              //  enviarNotificacionConCategoriaActual();
                 handler.postDelayed(this, 1000); // 30 segundos
             }
         };
         handler.post(notificacionRunnable);
     }
-
+/*
     private void enviarNotificacionConCategoriaActual() {
         // Extraer el texto de la medición actual desde el TextView
         String medicionText = textViewUltimaMedicion.getText().toString();
@@ -90,6 +90,7 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
         }
     }
 
+*/
 
     // Implementamos el método de la interfaz
     @Override
@@ -101,7 +102,7 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
                 "Hora: " + medicion.getHora() + "\n" +
                 "Categoría: " + medicion.getCategoria();  // Añadir categoría al texto
 
-        textViewUltimaMedicion.setText(medicionText);
+        //textViewUltimaMedicion.setText(medicionText);
     }
 
     @Override
@@ -120,15 +121,6 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
                 // Usamos getActivity() para acceder a la actividad que contiene el fragmento
                 Intent intent = new Intent(getActivity(), UserActivity.class);
                 startActivity(intent); // Inicia la actividad UserActivity
-            }
-        });
-
-        // Botón para ir a ScannerActivity
-        scannerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ScannerActivity.class);
-                startActivity(intent); // Inicia la actividad ScannerActivity
             }
         });
 

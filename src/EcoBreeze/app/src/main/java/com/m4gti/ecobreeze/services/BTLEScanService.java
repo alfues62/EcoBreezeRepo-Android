@@ -17,9 +17,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -29,25 +32,9 @@ import com.m4gti.ecobreeze.R;
 import com.m4gti.ecobreeze.logic.LogicaEnvioDatos;
 import com.m4gti.ecobreeze.models.TramaIBeacon;
 import com.m4gti.ecobreeze.utils.Utilidades;
+
 import java.util.List;
 
-
-/**
- * @class BTLEScanService
- * @brief Servicio encargado de escanear dispositivos Bluetooth Low Energy (BTLE) y obtener la ubicación del usuario.
- *
- * Este servicio utiliza la tecnología Bluetooth para escanear dispositivos iBeacon cercanos y realizar un seguimiento de la ubicación del usuario mediante el servicio de localización de Google. Cuando un dispositivo BTLE es detectado, el servicio notifica al usuario a través de una notificación y guarda los datos obtenidos.
- *
- *   Métodos principales:
- *       1. Inicializar Bluetooth y crear el escáner BTLE.
- *       2. Iniciar el escaneo para buscar dispositivos BTLE específicos.
- *       3. Procesar los resultados del escaneo para extraer la información de dispositivos iBeacon.
- *       4. Obtener la ubicación actual del usuario.
- *       5. Enviar notificaciones y guardar los datos procesados en una base de datos.
- *
- * @note Utiliza `BluetoothLeScanner` para realizar el escaneo de dispositivos BTLE.
- * @note Requiere permisos de ubicación y Bluetooth habilitados.
- */
 public class BTLEScanService extends Service {
 
     private static final String ETIQUETA_LOG = "BTLE_SERVICE";

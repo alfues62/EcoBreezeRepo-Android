@@ -1,41 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".ui.activities.MainActivity">
+    android:background="#FFFFFF">
 
-    <EditText
-        android:id="@+id/emailEditText"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Correo electrónico"
-        android:inputType="textEmailAddress" />
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center_horizontal">
 
-    <EditText
-        android:id="@+id/passwordEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Contraseña"
-        android:inputType="textPassword" />
 
-    <Button
-        android:id="@+id/loginButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Iniciar Sesión"
-        android:layout_marginTop="16dp"/>
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/logoImageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/logo"
+            android:layout_marginBottom="24dp"
+            android:contentDescription="Logo de la aplicación" />
 
-    <Button
-        android:id="@+id/loginWithFingerprintButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Iniciar sesión con Huella"
-        android:layout_marginTop="16dp"
-        android:layout_gravity="center"
-        />
-        <!--android:drawableLeft="@drawable/ic_launcher_f" -->
-</LinearLayout>
+        <!-- Título -->
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bienvenido a EcoBrezze"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:fontFamily="serif"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Campo de Correo Electrónico -->
+        <EditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Correo Electrónico"
+            android:inputType="textEmailAddress"
+            android:padding="12dp"
+            android:textColor="#000000"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Campo de Contraseña -->
+        <EditText
+            android:id="@+id/passwordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="#000000"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:textColor="#000000" />
+
+        <!-- Botón Iniciar Sesión -->
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="INICIAR SESIÓN"
+            android:backgroundTint="#68A7A2"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp"
+            android:padding="12dp" />
+
+        <!-- Separador -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="#D3D3D3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="O"
+                android:textColor="#000000"
+                android:layout_marginHorizontal="8dp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="#D3D3D3" />
+        </LinearLayout>
+
+        <!-- Botón Iniciar Sesión con Huella -->
+        <Button
+            android:id="@+id/loginWithFingerprintButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="INICIAR SESIÓN CON HUELLA"
+            android:backgroundTint="#68A7A2"
+            android:textColor="#FFFFFF"
+            android:padding="12dp" />
+    </LinearLayout>
+</ScrollView>

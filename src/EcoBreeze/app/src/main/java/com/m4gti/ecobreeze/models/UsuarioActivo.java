@@ -1,11 +1,10 @@
 package com.m4gti.ecobreeze.models;
 
+// --------------------------------------------------------------
 /**
- * @class UsuarioActivo
  * @brief Clase que se usa para almacenar temporalmente los datos del usuario activo.
- *
- * Esta clase obtiene y guarda los datos del usuario activo.
  */
+// --------------------------------------------------------------
 public class UsuarioActivo {
 
     private int userId;

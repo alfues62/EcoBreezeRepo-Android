@@ -27,10 +27,10 @@ public class CambiarCorreoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_correo);
 
-        etContrasenaActual = findViewById(R.id.etContrasenaActual);
-        etNuevoCorreo = findViewById(R.id.etNuevoCorreo);
+        etContrasenaActual = findViewById(R.id.edtContrasenaActual);
+        etNuevoCorreo = findViewById(R.id.edtNuevoCorreo);
         btnCambiarCorreo = findViewById(R.id.btnCambiarCorreo);
-        tvMensaje = findViewById(R.id.tvMensaje);
+        tvMensaje = findViewById(R.id.tvMensajeResultado);
 
         // Configurar el botón para cambiar el correo
         btnCambiarCorreo.setOnClickListener(new View.OnClickListener() {
@@ -51,15 +51,6 @@ public class CambiarCorreoActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * @brief Método para realizar el cambio de correo electrónico en el servidor.
-     *
-     * Este método utiliza la lógica de negocio definida en `LogicaUser` para enviar una solicitud POST al servidor con la contraseña actual y el nuevo correo proporcionado por el usuario.
-     * Si la operación es exitosa, muestra un mensaje de éxito; de lo contrario, muestra un mensaje de error.
-     *
-     * @param contrasenaActual La contraseña actual proporcionada por el usuario. Debe ser una cadena de texto no vacía.
-     * @param nuevoCorreo El nuevo correo electrónico que el usuario desea establecer. Debe ser una cadena de texto no vacía y cumplir con las validaciones de correo electrónico.
-     */
     private void cambiarCorreo(String contrasenaActual, String nuevoCorreo) {
         // Llamar a la lógica de negocio a través de LogicaUser
         LogicaUser.cambiarCorreo(this, contrasenaActual, nuevoCorreo, new Response.Listener<JSONObject>() {

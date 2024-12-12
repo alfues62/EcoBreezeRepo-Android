@@ -27,22 +27,12 @@ public class LogicaRecepcionDatos {
     private Context context;
     private OnMedicionRecibidaListener listener;
 
-    // Constructor de la clase
+    // Constructor donde se pasa el listener
     public LogicaRecepcionDatos(Context context, OnMedicionRecibidaListener listener) {
         this.context = context;
         this.listener = listener;
     }
 
-    /**
-     * @brief Realiza una solicitud al servidor para obtener las mediciones del usuario activo.
-     *
-     * Este método utiliza el ID del usuario almacenado en `SharedPreferences` para construir una solicitud
-     * al servidor. Si la respuesta es exitosa, se procesan las mediciones obtenidas.
-     *
-     * Diseño:
-     *                     [obtenerMedicionesDeServidor()] ---> Solicitud POST al servidor
-     *
-     */
     public void obtenerMedicionesDeServidor() {
         // Obtener el ID del usuario desde SharedPreferences
         SharedPreferences sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
@@ -102,17 +92,6 @@ public class LogicaRecepcionDatos {
         }
     }
 
-    /**
-     * @brief Procesa las mediciones obtenidas desde el servidor.
-     *
-     * Este método analiza un arreglo de mediciones, selecciona la última y la convierte en un objeto
-     * `Medicion`. Finalmente, pasa la medición procesada al listener asociado.
-     *
-     * Diseño:
-     *   mediciones (JSONArray) ---> [procesarMediciones()]
-     *
-     * @param mediciones Un arreglo JSON que contiene todas las mediciones obtenidas desde el servidor.
-     */
     private void procesarMediciones(JSONArray mediciones) {
         // Verificamos si hay mediciones y obtenemos la última
         if (mediciones.length() > 0) {
@@ -146,6 +125,7 @@ public class LogicaRecepcionDatos {
         }
     }
 
+    // Interfaz para pasar la última medición al MainActivity
     public interface OnMedicionRecibidaListener {
         void onMedicionRecibida(Medicion medicion);
     }

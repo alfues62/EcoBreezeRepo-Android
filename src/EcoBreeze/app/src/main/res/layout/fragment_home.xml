@@ -13,7 +13,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="0dp"
-        android:background="#3B3B3B">
+        android:background="#FFFFFF">
 
         <fragment
             android:id="@+id/map"
@@ -33,7 +33,7 @@
             android:id="@+id/air_quality_table"
             android:layout_width="402dp"
             android:layout_height="210dp"
-            android:background="#3B3B3B"
+            android:background="#C5C5C5"
             android:padding="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.444"
@@ -147,7 +147,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:text="Ver más..."
-                android:textColor="#E2E8FA"
+                android:textColor="#000000"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -158,7 +158,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
-            android:backgroundTint="#3B3B3B"
+            android:backgroundTint="#4CA5AA"
             android:elevation="4dp"
             android:padding="16dp"
             app:layout_constraintBottom_toTopOf="@+id/map"
@@ -175,7 +175,10 @@
                 android:layout_gravity="center"
                 android:text="MIS MEDICIONES:"
                 android:textColor="#FDFDFD"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="109dp"
+                tools:layout_editor_absoluteY="16dp" />
         </androidx.appcompat.widget.Toolbar>
 
 
