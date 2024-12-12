@@ -1,0 +1,138 @@
+\doxysection{com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+Envio\+Datos Class Reference}
+\hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos}{}\label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos}\index{com.m4gti.ecobreeze.logic.LogicaEnvioDatos@{com.m4gti.ecobreeze.logic.LogicaEnvioDatos}}
+
+
+Clase encargada de gestionar la lógica relacionada con el envío de datos al servidor remoto.  
+
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_ac9d5a5e833b7ea062a8b59131cd153f1}{Logica\+Envio\+Datos}} (Context context)
+\item 
+boolean \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_a928281afe791336f1f0d39192af6e3a4}{es\+Direccion\+Mac\+Valida}} (String mac)
+\begin{DoxyCompactList}\small\item\em Verifica si una dirección MAC tiene un formato válido. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_a4cf615502b4b98a73b72366fe0e357ef}{guardar\+Mac\+En\+BD}} (String mac)
+\begin{DoxyCompactList}\small\item\em Guarda la dirección MAC detectada en la base de datos remota. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_a2aac9c89bc19f995f0e35281fa5835eb}{guardar\+Token\+Huella\+En\+BD}} (String token\+Huella)
+\begin{DoxyCompactList}\small\item\em Registra un token de huella en la base de datos remota. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_a609377a6ad1f6dfe22c248721672842a}{guardar\+Notificacion\+En\+BD}} (String titulo, String cuerpo, String fecha)
+\begin{DoxyCompactList}\small\item\em Registra una notificación en la base de datos remota. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Clase encargada de gestionar la lógica relacionada con el envío de datos al servidor remoto. 
+
+Esta clase proporciona métodos para interactuar con un servidor remoto utilizando la biblioteca Volley. Permite registrar direcciones MAC, tokens de huella y notificaciones en la base de datos remota. La configuración del usuario actual se obtiene a través de {\ttfamily Shared\+Preferences}.
+
+Métodos principales\+:
+\begin{DoxyEnumerate}
+\item Verificación de formato de direcciones MAC.
+\item Envío de direcciones MAC detectadas al servidor.
+\item Envío de tokens de huella al servidor.
+\item Envío de notificaciones al servidor.
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+Se requiere acceso a un contexto Android para inicializar esta clase. 
+\end{DoxyNote}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_ac9d5a5e833b7ea062a8b59131cd153f1}\index{com.m4gti.ecobreeze.logic.LogicaEnvioDatos@{com.m4gti.ecobreeze.logic.LogicaEnvioDatos}!LogicaEnvioDatos@{LogicaEnvioDatos}}
+\index{LogicaEnvioDatos@{LogicaEnvioDatos}!com.m4gti.ecobreeze.logic.LogicaEnvioDatos@{com.m4gti.ecobreeze.logic.LogicaEnvioDatos}}
+\doxysubsubsection{\texorpdfstring{LogicaEnvioDatos()}{LogicaEnvioDatos()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_ac9d5a5e833b7ea062a8b59131cd153f1} 
+com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+Envio\+Datos.\+Logica\+Envio\+Datos (\begin{DoxyParamCaption}\item[{Context}]{context}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_a928281afe791336f1f0d39192af6e3a4}\index{com.m4gti.ecobreeze.logic.LogicaEnvioDatos@{com.m4gti.ecobreeze.logic.LogicaEnvioDatos}!esDireccionMacValida@{esDireccionMacValida}}
+\index{esDireccionMacValida@{esDireccionMacValida}!com.m4gti.ecobreeze.logic.LogicaEnvioDatos@{com.m4gti.ecobreeze.logic.LogicaEnvioDatos}}
+\doxysubsubsection{\texorpdfstring{esDireccionMacValida()}{esDireccionMacValida()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_a928281afe791336f1f0d39192af6e3a4} 
+boolean com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+Envio\+Datos.\+es\+Direccion\+Mac\+Valida (\begin{DoxyParamCaption}\item[{String}]{mac}{}\end{DoxyParamCaption})}
+
+
+
+Verifica si una dirección MAC tiene un formato válido. 
+
+Esta función utiliza una expresión regular para validar el formato de la dirección MAC. Una dirección MAC válida debe cumplir con el formato estándar\+: seis pares de caracteres hexadecimales separados por \textquotesingle{}\+:\textquotesingle{} o \textquotesingle{}-\/\textquotesingle{}.
+
+Diseño\+: mac (String) -\/-\/-\/\texorpdfstring{$>$}{>} \mbox{[}\doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_a928281afe791336f1f0d39192af6e3a4}{es\+Direccion\+Mac\+Valida()}\mbox{]} -\/-\/-\/\texorpdfstring{$>$}{>} true/false (boolean)
+
+
+\begin{DoxyParams}{Parameters}
+{\em mac} & La dirección MAC que se va a verificar. Debe ser una cadena de texto. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true si el formato es válido; false en caso contrario. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_a4cf615502b4b98a73b72366fe0e357ef}\index{com.m4gti.ecobreeze.logic.LogicaEnvioDatos@{com.m4gti.ecobreeze.logic.LogicaEnvioDatos}!guardarMacEnBD@{guardarMacEnBD}}
+\index{guardarMacEnBD@{guardarMacEnBD}!com.m4gti.ecobreeze.logic.LogicaEnvioDatos@{com.m4gti.ecobreeze.logic.LogicaEnvioDatos}}
+\doxysubsubsection{\texorpdfstring{guardarMacEnBD()}{guardarMacEnBD()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_a4cf615502b4b98a73b72366fe0e357ef} 
+void com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+Envio\+Datos.\+guardar\+Mac\+En\+BD (\begin{DoxyParamCaption}\item[{String}]{mac}{}\end{DoxyParamCaption})}
+
+
+
+Guarda la dirección MAC detectada en la base de datos remota. 
+
+Este método envía una solicitud POST al servidor para registrar un sensor asociado a un usuario. Los datos enviados incluyen la dirección MAC del sensor y el ID del usuario actual. Si ocurre un error durante el proceso, se muestra un mensaje al usuario.
+
+Diseño\+: mac (String) -\/-\/-\/\texorpdfstring{$>$}{>} \mbox{[}\doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_a4cf615502b4b98a73b72366fe0e357ef}{guardar\+Mac\+En\+BD()}\mbox{]} -\/-\/-\/\texorpdfstring{$>$}{>} Solicitud POST al servidor -\/-\/-\/\texorpdfstring{$>$}{>} Respuesta de éxito o error.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mac} & La dirección MAC que será registrada en la base de datos. Debe ser una cadena en formato válido. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_a609377a6ad1f6dfe22c248721672842a}\index{com.m4gti.ecobreeze.logic.LogicaEnvioDatos@{com.m4gti.ecobreeze.logic.LogicaEnvioDatos}!guardarNotificacionEnBD@{guardarNotificacionEnBD}}
+\index{guardarNotificacionEnBD@{guardarNotificacionEnBD}!com.m4gti.ecobreeze.logic.LogicaEnvioDatos@{com.m4gti.ecobreeze.logic.LogicaEnvioDatos}}
+\doxysubsubsection{\texorpdfstring{guardarNotificacionEnBD()}{guardarNotificacionEnBD()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_a609377a6ad1f6dfe22c248721672842a} 
+void com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+Envio\+Datos.\+guardar\+Notificacion\+En\+BD (\begin{DoxyParamCaption}\item[{String}]{titulo}{, }\item[{String}]{cuerpo}{, }\item[{String}]{fecha}{}\end{DoxyParamCaption})}
+
+
+
+Registra una notificación en la base de datos remota. 
+
+Este método envía una solicitud POST al servidor para guardar los detalles de una notificación. Los datos enviados incluyen el título, el cuerpo, la fecha y el ID del usuario que creó la notificación. Muestra mensajes de éxito o error al usuario según el resultado de la operación.
+
+Diseño\+: titulo (String) cuerpo (String) fecha (String) -\/-\/-\/\texorpdfstring{$>$}{>} \mbox{[}\doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_a609377a6ad1f6dfe22c248721672842a}{guardar\+Notificacion\+En\+BD()}\mbox{]} -\/-\/-\/\texorpdfstring{$>$}{>} Solicitud POST al servidor -\/-\/-\/\texorpdfstring{$>$}{>} Respuesta de éxito o error.
+
+
+\begin{DoxyParams}{Parameters}
+{\em titulo} & El título de la notificación. Debe ser una cadena no vacía. \\
+\hline
+{\em cuerpo} & El cuerpo del mensaje de la notificación. Debe ser una cadena no vacía. \\
+\hline
+{\em fecha} & La fecha de la notificación en formato {\ttfamily YYYY-\/\+MM-\/\+DD}. Debe ser válida. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_a2aac9c89bc19f995f0e35281fa5835eb}\index{com.m4gti.ecobreeze.logic.LogicaEnvioDatos@{com.m4gti.ecobreeze.logic.LogicaEnvioDatos}!guardarTokenHuellaEnBD@{guardarTokenHuellaEnBD}}
+\index{guardarTokenHuellaEnBD@{guardarTokenHuellaEnBD}!com.m4gti.ecobreeze.logic.LogicaEnvioDatos@{com.m4gti.ecobreeze.logic.LogicaEnvioDatos}}
+\doxysubsubsection{\texorpdfstring{guardarTokenHuellaEnBD()}{guardarTokenHuellaEnBD()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_a2aac9c89bc19f995f0e35281fa5835eb} 
+void com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+Envio\+Datos.\+guardar\+Token\+Huella\+En\+BD (\begin{DoxyParamCaption}\item[{String}]{token\+Huella}{}\end{DoxyParamCaption})}
+
+
+
+Registra un token de huella en la base de datos remota. 
+
+Este método envía una solicitud POST al servidor para guardar un token de huella asociado al usuario actual. El token de huella permite autenticar o identificar al usuario.
+
+Diseño\+: token\+Huella (String) -\/-\/-\/\texorpdfstring{$>$}{>} \mbox{[}\doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_envio_datos_a2aac9c89bc19f995f0e35281fa5835eb}{guardar\+Token\+Huella\+En\+BD()}\mbox{]} -\/-\/-\/\texorpdfstring{$>$}{>} Solicitud POST al servidor -\/-\/-\/\texorpdfstring{$>$}{>} Respuesta de éxito o error.
+
+
+\begin{DoxyParams}{Parameters}
+{\em token\+Huella} & El token de huella que se registrará en la base de datos. Debe ser una cadena no vacía. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+GTI\+\_\+\+Carpeta/\+Biometria\+Repos/\+Eco\+Breeze\+Repo-\/\+Android/src/\+Eco\+Breeze/app/src/main/java/com/m4gti/ecobreeze/logic/\mbox{\hyperlink{_logica_envio_datos_8java}{Logica\+Envio\+Datos.\+java}}\end{DoxyCompactItemize}

@@ -1,0 +1,92 @@
+\doxysection{com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+User Class Reference}
+\hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_user}{}\label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_user}\index{com.m4gti.ecobreeze.logic.LogicaUser@{com.m4gti.ecobreeze.logic.LogicaUser}}
+
+
+Clase encargada de gestionar las operaciones relacionadas con el usuario, como la actualización de correo electrónico y contraseña.  
+
+
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_user_ab7ea5c36f1da053593d95e0ea3ea6ab8}{cambiar\+Correo}} (Context context, String contrasena\+Actual, String nuevo\+Correo, final Response.\+Listener$<$ JSONObject $>$ listener, final Response.\+Error\+Listener error\+Listener)
+\begin{DoxyCompactList}\small\item\em Método para cambiar el correo electrónico del usuario. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_user_a909b6c7a57e5154d5699bfcc3bd87fd9}{cambiar\+Contrasena}} (Context context, String contrasena\+Actual, String nueva\+Contrasena, final Response.\+Listener$<$ JSONObject $>$ listener, final Response.\+Error\+Listener error\+Listener)
+\begin{DoxyCompactList}\small\item\em Método para cambiar la contraseña del usuario. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Clase encargada de gestionar las operaciones relacionadas con el usuario, como la actualización de correo electrónico y contraseña. 
+
+Esta clase utiliza la biblioteca Volley para realizar solicitudes HTTP al servidor. Proporciona métodos para cambiar el correo electrónico y la contraseña del usuario.
+
+Métodos principales\+:
+\begin{DoxyEnumerate}
+\item {\ttfamily \doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_user_ab7ea5c36f1da053593d95e0ea3ea6ab8}{cambiar\+Correo()}}\+: Enviar una solicitud POST para actualizar el correo electrónico del usuario.
+\item {\ttfamily \doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_user_a909b6c7a57e5154d5699bfcc3bd87fd9}{cambiar\+Contrasena()}}\+: Enviar una solicitud POST para actualizar la contraseña del usuario.
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+Requiere el contexto de la aplicación y utiliza {\ttfamily Shared\+Preferences} para obtener el ID del usuario. 
+\end{DoxyNote}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_user_a909b6c7a57e5154d5699bfcc3bd87fd9}\index{com.m4gti.ecobreeze.logic.LogicaUser@{com.m4gti.ecobreeze.logic.LogicaUser}!cambiarContrasena@{cambiarContrasena}}
+\index{cambiarContrasena@{cambiarContrasena}!com.m4gti.ecobreeze.logic.LogicaUser@{com.m4gti.ecobreeze.logic.LogicaUser}}
+\doxysubsubsection{\texorpdfstring{cambiarContrasena()}{cambiarContrasena()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_user_a909b6c7a57e5154d5699bfcc3bd87fd9} 
+static void com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+User.\+cambiar\+Contrasena (\begin{DoxyParamCaption}\item[{Context}]{context}{, }\item[{String}]{contrasena\+Actual}{, }\item[{String}]{nueva\+Contrasena}{, }\item[{final Response.\+Listener$<$ JSONObject $>$}]{listener}{, }\item[{final Response.\+Error\+Listener}]{error\+Listener}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Método para cambiar la contraseña del usuario. 
+
+Este método envía una solicitud POST al servidor para actualizar la contraseña del usuario. Obtiene el ID del usuario desde {\ttfamily Shared\+Preferences}, crea un objeto JSON con la nueva contraseña y la contraseña actual. Realiza la solicitud y gestiona las respuestas a través de listeners.
+
+Diseño\+: contrasena\+Actual, nueva\+Contrasena (String) -\/-\/-\/\texorpdfstring{$>$}{>} \mbox{[}\doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_user_a909b6c7a57e5154d5699bfcc3bd87fd9}{cambiar\+Contrasena()}\mbox{]} -\/-\/-\/\texorpdfstring{$>$}{>} Solicitud POST al servidor
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & El contexto de la aplicación. \\
+\hline
+{\em contrasena\+Actual} & La contraseña actual del usuario. \\
+\hline
+{\em nueva\+Contrasena} & La nueva contraseña que se desea establecer. \\
+\hline
+{\em listener} & Listener para manejar respuestas exitosas. \\
+\hline
+{\em error\+Listener} & Listener para manejar errores en la solicitud. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_user_ab7ea5c36f1da053593d95e0ea3ea6ab8}\index{com.m4gti.ecobreeze.logic.LogicaUser@{com.m4gti.ecobreeze.logic.LogicaUser}!cambiarCorreo@{cambiarCorreo}}
+\index{cambiarCorreo@{cambiarCorreo}!com.m4gti.ecobreeze.logic.LogicaUser@{com.m4gti.ecobreeze.logic.LogicaUser}}
+\doxysubsubsection{\texorpdfstring{cambiarCorreo()}{cambiarCorreo()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_user_ab7ea5c36f1da053593d95e0ea3ea6ab8} 
+static void com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+User.\+cambiar\+Correo (\begin{DoxyParamCaption}\item[{Context}]{context}{, }\item[{String}]{contrasena\+Actual}{, }\item[{String}]{nuevo\+Correo}{, }\item[{final Response.\+Listener$<$ JSONObject $>$}]{listener}{, }\item[{final Response.\+Error\+Listener}]{error\+Listener}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Método para cambiar el correo electrónico del usuario. 
+
+Este método envía una solicitud POST al servidor para actualizar el correo del usuario. Primero, obtiene el ID del usuario desde {\ttfamily Shared\+Preferences}, luego crea un objeto JSON con la nueva dirección de correo y la contraseña actual. Finalmente, realiza la solicitud y gestiona las respuestas a través de listeners.
+
+Diseño\+: id\+Usuario, contrasena\+Actual, nuevo\+Correo (String) -\/-\/-\/\texorpdfstring{$>$}{>} \mbox{[}\doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_user_ab7ea5c36f1da053593d95e0ea3ea6ab8}{cambiar\+Correo()}\mbox{]} -\/-\/-\/\texorpdfstring{$>$}{>} Solicitud POST al servidor
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & El contexto de la aplicación. \\
+\hline
+{\em contrasena\+Actual} & La contraseña actual del usuario. \\
+\hline
+{\em nuevo\+Correo} & El nuevo correo que se desea cambiar. \\
+\hline
+{\em listener} & Listener para manejar respuestas exitosas. \\
+\hline
+{\em error\+Listener} & Listener para manejar errores en la solicitud. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+GTI\+\_\+\+Carpeta/\+Biometria\+Repos/\+Eco\+Breeze\+Repo-\/\+Android/src/\+Eco\+Breeze/app/src/main/java/com/m4gti/ecobreeze/logic/\mbox{\hyperlink{_logica_user_8java}{Logica\+User.\+java}}\end{DoxyCompactItemize}

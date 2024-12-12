@@ -1,0 +1,67 @@
+\doxysection{com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+Recepcion\+Datos Class Reference}
+\hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_datos}{}\label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_datos}\index{com.m4gti.ecobreeze.logic.LogicaRecepcionDatos@{com.m4gti.ecobreeze.logic.LogicaRecepcionDatos}}
+
+
+Clase encargada de gestionar la lógica de recepción y procesamiento de mediciones desde el servidor.  
+
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+interface \mbox{\hyperlink{interfacecom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_datos_1_1_on_medicion_recibida_listener}{On\+Medicion\+Recibida\+Listener}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_datos_a252bc018d94c017a09073b6182795570}{Logica\+Recepcion\+Datos}} (Context context, \mbox{\hyperlink{interfacecom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_datos_1_1_on_medicion_recibida_listener}{On\+Medicion\+Recibida\+Listener}} listener)
+\item 
+void \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_datos_aa91567db7cd2761759637e8ff6c272d0}{obtener\+Mediciones\+De\+Servidor}} ()
+\begin{DoxyCompactList}\small\item\em Realiza una solicitud al servidor para obtener las mediciones del usuario activo. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Clase encargada de gestionar la lógica de recepción y procesamiento de mediciones desde el servidor. 
+
+Esta clase se encarga de obtener datos de mediciones asociados a un usuario desde un servidor remoto, procesar las respuestas, y notificar al componente correspondiente mediante un listener.
+
+Métodos principales\+:
+\begin{DoxyEnumerate}
+\item Solicitar mediciones desde el servidor para el usuario activo.
+\item Procesar las mediciones obtenidas, extrayendo la más reciente.
+\item Comunicar la medición procesada a través de una interfaz de callback.
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+Utiliza {\ttfamily Volley} para realizar solicitudes HTTP y {\ttfamily Shared\+Preferences} para recuperar el ID del usuario. 
+
+Requiere un contexto válido de la aplicación y un listener para recibir los datos procesados. 
+\end{DoxyNote}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_datos_a252bc018d94c017a09073b6182795570}\index{com.m4gti.ecobreeze.logic.LogicaRecepcionDatos@{com.m4gti.ecobreeze.logic.LogicaRecepcionDatos}!LogicaRecepcionDatos@{LogicaRecepcionDatos}}
+\index{LogicaRecepcionDatos@{LogicaRecepcionDatos}!com.m4gti.ecobreeze.logic.LogicaRecepcionDatos@{com.m4gti.ecobreeze.logic.LogicaRecepcionDatos}}
+\doxysubsubsection{\texorpdfstring{LogicaRecepcionDatos()}{LogicaRecepcionDatos()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_datos_a252bc018d94c017a09073b6182795570} 
+com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+Recepcion\+Datos.\+Logica\+Recepcion\+Datos (\begin{DoxyParamCaption}\item[{Context}]{context}{, }\item[{\mbox{\hyperlink{interfacecom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_datos_1_1_on_medicion_recibida_listener}{On\+Medicion\+Recibida\+Listener}}}]{listener}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_datos_aa91567db7cd2761759637e8ff6c272d0}\index{com.m4gti.ecobreeze.logic.LogicaRecepcionDatos@{com.m4gti.ecobreeze.logic.LogicaRecepcionDatos}!obtenerMedicionesDeServidor@{obtenerMedicionesDeServidor}}
+\index{obtenerMedicionesDeServidor@{obtenerMedicionesDeServidor}!com.m4gti.ecobreeze.logic.LogicaRecepcionDatos@{com.m4gti.ecobreeze.logic.LogicaRecepcionDatos}}
+\doxysubsubsection{\texorpdfstring{obtenerMedicionesDeServidor()}{obtenerMedicionesDeServidor()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_datos_aa91567db7cd2761759637e8ff6c272d0} 
+void com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+Recepcion\+Datos.\+obtener\+Mediciones\+De\+Servidor (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Realiza una solicitud al servidor para obtener las mediciones del usuario activo. 
+
+Este método utiliza el ID del usuario almacenado en {\ttfamily Shared\+Preferences} para construir una solicitud al servidor. Si la respuesta es exitosa, se procesan las mediciones obtenidas.
+
+Diseño\+: \mbox{[}\doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_datos_aa91567db7cd2761759637e8ff6c272d0}{obtener\+Mediciones\+De\+Servidor()}\mbox{]} -\/-\/-\/\texorpdfstring{$>$}{>} Solicitud POST al servidor 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+GTI\+\_\+\+Carpeta/\+Biometria\+Repos/\+Eco\+Breeze\+Repo-\/\+Android/src/\+Eco\+Breeze/app/src/main/java/com/m4gti/ecobreeze/logic/\mbox{\hyperlink{_logica_recepcion_datos_8java}{Logica\+Recepcion\+Datos.\+java}}\end{DoxyCompactItemize}

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -16,12 +15,44 @@ import com.m4gti.ecobreeze.models.UsuarioActivo;
 import com.m4gti.ecobreeze.ui.activities.LoginActivity;
 import com.m4gti.ecobreeze.ui.activities.MainActivity;
 import com.m4gti.ecobreeze.ui.activities.ScannerActivity;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * @class LogicaRecepcionDatos
+ * @brief Clase encargada de gestionar la lógica de recepción y procesamiento de mediciones desde el servidor.
+ *
+ * Esta clase se encarga de obtener datos de mediciones asociados a un usuario desde un servidor remoto,
+ * procesar las respuestas, y notificar al componente correspondiente mediante un listener.
+ *
+ *   Métodos principales:
+ *       1. Solicitar mediciones desde el servidor para el usuario activo.
+ *       2. Procesar las mediciones obtenidas, extrayendo la más reciente.
+ *       3. Comunicar la medición procesada a través de una interfaz de callback.
+ *
+ * @note Utiliza `Volley` para realizar solicitudes HTTP y `SharedPreferences` para recuperar el ID del usuario.
+ * @note Requiere un contexto válido de la aplicación y un listener para recibir los datos procesados.
+ */
 public class LogicaLogin {
 
+    /**
+     * @brief Realiza el proceso de inicio de sesión utilizando email y contraseña.
+     *
+     * Este método envía una solicitud POST al servidor con las credenciales del usuario.
+     * Si el inicio de sesión es exitoso, los datos del usuario se guardan en `SharedPreferences`
+     * y se redirige al usuario a la actividad correspondiente.
+     *
+     * Diseño:
+     *   email (String)
+     *   password (String)
+     *   LOGIN_URL (String)
+     *        ---> [login()] ---> Solicitud POST al servidor
+     *
+     * @param context El contexto de la aplicación que ejecuta el método.
+     * @param email El correo electrónico del usuario. Debe ser una cadena de texto no vacía.
+     * @param password La contraseña del usuario. Debe ser una cadena de texto no vacía.
+     * @param LOGIN_URL La URL del servidor donde se realizará el inicio de sesión.
+     */
     public static void login(Context context, String email, String password, String LOGIN_URL) {
         // Crear el JSON para la solicitud
         JSONObject jsonBody = new JSONObject();
@@ -84,6 +115,24 @@ public class LogicaLogin {
         requestQueue.add(jsonObjectRequest);
     }
 
+    /**
+     * @brief Realiza el proceso de inicio de sesión utilizando email y token de huella.
+     *
+     * Este método envía una solicitud POST al servidor con el correo electrónico y el token de huella del usuario.
+     * Si el inicio de sesión es exitoso, los datos del usuario se guardan en `SharedPreferences`
+     * y se redirige al usuario a la actividad principal.
+     *
+     * Diseño:
+     *   email (String)
+     *   tokenHuella (String)
+     *   LOGIN_HUELLA_URL (String)
+     *        ---> [loginConHuella()] ---> Solicitud POST al servidor
+     *
+     * @param context El contexto de la aplicación que ejecuta el método.
+     * @param email El correo electrónico del usuario. Debe ser una cadena de texto no vacía.
+     * @param tokenHuella El token de huella asociado al usuario. Debe ser una cadena de texto no vacía.
+     * @param LOGIN_HUELLA_URL La URL del servidor donde se realizará el inicio de sesión con huella.
+     */
     public static void loginConHuella(Context context, String email, String tokenHuella, String LOGIN_HUELLA_URL) {
         // Crear el JSON para la solicitud
         JSONObject jsonBody = new JSONObject();
@@ -146,6 +195,19 @@ public class LogicaLogin {
         requestQueue.add(jsonObjectRequest);
     }
 
+    /**
+     * @brief Realiza el proceso de cierre de sesión del usuario.
+     *
+     * Este método elimina todos los datos del usuario almacenados en `SharedPreferences`
+     * y redirige al usuario a la actividad de inicio de sesión (`LoginActivity`).
+     *
+     * Diseño:
+     *   context (Context)
+     *        ---> [logout()] ---> Eliminar datos en `SharedPreferences`
+     *                             ---> Redirigir a LoginActivity.
+     *
+     * @param context El contexto de la aplicación que ejecuta el método.
+     */
     public static void logout(Context context) {
         // Borrar los datos de usuario almacenados
         SharedPreferences sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);

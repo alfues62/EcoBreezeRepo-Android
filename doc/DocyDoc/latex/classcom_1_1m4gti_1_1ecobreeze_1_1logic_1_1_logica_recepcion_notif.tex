@@ -1,0 +1,67 @@
+\doxysection{com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+Recepcion\+Notif Class Reference}
+\hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_notif}{}\label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_notif}\index{com.m4gti.ecobreeze.logic.LogicaRecepcionNotif@{com.m4gti.ecobreeze.logic.LogicaRecepcionNotif}}
+
+
+Clase encargada de gestionar la lógica de recepción y procesamiento de notificaciones desde el servidor.  
+
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+interface \mbox{\hyperlink{interfacecom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_notif_1_1_on_notificaciones_recibidas_listener}{On\+Notificaciones\+Recibidas\+Listener}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_notif_abdc3851590dcdbee3bc00e9b370997e5}{Logica\+Recepcion\+Notif}} (Context context, \mbox{\hyperlink{interfacecom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_notif_1_1_on_notificaciones_recibidas_listener}{On\+Notificaciones\+Recibidas\+Listener}} listener)
+\item 
+void \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_notif_a9310383fa59761ea91c6d1ce64c88522}{obtener\+Notificaciones\+De\+Servidor}} ()
+\begin{DoxyCompactList}\small\item\em Obtiene las notificaciones desde el servidor para el usuario activo. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Clase encargada de gestionar la lógica de recepción y procesamiento de notificaciones desde el servidor. 
+
+Esta clase se encarga de obtener las notificaciones asociadas a un usuario desde un servidor remoto, procesar las respuestas recibidas, y notificar al componente correspondiente mediante un listener.
+
+Métodos principales\+:
+\begin{DoxyEnumerate}
+\item Solicitar notificaciones desde el servidor para el usuario activo.
+\item Procesar las notificaciones obtenidas y almacenarlas en una lista.
+\item Comunicar la lista de notificaciones procesadas a través de una interfaz de callback.
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+Utiliza {\ttfamily Volley} para realizar solicitudes HTTP y {\ttfamily Shared\+Preferences} para recuperar el ID del usuario. 
+
+Requiere un contexto válido de la aplicación y un listener para recibir las notificaciones procesadas. 
+\end{DoxyNote}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_notif_abdc3851590dcdbee3bc00e9b370997e5}\index{com.m4gti.ecobreeze.logic.LogicaRecepcionNotif@{com.m4gti.ecobreeze.logic.LogicaRecepcionNotif}!LogicaRecepcionNotif@{LogicaRecepcionNotif}}
+\index{LogicaRecepcionNotif@{LogicaRecepcionNotif}!com.m4gti.ecobreeze.logic.LogicaRecepcionNotif@{com.m4gti.ecobreeze.logic.LogicaRecepcionNotif}}
+\doxysubsubsection{\texorpdfstring{LogicaRecepcionNotif()}{LogicaRecepcionNotif()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_notif_abdc3851590dcdbee3bc00e9b370997e5} 
+com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+Recepcion\+Notif.\+Logica\+Recepcion\+Notif (\begin{DoxyParamCaption}\item[{Context}]{context}{, }\item[{\mbox{\hyperlink{interfacecom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_notif_1_1_on_notificaciones_recibidas_listener}{On\+Notificaciones\+Recibidas\+Listener}}}]{listener}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_notif_a9310383fa59761ea91c6d1ce64c88522}\index{com.m4gti.ecobreeze.logic.LogicaRecepcionNotif@{com.m4gti.ecobreeze.logic.LogicaRecepcionNotif}!obtenerNotificacionesDeServidor@{obtenerNotificacionesDeServidor}}
+\index{obtenerNotificacionesDeServidor@{obtenerNotificacionesDeServidor}!com.m4gti.ecobreeze.logic.LogicaRecepcionNotif@{com.m4gti.ecobreeze.logic.LogicaRecepcionNotif}}
+\doxysubsubsection{\texorpdfstring{obtenerNotificacionesDeServidor()}{obtenerNotificacionesDeServidor()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_notif_a9310383fa59761ea91c6d1ce64c88522} 
+void com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+Recepcion\+Notif.\+obtener\+Notificaciones\+De\+Servidor (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Obtiene las notificaciones desde el servidor para el usuario activo. 
+
+Este método construye un JSON con el ID del usuario y realiza una solicitud POST al servidor para obtener las notificaciones asociadas al usuario. Luego, procesa la respuesta para extraer las notificaciones y las pasa al listener correspondiente.
+
+Diseño\+: \mbox{[}\doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_recepcion_notif_a9310383fa59761ea91c6d1ce64c88522}{obtener\+Notificaciones\+De\+Servidor()}\mbox{]} -\/-\/-\/\texorpdfstring{$>$}{>} Solicitud al servidor 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+GTI\+\_\+\+Carpeta/\+Biometria\+Repos/\+Eco\+Breeze\+Repo-\/\+Android/src/\+Eco\+Breeze/app/src/main/java/com/m4gti/ecobreeze/logic/\mbox{\hyperlink{_logica_recepcion_notif_8java}{Logica\+Recepcion\+Notif.\+java}}\end{DoxyCompactItemize}

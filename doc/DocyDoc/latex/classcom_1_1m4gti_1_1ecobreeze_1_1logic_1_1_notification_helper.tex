@@ -1,0 +1,50 @@
+\doxysection{com.\+m4gti.\+ecobreeze.\+logic.\+Notification\+Helper Class Reference}
+\hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_notification_helper}{}\label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_notification_helper}\index{com.m4gti.ecobreeze.logic.NotificationHelper@{com.m4gti.ecobreeze.logic.NotificationHelper}}
+
+
+Clase que maneja la creación y envío de notificaciones para alertas de sensores.  
+
+
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_notification_helper_accf3cad848f826fca5f37b13e798ed93}{create\+Notification\+Channel}} (Context context)
+\item 
+static void \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_notification_helper_a6e53c11fd0e77ddbe6efd6257c542765}{send\+Sensor\+Alert\+Notification}} (Context context, String message)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Clase que maneja la creación y envío de notificaciones para alertas de sensores. 
+
+Esta clase proporciona métodos para crear un canal de notificación y enviar alertas de sensores a los usuarios. Las notificaciones son útiles para informar sobre fallos o errores detectados por los sensores.
+
+Métodos principales\+:
+\begin{DoxyEnumerate}
+\item {\ttfamily \doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_notification_helper_accf3cad848f826fca5f37b13e798ed93}{create\+Notification\+Channel()}}\+: Crea un canal de notificación para las alertas de sensores.
+\item {\ttfamily \doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_notification_helper_a6e53c11fd0e77ddbe6efd6257c542765}{send\+Sensor\+Alert\+Notification()}}\+: Envía una notificación de alerta de sensor con el mensaje proporcionado.
+\end{DoxyEnumerate}
+
+\begin{DoxyNote}{Note}
+Requiere el contexto de la aplicación y, en el caso de {\ttfamily \doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_notification_helper_accf3cad848f826fca5f37b13e798ed93}{create\+Notification\+Channel()}}, utiliza las capacidades de la API de Android Oreo (nivel 26) o superior. 
+\end{DoxyNote}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_notification_helper_accf3cad848f826fca5f37b13e798ed93}\index{com.m4gti.ecobreeze.logic.NotificationHelper@{com.m4gti.ecobreeze.logic.NotificationHelper}!createNotificationChannel@{createNotificationChannel}}
+\index{createNotificationChannel@{createNotificationChannel}!com.m4gti.ecobreeze.logic.NotificationHelper@{com.m4gti.ecobreeze.logic.NotificationHelper}}
+\doxysubsubsection{\texorpdfstring{createNotificationChannel()}{createNotificationChannel()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_notification_helper_accf3cad848f826fca5f37b13e798ed93} 
+static void com.\+m4gti.\+ecobreeze.\+logic.\+Notification\+Helper.\+create\+Notification\+Channel (\begin{DoxyParamCaption}\item[{Context}]{context}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_notification_helper_a6e53c11fd0e77ddbe6efd6257c542765}\index{com.m4gti.ecobreeze.logic.NotificationHelper@{com.m4gti.ecobreeze.logic.NotificationHelper}!sendSensorAlertNotification@{sendSensorAlertNotification}}
+\index{sendSensorAlertNotification@{sendSensorAlertNotification}!com.m4gti.ecobreeze.logic.NotificationHelper@{com.m4gti.ecobreeze.logic.NotificationHelper}}
+\doxysubsubsection{\texorpdfstring{sendSensorAlertNotification()}{sendSensorAlertNotification()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_notification_helper_a6e53c11fd0e77ddbe6efd6257c542765} 
+static void com.\+m4gti.\+ecobreeze.\+logic.\+Notification\+Helper.\+send\+Sensor\+Alert\+Notification (\begin{DoxyParamCaption}\item[{Context}]{context}{, }\item[{String}]{message}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+GTI\+\_\+\+Carpeta/\+Biometria\+Repos/\+Eco\+Breeze\+Repo-\/\+Android/src/\+Eco\+Breeze/app/src/main/java/com/m4gti/ecobreeze/logic/\mbox{\hyperlink{_notification_helper_8java}{Notification\+Helper.\+java}}\end{DoxyCompactItemize}
