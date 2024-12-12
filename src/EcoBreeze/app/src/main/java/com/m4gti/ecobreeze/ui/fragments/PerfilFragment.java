@@ -1,5 +1,6 @@
 package com.m4gti.ecobreeze.ui.fragments;
 import com.m4gti.ecobreeze.R;
+import com.m4gti.ecobreeze.logic.LogicaEnvioDatos;
 import com.m4gti.ecobreeze.logic.LogicaLogin;
 import com.m4gti.ecobreeze.logic.LogicaRecepcionDatos;
 import com.m4gti.ecobreeze.logic.NotificationHelper;
@@ -9,6 +10,7 @@ import com.m4gti.ecobreeze.ui.activities.MainActivity;
 import com.m4gti.ecobreeze.ui.activities.NotificacionesActivity;
 import com.m4gti.ecobreeze.ui.activities.ScannerActivity;
 import com.m4gti.ecobreeze.ui.activities.UserActivity;
+import com.m4gti.ecobreeze.utils.Utilidades;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -43,7 +45,7 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
         huellaButton = view.findViewById(R.id.huellaButton);
         userButton = view.findViewById(R.id.userButton);
         notifButton = view.findViewById(R.id.notifButton);
-
+        textViewUltimaMedicion = view.findViewById(R.id.textViewUltimaMedicion);
 
         // Inicializamos LogicaRecepcionDatos con el listener
         if (getActivity() != null) {
@@ -66,13 +68,12 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
         notificacionRunnable = new Runnable() {
             @Override
             public void run() {
-              //  enviarNotificacionConCategoriaActual();
+                enviarNotificacionConCategoriaActual();
                 handler.postDelayed(this, 1000); // 30 segundos
             }
         };
         handler.post(notificacionRunnable);
     }
-/*
     private void enviarNotificacionConCategoriaActual() {
         // Extraer el texto de la medición actual desde el TextView
         String medicionText = textViewUltimaMedicion.getText().toString();
@@ -86,11 +87,18 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
                         requireContext(),
                         "¡Alerta! el nivel actual es muy " + categoria
                 );
+
+                String fecha = Utilidades.obtenerFechaActual();  // Asegúrate de tener un método que obtenga la fecha actual en el formato deseado.
+
+                // Instanciar LogicaEnvioDatos
+                LogicaEnvioDatos logicaEnvioDatos = new LogicaEnvioDatos(getContext());
+
+                // Llamar al método para guardar la notificación en la base de datos
+                logicaEnvioDatos.guardarNotificacionEnBD("¡Cuidado!", "¡Alerta! el nivel actual es muy Alto", fecha);
             }
         }
     }
 
-*/
 
     // Implementamos el método de la interfaz
     @Override
@@ -102,7 +110,7 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
                 "Hora: " + medicion.getHora() + "\n" +
                 "Categoría: " + medicion.getCategoria();  // Añadir categoría al texto
 
-        //textViewUltimaMedicion.setText(medicionText);
+        textViewUltimaMedicion.setText(medicionText);
     }
 
     @Override

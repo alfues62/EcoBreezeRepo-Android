@@ -6,9 +6,21 @@ import android.content.Context;
 import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
 import com.m4gti.ecobreeze.R;
 
+/**
+ * @class NotificationHelper
+ * @brief Clase que maneja la creación y envío de notificaciones para alertas de sensores.
+ *
+ * Esta clase proporciona métodos para crear un canal de notificación y enviar alertas de sensores a los usuarios.
+ * Las notificaciones son útiles para informar sobre fallos o errores detectados por los sensores.
+ *
+ * Métodos principales:
+ *   1. `createNotificationChannel()`: Crea un canal de notificación para las alertas de sensores.
+ *   2. `sendSensorAlertNotification()`: Envía una notificación de alerta de sensor con el mensaje proporcionado.
+ *
+ * @note Requiere el contexto de la aplicación y, en el caso de `createNotificationChannel()`, utiliza las capacidades de la API de Android Oreo (nivel 26) o superior.
+ */
 public class NotificationHelper {
     private static final String CHANNEL_ID = "sensor_alerts";
 
