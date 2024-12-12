@@ -1,0 +1,88 @@
+\doxysection{com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+Login Class Reference}
+\hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_login}{}\label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_login}\index{com.m4gti.ecobreeze.logic.LogicaLogin@{com.m4gti.ecobreeze.logic.LogicaLogin}}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_login_aa9bde143ad10b5ae7f312e583b370ef2}{login}} (Context context, String email, String password, String LOGIN\+\_\+\+URL)
+\begin{DoxyCompactList}\small\item\em Realiza el proceso de inicio de sesión utilizando email y contraseña. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_login_a5a6c6ce37ce98a373574a94d57e00548}{login\+Con\+Huella}} (Context context, String email, String token\+Huella, String LOGIN\+\_\+\+HUELLA\+\_\+\+URL)
+\begin{DoxyCompactList}\small\item\em Realiza el proceso de inicio de sesión utilizando email y token de huella. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_login_aa36032f105da9d2f20faf36ddfea4ec0}{logout}} (Context context)
+\begin{DoxyCompactList}\small\item\em Realiza el proceso de cierre de sesión del usuario. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_login_aa9bde143ad10b5ae7f312e583b370ef2}\index{com.m4gti.ecobreeze.logic.LogicaLogin@{com.m4gti.ecobreeze.logic.LogicaLogin}!login@{login}}
+\index{login@{login}!com.m4gti.ecobreeze.logic.LogicaLogin@{com.m4gti.ecobreeze.logic.LogicaLogin}}
+\doxysubsubsection{\texorpdfstring{login()}{login()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_login_aa9bde143ad10b5ae7f312e583b370ef2} 
+static void com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+Login.\+login (\begin{DoxyParamCaption}\item[{Context}]{context}{, }\item[{String}]{email}{, }\item[{String}]{password}{, }\item[{String}]{LOGIN\+\_\+\+URL}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Realiza el proceso de inicio de sesión utilizando email y contraseña. 
+
+Este método envía una solicitud POST al servidor con las credenciales del usuario. Si el inicio de sesión es exitoso, los datos del usuario se guardan en {\ttfamily Shared\+Preferences} y se redirige al usuario a la actividad correspondiente.
+
+Diseño\+: email (String) password (String) LOGIN\+\_\+\+URL (String) -\/-\/-\/\texorpdfstring{$>$}{>} \mbox{[}\doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_login_aa9bde143ad10b5ae7f312e583b370ef2}{login()}\mbox{]} -\/-\/-\/\texorpdfstring{$>$}{>} Solicitud POST al servidor
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & El contexto de la aplicación que ejecuta el método. \\
+\hline
+{\em email} & El correo electrónico del usuario. Debe ser una cadena de texto no vacía. \\
+\hline
+{\em password} & La contraseña del usuario. Debe ser una cadena de texto no vacía. \\
+\hline
+{\em LOGIN\+\_\+\+URL} & La URL del servidor donde se realizará el inicio de sesión. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_login_a5a6c6ce37ce98a373574a94d57e00548}\index{com.m4gti.ecobreeze.logic.LogicaLogin@{com.m4gti.ecobreeze.logic.LogicaLogin}!loginConHuella@{loginConHuella}}
+\index{loginConHuella@{loginConHuella}!com.m4gti.ecobreeze.logic.LogicaLogin@{com.m4gti.ecobreeze.logic.LogicaLogin}}
+\doxysubsubsection{\texorpdfstring{loginConHuella()}{loginConHuella()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_login_a5a6c6ce37ce98a373574a94d57e00548} 
+static void com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+Login.\+login\+Con\+Huella (\begin{DoxyParamCaption}\item[{Context}]{context}{, }\item[{String}]{email}{, }\item[{String}]{token\+Huella}{, }\item[{String}]{LOGIN\+\_\+\+HUELLA\+\_\+\+URL}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Realiza el proceso de inicio de sesión utilizando email y token de huella. 
+
+Este método envía una solicitud POST al servidor con el correo electrónico y el token de huella del usuario. Si el inicio de sesión es exitoso, los datos del usuario se guardan en {\ttfamily Shared\+Preferences} y se redirige al usuario a la actividad principal.
+
+Diseño\+: email (String) token\+Huella (String) LOGIN\+\_\+\+HUELLA\+\_\+\+URL (String) -\/-\/-\/\texorpdfstring{$>$}{>} \mbox{[}\doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_login_a5a6c6ce37ce98a373574a94d57e00548}{login\+Con\+Huella()}\mbox{]} -\/-\/-\/\texorpdfstring{$>$}{>} Solicitud POST al servidor
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & El contexto de la aplicación que ejecuta el método. \\
+\hline
+{\em email} & El correo electrónico del usuario. Debe ser una cadena de texto no vacía. \\
+\hline
+{\em token\+Huella} & El token de huella asociado al usuario. Debe ser una cadena de texto no vacía. \\
+\hline
+{\em LOGIN\+\_\+\+HUELLA\+\_\+\+URL} & La URL del servidor donde se realizará el inicio de sesión con huella. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_login_aa36032f105da9d2f20faf36ddfea4ec0}\index{com.m4gti.ecobreeze.logic.LogicaLogin@{com.m4gti.ecobreeze.logic.LogicaLogin}!logout@{logout}}
+\index{logout@{logout}!com.m4gti.ecobreeze.logic.LogicaLogin@{com.m4gti.ecobreeze.logic.LogicaLogin}}
+\doxysubsubsection{\texorpdfstring{logout()}{logout()}}
+{\footnotesize\ttfamily \label{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_login_aa36032f105da9d2f20faf36ddfea4ec0} 
+static void com.\+m4gti.\+ecobreeze.\+logic.\+Logica\+Login.\+logout (\begin{DoxyParamCaption}\item[{Context}]{context}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Realiza el proceso de cierre de sesión del usuario. 
+
+Este método elimina todos los datos del usuario almacenados en {\ttfamily Shared\+Preferences} y redirige al usuario a la actividad de inicio de sesión ({\ttfamily Login\+Activity}).
+
+Diseño\+: context (Context) -\/-\/-\/\texorpdfstring{$>$}{>} \mbox{[}\doxylink{classcom_1_1m4gti_1_1ecobreeze_1_1logic_1_1_logica_login_aa36032f105da9d2f20faf36ddfea4ec0}{logout()}\mbox{]} -\/-\/-\/\texorpdfstring{$>$}{>} Eliminar datos en {\ttfamily Shared\+Preferences} -\/-\/-\/\texorpdfstring{$>$}{>} Redirigir a Login\+Activity.
+
+
+\begin{DoxyParams}{Parameters}
+{\em context} & El contexto de la aplicación que ejecuta el método. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+GTI\+\_\+\+Carpeta/\+Biometria\+Repos/\+Eco\+Breeze\+Repo-\/\+Android/src/\+Eco\+Breeze/app/src/main/java/com/m4gti/ecobreeze/logic/\mbox{\hyperlink{_logica_login_8java}{Logica\+Login.\+java}}\end{DoxyCompactItemize}

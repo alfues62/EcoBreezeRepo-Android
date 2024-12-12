@@ -1,13 +1,16 @@
 package com.m4gti.ecobreeze.ui.fragments;
 import com.m4gti.ecobreeze.R;
+import com.m4gti.ecobreeze.logic.LogicaEnvioDatos;
 import com.m4gti.ecobreeze.logic.LogicaLogin;
 import com.m4gti.ecobreeze.logic.LogicaRecepcionDatos;
 import com.m4gti.ecobreeze.logic.NotificationHelper;
 import com.m4gti.ecobreeze.models.Medicion;
 import com.m4gti.ecobreeze.ui.activities.HuellaActivity;
 import com.m4gti.ecobreeze.ui.activities.MainActivity;
+import com.m4gti.ecobreeze.ui.activities.NotificacionesActivity;
 import com.m4gti.ecobreeze.ui.activities.ScannerActivity;
 import com.m4gti.ecobreeze.ui.activities.UserActivity;
+import com.m4gti.ecobreeze.utils.Utilidades;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +30,7 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
     private Button scannerButton;
     private Button huellaButton;
     private Button userButton;
+    private Button notifButton;
     private Handler handler;
     private Runnable notificacionRunnable;
     private TextView textViewUltimaMedicion;
@@ -38,10 +42,9 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
 
         logoutButton = view.findViewById(R.id.logoutButton);
-        scannerButton = view.findViewById(R.id.scannerButton);
         huellaButton = view.findViewById(R.id.huellaButton);
         userButton = view.findViewById(R.id.userButton);
-
+        notifButton = view.findViewById(R.id.notifButton);
         textViewUltimaMedicion = view.findViewById(R.id.textViewUltimaMedicion);
 
         // Inicializamos LogicaRecepcionDatos con el listener
@@ -66,12 +69,11 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
             @Override
             public void run() {
                 enviarNotificacionConCategoriaActual();
-                handler.postDelayed(this, 30000); // 30 segundos
+                handler.postDelayed(this, 1000); // 30 segundos
             }
         };
         handler.post(notificacionRunnable);
     }
-
     private void enviarNotificacionConCategoriaActual() {
         // Extraer el texto de la medición actual desde el TextView
         String medicionText = textViewUltimaMedicion.getText().toString();
@@ -79,14 +81,23 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
         if (medicionText.contains("Categoría:")) {
             String categoria = medicionText.substring(medicionText.indexOf("Categoría:") + 10).trim();
 
-            // Enviar notificación con la categoría
-            NotificationHelper.sendSensorAlertNotification(
-                    requireContext(),
-                    "Categoría actual: " + categoria
-            );
+            // Verificar si la categoría es "Alta" antes de enviar la notificación
+            if ("Alto".equalsIgnoreCase(categoria)) { // Comparación ignorando mayúsculas y minúsculas
+                NotificationHelper.sendSensorAlertNotification(
+                        requireContext(),
+                        "¡Alerta! el nivel actual es muy " + categoria
+                );
+
+                String fecha = Utilidades.obtenerFechaActual();  // Asegúrate de tener un método que obtenga la fecha actual en el formato deseado.
+
+                // Instanciar LogicaEnvioDatos
+                LogicaEnvioDatos logicaEnvioDatos = new LogicaEnvioDatos(getContext());
+
+                // Llamar al método para guardar la notificación en la base de datos
+                logicaEnvioDatos.guardarNotificacionEnBD("¡Cuidado!", "¡Alerta! el nivel actual es muy Alto", fecha);
+            }
         }
     }
-
 
 
     // Implementamos el método de la interfaz
@@ -121,20 +132,20 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
             }
         });
 
-        // Botón para ir a ScannerActivity
-        scannerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ScannerActivity.class);
-                startActivity(intent); // Inicia la actividad ScannerActivity
-            }
-        });
-
         // Botón para ir a HuellaActivity
         huellaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), HuellaActivity.class);
+                startActivity(intent); // Inicia la actividad HuellaActivity
+            }
+        });
+
+        // Botón para ir a NotificacionesActivity
+        notifButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), NotificacionesActivity.class);
                 startActivity(intent); // Inicia la actividad HuellaActivity
             }
         });

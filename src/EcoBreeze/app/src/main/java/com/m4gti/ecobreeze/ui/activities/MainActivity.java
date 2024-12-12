@@ -4,8 +4,10 @@ import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +34,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.m4gti.ecobreeze.R;
 import com.m4gti.ecobreeze.logic.NotificationHelper;
 import com.m4gti.ecobreeze.ui.fragments.HomeFragment;
+import com.m4gti.ecobreeze.ui.fragments.LogrosFragment;
 import com.m4gti.ecobreeze.ui.fragments.MapaGlobalFragment;
 import com.m4gti.ecobreeze.ui.fragments.PerfilFragment;
 import com.m4gti.ecobreeze.ui.fragments.QueRespirasFragment;
@@ -41,60 +44,11 @@ import androidx.fragment.app.Fragment;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private static final String CHANNEL_ID = "sensor_notifications";
-    private static final int CODIGO_PETICION_PERMISOS = 100; // Puedes usar cualquier valor entero.
-    private TextView tv;
-    // Declaración de requestPermissionLauncher fuera del método
-    private ActivityResultLauncher<String> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (isGranted) {
-                    // Permiso concedido
-                    NotificationHelper.sendSensorAlertNotification(this, "Permiso concedido, notificaciones activadas.");
-                } else {
-                    // Permiso denegado
-                    Toast.makeText(this, "Permiso denegado para mostrar notificaciones.", Toast.LENGTH_SHORT).show();
-                }
-            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Crear un canal de notificación (requerido en Android 8.0 y superior)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Sensor Notifications";
-            String description = "Notificaciones del estado del sensor";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-
-            // Registrar el canal en el sistema
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                comprobarEstadoSensor();
-                handler.postDelayed(this, 60000); // Verifica cada 5 segundos
-            }
-        };
-        handler.post(runnable);
-
-
-        // Crear el canal de notificaciones
-        NotificationHelper.createNotificationChannel(this);
-
-        // Verifica y solicita el permiso si es necesario (solo Android 13+)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-                    != PackageManager.PERMISSION_GRANTED) {
-                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
-            }
-        }
 
         // Configura BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -110,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     selectedFragment = new QueRespirasFragment();
                 } else if (item.getItemId() == R.id.navigation_perfil) {
                     selectedFragment = new PerfilFragment();
+                }else if (item.getItemId()== R.id.navigation_logros){
+                    selectedFragment = new LogrosFragment();
                 }
 
                 if (selectedFragment != null) {
@@ -142,31 +98,33 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(UPV));
     }
 
-    // Método para mostrar la notificación
-    private void mostrarNotificacion(String mensaje) {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        // Crear la notificación
-        Notification notification = new Notification.Builder(this, CHANNEL_ID)
-                .setContentTitle("Estado del Sensor")
-                .setContentText(mensaje)
-                .setSmallIcon(android.R.drawable.ic_dialog_alert)
-                .build();
-
-        // Mostrar la notificación
-        notificationManager.notify(1, notification);
-    }
-
-    // Simulación de la comprobación de estado del sensor
-    private void comprobarEstadoSensor() {
-        // Lógica para verificar si el sensor está apagado o desconectado
-        boolean sensorDesconectado = true; // Cambiar por la lógica real
-
-        if (sensorDesconectado) {
-            mostrarNotificacion("El sensor está apagado o desconectado");
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String datos = intent.getStringExtra("datos");
+            if (datos != null) {
+                Log.d("MainActivity", "Datos recibidos: " + datos);
+                // Actualiza la interfaz o procesa los datos según necesites.
+            }
+        }
+    };@Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter("BTLEScanServiceUpdates");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(receiver, filter);
         }
     }
 
-    // Aquí puedes invocar comprobarEstadoSensor cuando sea necesario, por ejemplo, al perder conexión Bluetooth.
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
+
 
 }

@@ -1,56 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.MainActivity">
+    android:background="#FFFFFF">
 
-    <Button
-        android:id="@+id/scannerButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Scan"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center_horizontal">
 
-    <Button
-        android:id="@+id/huellaButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Huella"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userButton" />
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/logoImageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/logo"
+            android:layout_marginBottom="24dp"
+            android:contentDescription="Logo de la aplicación" />
 
-    <Button
-        android:id="@+id/userButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pagina Usuario"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scannerButton" />
+        <!-- Título -->
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Perfil"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:fontFamily="serif"
+            android:layout_marginBottom="24dp" />
 
-    <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cerrar Sesión"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/huellaButton" />
+        <!-- Botón Editar Usuario -->
+        <Button
+            android:id="@+id/userButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#68A7A2"
+            android:padding="12dp"
+            android:text="EDITAR PERFIL"
+            android:textColor="#FFFFFF" />
 
-    <TextView
-        android:id="@+id/textViewUltimaMedicion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Esperando datos..."
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logoutButton" />
+        <!-- Botón Notificaciones -->
+        <Button
+            android:id="@+id/notifButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#68A7A2"
+            android:padding="12dp"
+            android:text="TUS NOTIFICACIONES"
+            android:textColor="#FFFFFF" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Botón Huella -->
+        <Button
+            android:id="@+id/huellaButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#68A7A2"
+            android:padding="12dp"
+            android:text="AÑADIR HUELLA"
+            android:textColor="#FFFFFF" />
+
+        <!-- Botón Cerrar Sesión -->
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#68A7A2"
+            android:padding="12dp"
+            android:text="CERRAR SESIÓN"
+            android:textColor="#FFFFFF" />
+        <TextView
+            android:id="@+id/textViewUltimaMedicion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</ScrollView>
