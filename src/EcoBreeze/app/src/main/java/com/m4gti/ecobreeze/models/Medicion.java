@@ -43,25 +43,22 @@ public class Medicion {
         this.tipoGasId = tipoGasId;
         this.tipoGas = tipoGas;
     }
-
     public int getIdMedicion() {
         return idMedicion;
     }
-
     public double getValor() {
         return valor;
     }
-
     public String getCategoria() {
         return categoria;  // Getter para categoría
     }
     public String getFecha() {
         return fecha;
     }
-
     public String getHora() {
         return hora;
     }
-
+    public double getLon() {return lon;}
+    public double getLat() {return lat;}
 }
 
