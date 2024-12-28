@@ -107,13 +107,15 @@ public class MapaGlobalFragment extends Fragment implements OnMapReadyCallback, 
         if (!puntos.isEmpty()) {
             mProvider = new HeatmapTileProvider.Builder()
                     .weightedData(puntos)  // Usamos los puntos con intensidades asignadas
+                    .radius(10)  // Establecemos un rango de influencia fijo (ajustable)
                     .build();
 
             if (mOverlay != null) {
                 mOverlay.remove();  // Eliminamos el overlay anterior si existe
             }
 
-            mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));  // Añadimos el nuevo mapa de calor
+            // Añadimos el nuevo mapa de calor
+            mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
         } else {
             Log.d("MapaGlobalFragment", "No hay mediciones para la fecha actual.");
         }
