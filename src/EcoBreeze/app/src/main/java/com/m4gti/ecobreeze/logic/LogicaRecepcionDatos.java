@@ -22,6 +22,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @class LogicaRecepcionDatos
  * @brief Clase encargada de gestionar la lógica de recepción y procesamiento de mediciones desde el servidor.
@@ -41,6 +44,8 @@ public class LogicaRecepcionDatos {
     private static final String MEDICIONES_URL = "http://" + Globales.IP + ":8080/api/api_datos.php?action=obtener_mediciones_usuario";
     private Context context;
     private OnMedicionRecibidaListener listener;
+
+    private List<Medicion> mediciones = new ArrayList<>();
 
     // Constructor de la clase
     public LogicaRecepcionDatos(Context context, OnMedicionRecibidaListener listener) {
@@ -126,39 +131,45 @@ public class LogicaRecepcionDatos {
      * Diseño:
      *   mediciones (JSONArray) ---> [procesarMediciones()]
      *
-     * @param mediciones Un arreglo JSON que contiene todas las mediciones obtenidas desde el servidor.
+     * @param medicionesArray Un arreglo JSON que contiene todas las mediciones obtenidas desde el servidor.
      */
-    private void procesarMediciones(JSONArray mediciones) {
-        // Verificamos si hay mediciones y obtenemos la última
-        if (mediciones.length() > 0) {
-            try {
-                // Tomamos la última medición
-                JSONObject ultimaMedicion = mediciones.getJSONObject(mediciones.length() - 1);
+    private void procesarMediciones(JSONArray medicionesArray) {
+        try {
+            // Limpiar lista anterior antes de agregar nuevas mediciones
+            mediciones.clear();
 
-                int idMedicion = ultimaMedicion.getInt("IDMedicion");
-                double valor = ultimaMedicion.getDouble("Valor");
-                double lon = ultimaMedicion.getDouble("Lon");
-                double lat = ultimaMedicion.getDouble("Lat");
-                String fecha = ultimaMedicion.getString("Fecha");
-                String hora = ultimaMedicion.getString("Hora");
-                String categoria = ultimaMedicion.getString("Categoria");
-                int tipoGasId = ultimaMedicion.getInt("TIPOGAS_TipoID");
-                String tipoGas = ultimaMedicion.getString("TipoGas");
+            // Procesar todas las mediciones obtenidas
+            for (int i = 0; i < medicionesArray.length(); i++) {
+                JSONObject medicionJson = medicionesArray.getJSONObject(i);
 
-                // Crear un objeto Medicion para la última medición
-                Medicion medicion = new Medicion(idMedicion, valor, lon, lat, fecha, hora, categoria, tipoGasId, tipoGas);
-
-                // Pasar la última medición al listener (MainActivity)
-                if (listener != null) {
-                    listener.onMedicionRecibida(medicion);
-                }
-
-                Log.d("Medicion", "Última medición - ID: " + idMedicion + ", Valor: " + valor + ", Fecha: " + fecha + ", Hora: " + hora);
-
-            } catch (JSONException e) {
-                Log.e("JSON Exception", "Error al procesar medición: " + e.getMessage());
+                // Crear un objeto Medicion y agregarlo a la lista
+                Medicion medicion = new Medicion(
+                        medicionJson.getInt("IDMedicion"),
+                        medicionJson.getDouble("Valor"),
+                        medicionJson.getDouble("Lon"),
+                        medicionJson.getDouble("Lat"),
+                        medicionJson.getString("Fecha"),
+                        medicionJson.getString("Hora"),
+                        medicionJson.getString("Categoria"),
+                        medicionJson.getInt("TIPOGAS_TipoID"),
+                        medicionJson.getString("TipoGas")
+                );
+                mediciones.add(medicion);
             }
+
+            // Llamar al listener si es necesario (para la última medición)
+            if (listener != null && !mediciones.isEmpty()) {
+                listener.onMedicionRecibida(mediciones.get(mediciones.size() - 1)); // Última medición
+            }
+
+        } catch (JSONException e) {
+            Log.e("JSON Exception", "Error al procesar las mediciones: " + e.getMessage());
         }
+    }
+
+    // Método para obtener todas las mediciones
+    public List<Medicion> getMediciones() {
+        return mediciones;
     }
 
     public interface OnMedicionRecibidaListener {
