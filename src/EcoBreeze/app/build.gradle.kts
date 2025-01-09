@@ -55,9 +55,19 @@ dependencies {
     implementation ("com.google.android.gms:play-services-maps:18.1.0")
     implementation ("com.google.android.gms:play-services-location:21.0.1")
     implementation("com.google.maps.android:android-maps-utils:2.3.0")
+    implementation("junit:junit:4.12")
+
+    //TESTS (ESTO ES POR DEFECTO DE ANDROID STUDIO)
 
     testImplementation("junit:junit:4.13.2")
+
+    testImplementation("org.mockito:mockito-core:5.2.0")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
+    androidTestImplementation("org.mockito:mockito-android:5.2.0")
+
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test:core:1.6.1")
+
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 
 }
