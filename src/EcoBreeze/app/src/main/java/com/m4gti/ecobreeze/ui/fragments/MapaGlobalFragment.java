@@ -107,7 +107,7 @@ public class MapaGlobalFragment extends Fragment implements OnMapReadyCallback, 
         if (!puntos.isEmpty()) {
             mProvider = new HeatmapTileProvider.Builder()
                     .weightedData(puntos)  // Usamos los puntos con intensidades asignadas
-                    .radius(10)  // Establecemos un rango de influencia fijo (ajustable)
+                    .radius(20)  // Establecemos un rango de influencia fijo (ajustable)
                     .build();
 
             if (mOverlay != null) {
@@ -123,17 +123,16 @@ public class MapaGlobalFragment extends Fragment implements OnMapReadyCallback, 
 
     // Método para calcular la intensidad según la categoría
     private float obtenerIntensidadPorCategoria(String categoria) {
-        if (categoria == null) return 0.0f;  // Si no hay categoría, asignamos la intensidad mínima
-
+        if (categoria == null || categoria.equals("Null")) return 1.0f;  // Intensidad predeterminada
         switch (categoria) {
             case "Bajo":
-                return 1.0f;  // Baja intensidad
+                return 1.0f;
             case "Normal":
-                return 2.0f;  // Intensidad media
+                return 2.0f;
             case "Alto":
-                return 3.0f;  // Alta intensidad
+                return 3.0f;
             default:
-                return 0.0f;  // Intensidad mínima en caso de categoría desconocida
+                return 1.0f;  // Intensidad mínima para categorías desconocidas
         }
     }
 }
