@@ -64,6 +64,24 @@
             android:text="AÑADIR HUELLA"
             android:textColor="#FFFFFF" />
 
+        <!-- Botón Huella -->
+        <Button
+            android:id="@+id/enviarButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#68A7A2"
+            android:padding="12dp"
+            android:text="ENVIAR MEDICION"
+            android:textColor="#FFFFFF" />
+
+        <EditText
+            android:id="@+id/editTextMedic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Escribe aquí tu valor..."
+            android:inputType="numberDecimal"/>
+
         <!-- Botón Cerrar Sesión -->
         <Button
             android:id="@+id/logoutButton"

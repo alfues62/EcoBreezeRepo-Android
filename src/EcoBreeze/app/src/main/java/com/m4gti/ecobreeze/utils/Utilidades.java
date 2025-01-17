@@ -20,6 +20,19 @@ import java.util.UUID;
 //-----------------------------------------------------------------------------------
 public class Utilidades {
 
+    // Método para obtener la fecha actual
+    public static String obtenerFechaActual2() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // Formato deseado: año-mes-día
+        Date date = new Date();  // Obtener la fecha actual
+        return sdf.format(date);  // Formatear y devolver la fecha
+    }
+
+    // Método para obtener la hora actual
+    public static String obtenerHoraActual() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss"); // Formato deseado: hora:minuto:segundo
+        Date date = new Date();  // Obtener la hora actual
+        return sdf.format(date);  // Formatear y devolver la hora
+    }
 
     public static String obtenerFechaActual() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
