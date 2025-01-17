@@ -22,17 +22,47 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @class LogicaRecepcionDatos
+ * @brief Clase encargada de gestionar la lógica de recepción y procesamiento de mediciones desde el servidor.
+ *
+ *Esta clase se encarga de obtener datos de mediciones asociados a un usuario desde un servidor remoto, procesar las respuestas, y notificar al componente correspondiente mediante un listener.
+ *
+ * Métodos principales:
+ *
+ *  1. Solicitar mediciones desde el servidor para el usuario activo.
+ *  2. Procesar las mediciones obtenidas, extrayendo la más reciente.
+ *  3. Comunicar la medición procesada a través de una interfaz de callback.
+ *
+ * @note Utiliza `Volley` para realizar solicitudes HTTP y `SharedPreferences` para recuperar el ID del usuario.
+ * @note Requiere un contexto válido de la aplicación y un listener para recibir las notificaciones procesadas.
+ */
 public class LogicaRecepcionDatos {
     private static final String MEDICIONES_URL = "http://" + Globales.IP + ":8080/api/api_datos.php?action=obtener_mediciones_usuario";
     private Context context;
     private OnMedicionRecibidaListener listener;
 
-    // Constructor donde se pasa el listener
+    private List<Medicion> mediciones = new ArrayList<>();
+
+    // Constructor de la clase
     public LogicaRecepcionDatos(Context context, OnMedicionRecibidaListener listener) {
         this.context = context;
         this.listener = listener;
     }
 
+    /**
+     * @brief Realiza una solicitud al servidor para obtener las mediciones del usuario activo.
+     *
+     * Este método utiliza el ID del usuario almacenado en `SharedPreferences` para construir una solicitud
+     * al servidor. Si la respuesta es exitosa, se procesan las mediciones obtenidas.
+     *
+     * Diseño:
+     *                     [obtenerMedicionesDeServidor()] ---> Solicitud POST al servidor
+     *
+     */
     public void obtenerMedicionesDeServidor() {
         // Obtener el ID del usuario desde SharedPreferences
         SharedPreferences sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
@@ -92,43 +122,57 @@ public class LogicaRecepcionDatos {
         }
     }
 
-    private void procesarMediciones(JSONArray mediciones) {
-        // Verificamos si hay mediciones y obtenemos la última
-        if (mediciones.length() > 0) {
-            try {
-                // Tomamos la última medición
-                JSONObject ultimaMedicion = mediciones.getJSONObject(mediciones.length() - 1);
+    /**
+     * @brief Procesa las mediciones obtenidas desde el servidor.
+     *
+     * Este método analiza un arreglo de mediciones, selecciona la última y la convierte en un objeto
+     * `Medicion`. Finalmente, pasa la medición procesada al listener asociado.
+     *
+     * Diseño:
+     *   mediciones (JSONArray) ---> [procesarMediciones()]
+     *
+     * @param medicionesArray Un arreglo JSON que contiene todas las mediciones obtenidas desde el servidor.
+     */
+    private void procesarMediciones(JSONArray medicionesArray) {
+        try {
+            // Limpiar lista anterior antes de agregar nuevas mediciones
+            mediciones.clear();
 
-                int idMedicion = ultimaMedicion.getInt("IDMedicion");
-                double valor = ultimaMedicion.getDouble("Valor");
-                double lon = ultimaMedicion.getDouble("Lon");
-                double lat = ultimaMedicion.getDouble("Lat");
-                String fecha = ultimaMedicion.getString("Fecha");
-                String hora = ultimaMedicion.getString("Hora");
-                String categoria = ultimaMedicion.getString("Categoria");
-                int tipoGasId = ultimaMedicion.getInt("TIPOGAS_TipoID");
-                String tipoGas = ultimaMedicion.getString("TipoGas");
+            // Procesar todas las mediciones obtenidas
+            for (int i = 0; i < medicionesArray.length(); i++) {
+                JSONObject medicionJson = medicionesArray.getJSONObject(i);
 
-                // Crear un objeto Medicion para la última medición
-                Medicion medicion = new Medicion(idMedicion, valor, lon, lat, fecha, hora, categoria, tipoGasId, tipoGas);
-
-                // Pasar la última medición al listener (MainActivity)
-                if (listener != null) {
-                    listener.onMedicionRecibida(medicion);
-                }
-
-                Log.d("Medicion", "Última medición - ID: " + idMedicion + ", Valor: " + valor + ", Fecha: " + fecha + ", Hora: " + hora);
-
-            } catch (JSONException e) {
-                Log.e("JSON Exception", "Error al procesar medición: " + e.getMessage());
+                // Crear un objeto Medicion y agregarlo a la lista
+                Medicion medicion = new Medicion(
+                        medicionJson.getInt("IDMedicion"),
+                        medicionJson.getDouble("Valor"),
+                        medicionJson.getDouble("Lon"),
+                        medicionJson.getDouble("Lat"),
+                        medicionJson.getString("Fecha"),
+                        medicionJson.getString("Hora"),
+                        medicionJson.getString("Categoria"),
+                        medicionJson.getInt("TIPOGAS_TipoID"),
+                        medicionJson.getString("TipoGas")
+                );
+                mediciones.add(medicion);
             }
+
+            // Llamar al listener si es necesario (para la última medición)
+            if (listener != null && !mediciones.isEmpty()) {
+                listener.onMedicionRecibida(mediciones.get(mediciones.size() - 1)); // Última medición
+            }
+
+        } catch (JSONException e) {
+            Log.e("JSON Exception", "Error al procesar las mediciones: " + e.getMessage());
         }
     }
 
-    // Interfaz para pasar la última medición al MainActivity
+    // Método para obtener todas las mediciones
+    public List<Medicion> getMediciones() {
+        return mediciones;
+    }
+
     public interface OnMedicionRecibidaListener {
         void onMedicionRecibida(Medicion medicion);
     }
 }
-
-

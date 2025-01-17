@@ -1,64 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="#FFFFFF"
+    android:padding="16dp">
 
-    <!-- Contraseña actual -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilContrasenaActual"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:hint="Contraseña Actual"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <!-- Logo -->
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logo"
+    android:contentDescription="Logo de la aplicación"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="32dp" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etContrasenaActual"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- Nuevo correo -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilNuevoCorreo"
-        android:layout_width="0dp"
+    <!-- Título -->
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Nuevo Correo"
+        android:fontFamily="serif"
+        android:text="¿Quieres cambiar tu correo?"
+        android:textColor="#000000"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilContrasenaActual">
+        app:layout_constraintTop_toBottomOf="@id/logoImageView" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etNuevoCorreo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
-    </com.google.android.material.textfield.TextInputLayout>
+    <!-- Nuevo correo -->
+    <TextView
+        android:id="@+id/tvNuevoCorreo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nuevo correo"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/edtNuevoCorreo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Escribe tu nuevo correo"
+        android:inputType="textEmailAddress"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvNuevoCorreo" />
+
+    <!-- Contraseña actual -->
+    <TextView
+        android:id="@+id/tvContrasenaActual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contraseña actual"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@id/edtNuevoCorreo"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/edtContrasenaActual"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Escribe tu contraseña actual"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvContrasenaActual" />
 
     <!-- Botón para cambiar correo -->
     <Button
         android:id="@+id/btnCambiarCorreo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:text="CAMBIAR CORREO"
+        android:backgroundTint="#68A7A2"
+        android:textColor="#FFFFFF"
         android:layout_marginTop="24dp"
-        android:text="Cambiar Correo"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="12dp"
+        app:layout_constraintTop_toBottomOf="@id/edtContrasenaActual"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilNuevoCorreo" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Mensaje de error o éxito -->
+    <!-- Mensajes de error o éxito -->
     <TextView
-        android:id="@+id/tvMensaje"
+        android:id="@+id/tvMensajeResultado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textColor="@android:color/holo_red_dark"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text=""
+        android:textColor="#FF0000"
+        app:layout_constraintTop_toBottomOf="@id/btnCambiarCorreo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnCambiarCorreo" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

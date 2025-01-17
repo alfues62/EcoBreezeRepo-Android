@@ -27,10 +27,10 @@ public class CambiarCorreoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_correo);
 
-        etContrasenaActual = findViewById(R.id.etContrasenaActual);
-        etNuevoCorreo = findViewById(R.id.etNuevoCorreo);
+        etContrasenaActual = findViewById(R.id.edtContrasenaActual);
+        etNuevoCorreo = findViewById(R.id.edtNuevoCorreo);
         btnCambiarCorreo = findViewById(R.id.btnCambiarCorreo);
-        tvMensaje = findViewById(R.id.tvMensaje);
+        tvMensaje = findViewById(R.id.tvMensajeResultado);
 
         // Configurar el botón para cambiar el correo
         btnCambiarCorreo.setOnClickListener(new View.OnClickListener() {

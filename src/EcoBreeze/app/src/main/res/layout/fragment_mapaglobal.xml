@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
-        android:backgroundTint="#3B3B3B"
+        android:backgroundTint="#4CA5AA"
         android:elevation="4dp"
         android:padding="16dp"
         app:layout_constraintBottom_toTopOf="@+id/map"
@@ -26,14 +27,17 @@
             android:layout_gravity="center"
             android:text="MAPA GLOBAL:"
             android:textColor="#FDFDFD"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="123dp"
+            tools:layout_editor_absoluteY="16dp" />
     </androidx.appcompat.widget.Toolbar>
 
     <fragment
         android:id="@+id/map"
         class="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="410dp"
-        android:layout_height="588dp"
+        android:layout_width="408dp"
+        android:layout_height="608dp"
         android:layout_marginBottom="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
