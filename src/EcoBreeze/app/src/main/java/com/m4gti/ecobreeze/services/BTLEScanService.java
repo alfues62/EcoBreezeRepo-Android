@@ -64,7 +64,7 @@ public class BTLEScanService extends Service {
     };
 
     private void iniciarTemporizador() {
-        handler.postDelayed(verificarBeacons, 10000); // 60 segundos.
+        handler.postDelayed(verificarBeacons, 60000); // 60 segundos.
     }
 
     private void detenerTemporizador() {

@@ -18,9 +18,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -31,6 +33,8 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
     private Button huellaButton;
     private Button userButton;
     private Button notifButton;
+    private Button medicionButton;
+    private EditText editText;
     private Handler handler;
     private Runnable notificacionRunnable;
     private TextView textViewUltimaMedicion;
@@ -45,6 +49,8 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
         huellaButton = view.findViewById(R.id.huellaButton);
         userButton = view.findViewById(R.id.userButton);
         notifButton = view.findViewById(R.id.notifButton);
+        medicionButton = view.findViewById(R.id.enviarButton);
+        editText = view.findViewById(R.id.editTextMedic);
         textViewUltimaMedicion = view.findViewById(R.id.textViewUltimaMedicion);
 
         // Inicializamos LogicaRecepcionDatos con el listener
@@ -122,6 +128,34 @@ public class PerfilFragment extends Fragment implements LogicaRecepcionDatos.OnM
     }
 
     private void configurarBotones() {
+        medicionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String medicionText = editText.getText().toString().trim();
+
+                // Verificar que el campo no esté vacío
+                if (!medicionText.isEmpty()) {
+                    // Aquí puedes asignar los valores necesarios para la medición
+                    // Usamos valores de ejemplo para otros campos, ajusta según tu lógica
+                    float valor = Float.parseFloat(medicionText); // Convierte el valor del EditText a float
+                    String lon = "0.0";  // Asume valores o toma de otro lugar
+                    String lat = "0.0";  // Asume valores o toma de otro lugar
+                    String fecha = Utilidades.obtenerFechaActual2();  // Obtén la fecha actual
+                    String hora = Utilidades.obtenerHoraActual();   // Obtén la hora actual
+                    int tipoGas = 2;  // Asume un tipo de gas (o puede venir de otro campo)
+
+                    // Llamar al método para insertar la medición
+                    LogicaEnvioDatos logicaEnvioDatos = new LogicaEnvioDatos(getContext());
+                    logicaEnvioDatos.insertarMedicionEnBD(valor, lon, lat, fecha, hora, tipoGas);
+
+                    // Mostrar un mensaje de éxito o limpiar el campo
+                    Toast.makeText(getContext(), "Medición enviada con éxito", Toast.LENGTH_SHORT).show();
+                    editText.setText("");  // Limpiar el EditText después de enviar la medición
+                } else {
+                    Toast.makeText(getContext(), "Por favor ingrese un valor de medición", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         // Botón para ir a UserActivity
         userButton.setOnClickListener(new View.OnClickListener() {
             @Override
